@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 // Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
-// Bu dosya .jsx olarak kullanılacak şekilde saf React + JSX ile yazıldı (TypeScript yok).
+// Bu dosya .jsx/.tsx içinde sorunsuz derlenecek şekilde yazıldı.
 
 function ElevatorAnimation() {
   return (
@@ -66,7 +66,7 @@ export default function AsansorSite() {
 
   // Düzenlenebilir içerikler
   const [hero, setHero] = useState({
-    eyebrow: "PREMIUM ASANSÖR ÇÖZÜMLERİ",
+    eyebrow: "Premium Asansör Çözümleri",
     title: "Güvenli ve estetik dikey ulaşım mühendisliği",
     subtitle:
       "Konut binalarından iş merkezlerine kadar özel tasarım, montaj ve bakım hizmetleri sunuyoruz.",
@@ -276,79 +276,82 @@ export default function AsansorSite() {
         </div>
       </header>
 
-      {/* ANA İÇERİK */}
-      <main className="mx-auto max-w-6xl px-4 pb-20">
-        {/* HERO (beyaz blok + sistem akışı) */}
-        <section className="mt-8 border-b border-slate-200 bg-white py-14 text-slate-900 w-full px-4 sm:px-6 lg:px-10 mx-auto">
-          <div className="grid gap-10 md:grid-cols-2">
-            {/* Sol taraf metin */}
-            <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-medium text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                7/24 bakım ve uzaktan izleme
-              </div>
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                {hero.eyebrow}
-              </p>
-              <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.6rem]">
-                {hero.title}
-              </h1>
-              <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600">
-                {hero.subtitle}
-              </p>
-              <div className="mb-6 flex flex-wrap items-center gap-3">
-                <button className="rounded-full bg-cyan-600 px-6 py-2 text-sm font-medium text-white shadow-md transition hover:bg-cyan-500">
-                  {hero.cta}
-                </button>
-                <a
-                  href="#projects"
-                  className="text-sm font-medium text-cyan-700 underline underline-offset-4 hover:text-cyan-900"
-                >
-                  {hero.secondaryCta}
-                </a>
-              </div>
-              <div className="grid max-w-xl grid-cols-3 gap-4 text-center text-[11px]">
-                <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                  <p className="text-lg font-bold text-sky-700">15+</p>
-                  <p className="mt-1 text-slate-600">yılı aşkın mühendislik deneyimi</p>
-                </div>
-                <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                  <p className="text-lg font-bold text-violet-700">250+</p>
-                  <p className="mt-1 text-slate-600">tamamlanmış proje</p>
-                </div>
-                <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                  <p className="text-lg font-bold text-amber-700">7/24</p>
-                  <p className="mt-1 text-slate-600">servis ve destek</p>
-                </div>
-              </div>
-              {isLoggedIn && (
-                <button
-                  onClick={() => openEdit("hero")}
-                  className="mt-4 text-[11px] text-cyan-700 underline"
-                >
-                  Hero içeriğini düzenle
-                </button>
-              )}
+      {/* HERO - Tam genişlik beyaz blok */}
+      <section className="border-b border-slate-200 bg-white py-14 text-slate-900 w-full px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2">
+          {/* Sol taraf */}
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-medium text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              7/24 bakım ve uzaktan izleme
             </div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
+              {hero.eyebrow}
+            </p>
+            <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.6rem]">
+              {hero.title}
+            </h1>
+            <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600">
+              {hero.subtitle}
+            </p>
+            <div className="mb-6 flex flex-wrap items-center gap-3">
+              <button className="rounded-full bg-cyan-600 px-6 py-2 text-sm font-medium text-white shadow-md transition hover:bg-cyan-500">
+                {hero.cta}
+              </button>
+              <a
+                href="#projects"
+                className="text-sm font-medium text-cyan-700 underline underline-offset-4 hover:text-cyan-900"
+              >
+                {hero.secondaryCta}
+              </a>
+            </div>
+            <div className="grid max-w-xl grid-cols-3 gap-4 text-center text-[11px]">
+              <div className="rounded-2xl bg-slate-100 px-3 py-3">
+                <p className="text-lg font-bold text-sky-700">15+</p>
+                <p className="mt-1 text-slate-600">yılı aşkın mühendislik deneyimi</p>
+              </div>
+              <div className="rounded-2xl bg-slate-100 px-3 py-3">
+                <p className="text-lg font-bold text-violet-700">250+</p>
+                <p className="mt-1 text-slate-600">tamamlanmış proje</p>
+              </div>
+              <div className="rounded-2xl bg-slate-100 px-3 py-3">
+                <p className="text-lg font-bold text-amber-700">7/24</p>
+                <p className="mt-1 text-slate-600">servis ve destek</p>
+              </div>
+            </div>
+            {isLoggedIn && (
+              <button
+                onClick={() => openEdit("hero")}
+                className="mt-4 text-[11px] text-cyan-700 underline"
+              >
+                Hero içeriğini düzenle
+              </button>
+            )}
+          </div>
 
-            {/* Sağ taraf: Sistem akışı + animasyon */}
-            <div className="flex items-center justify-center">
-              <div className="flex flex-col items-center justify-center text-center">
-                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                  Sistem akışı
-                </p>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
+          {/* Sağ taraf - animasyon ve açıklama */}
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
+                <div className="relative flex justify-center">
                   <ElevatorAnimation />
+                  <p className="absolute right-0 top-0 -translate-x-2 translate-y-4 text-[10px] font-bold text-slate-600 whitespace-nowrap">
+                    Withmor Teknika Lift
+                  </p>
                 </div>
-                <p className="mt-3 max-w-xs text-[11px] text-slate-600">
-                  Çok katlı asansör animasyonu makine dairesiz sistemin demo görünümüdür.
+                <p className="mt-3 max-w-xs text-center text-[11px] text-slate-600">
+                  Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve
+                  sınırsız özel uygulamalar ile hizmetinizdesiniz.
                 </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* HİZMETLER */}
+      {/* ANA İÇERİK */}
+      <main className="mx-auto max-w-6xl px-4 pb-20">
+        {/* Hizmetler */}
         <section
           id="services"
           className="mt-14 rounded-3xl border border-cyan-400/25 bg-slate-900/70 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.8)] backdrop-blur-sm"
@@ -397,32 +400,33 @@ export default function AsansorSite() {
                 })}
               </div>
 
-              {/* Ana kart */}
+              {/* Ana kart: görsel placeholder + açıklama */}
               <div className="flex flex-col justify-between">
                 <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
-                  <div className="flex flex-col">
-                    <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#22d3ee44,_transparent_60%)]" />
-                      <div className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-200">
-                        <span className="rounded-full bg-black/40 px-3 py-1">
-                          {services[activeService]?.name} görsel alanı
-                        </span>
+                  <div className="grid gap-4">
+                    <div className="flex flex-col">
+                      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl">
+                        <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_top,_#22d3ee44,_transparent_60%)] text-[11px] text-slate-200">
+                          <span className="rounded-full bg-black/40 px-3 py-1">
+                            Görsel eklenecek
+                          </span>
+                        </div>
                       </div>
+                      <p className="text-sm font-semibold text-slate-50">
+                        {services[activeService]?.name}
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                        {services[activeService]?.desc}
+                      </p>
+                      {isLoggedIn && (
+                        <button
+                          onClick={() => openEdit("service", activeService)}
+                          className="mt-2 self-start text-[11px] text-cyan-300 underline underline-offset-2"
+                        >
+                          Bu hizmeti düzenle
+                        </button>
+                      )}
                     </div>
-                    <p className="text-sm font-semibold text-slate-50">
-                      {services[activeService]?.name}
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                      {services[activeService]?.desc}
-                    </p>
-                    {isLoggedIn && (
-                      <button
-                        onClick={() => openEdit("service", activeService)}
-                        className="mt-2 text-[11px] text-cyan-300 underline underline-offset-2"
-                      >
-                        Bu hizmeti düzenle
-                      </button>
-                    )}
                   </div>
                 </div>
 
@@ -444,7 +448,9 @@ export default function AsansorSite() {
                           }
                         `}
                       >
-                        <div className="h-16 w-full rounded-t-xl bg-gradient-to-br from-slate-800 to-slate-900" />
+                        <div className="flex h-16 w-full items-center justify-center rounded-t-xl bg-gradient-to-br from-slate-800 to-slate-900 text-[10px] text-slate-300">
+                          Görsel
+                        </div>
                         <div className="px-2 py-2">
                           <p className="line-clamp-2 font-medium">{service.name}</p>
                         </div>
@@ -457,7 +463,7 @@ export default function AsansorSite() {
           )}
         </section>
 
-        {/* PROJELER */}
+        {/* Projeler */}
         <section
           id="projects"
           className="mt-16 rounded-3xl border border-sky-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950/70 p-6"
@@ -503,7 +509,7 @@ export default function AsansorSite() {
           </div>
         </section>
 
-        {/* REFERANSLAR */}
+        {/* Referanslar */}
         <section
           id="references"
           className="mt-16 rounded-3xl border border-emerald-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/70 p-6"
@@ -551,10 +557,10 @@ export default function AsansorSite() {
           </div>
         </section>
 
-        {/* HAKKIMIZDA / İLETİŞİM */}
+        {/* Hakkımızda / İletişim */}
         <section
           id="contact"
-          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-white text-slate-900 p-6 md:grid-cols-[1.2fr_1fr]"
+          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-white p-6 text-slate-900 md:grid-cols-[1.2fr_1fr]"
         >
           <div>
             <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Hakkımızda</h2>
@@ -565,7 +571,7 @@ export default function AsansorSite() {
                 {companyInfo.phone}
               </li>
               <li>
-                <span className="font-medium text-slate-900">E-posta: </span>
+                <span className="font-medium text-slate-900">E‑posta: </span>
                 {companyInfo.email}
               </li>
               <li>
@@ -574,26 +580,26 @@ export default function AsansorSite() {
               </li>
             </ul>
 
-            {/* Sosyal Medya */}
+            {/* Sosyal Medya - Hakkımızda içinde */}
             <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-700">
               <a
                 href="https://www.facebook.com/TEKNIKALIFT"
                 target="_blank"
-                className="rounded-full bg-[#1877F2] px-3 py-1.5 text-white hover:brightness-110 transition"
+                className="rounded-full bg-[#1877F2] px-3 py-1.5 text-white transition hover:brightness-110"
               >
                 Facebook Page
               </a>
               <a
                 href="https://wa.me/905302805526"
                 target="_blank"
-                className="rounded-full bg-[#25D366] px-3 py-1.5 text-white hover:brightness-110 transition"
+                className="rounded-full bg-[#25D366] px-3 py-1.5 text-white transition hover:brightness-110"
               >
                 WhatsApp Contact
               </a>
               <a
                 href="https://www.instagram.com/withmorlift/"
                 target="_blank"
-                className="rounded-full px-3 py-1.5 text-white hover:brightness-110 transition"
+                className="rounded-full px-3 py-1.5 text-white transition hover:brightness-110"
                 style={{
                   background:
                     "linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4)",
@@ -659,21 +665,21 @@ export default function AsansorSite() {
           <a
             href="https://www.facebook.com/TEKNIKALIFT"
             target="_blank"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
+            className="rounded-full bg-white/10 px-3 py-1.5 transition hover:bg-white/20"
           >
             Facebook Page
           </a>
           <a
             href="https://wa.me/905302805526"
             target="_blank"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
+            className="rounded-full bg-white/10 px-3 py-1.5 transition hover:bg-white/20"
           >
             WhatsApp Contact
           </a>
           <a
             href="https://www.instagram.com/withmorlift/"
             target="_blank"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
+            className="rounded-full bg-white/10 px-3 py-1.5 transition hover:bg-white/20"
           >
             Instagram Profile
           </a>
