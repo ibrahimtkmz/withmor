@@ -4,6 +4,27 @@ import { useState } from "react";
 
 // Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
 // Bu dosya .jsx/.tsx içinde sorunsuz derlenecek şekilde yazıldı.
+{/* Sağ taraf - görsel ve açıklama */}
+<div className="flex items-center justify-center">
+  <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
+    <div className="relative flex justify-center">
+      <div className="relative h-48 w-full max-w-md">
+        <img
+          src="/images/withmor-lift-components.png"
+          alt="Asansör kabini, şase ve komponentleri"
+          className="h-full w-full rounded-2xl object-contain"
+        />
+      </div>
+      <p className="absolute right-4 top-3 text-[10px] font-bold text-slate-600">
+        Withmor Teknika Lift
+      </p>
+    </div>
+    <p className="mt-3 mx-auto max-w-xs text-center text-[11px] text-slate-600">
+      Yük asansörleri, yük platformları, hidrolik asansörler, villa asansörleri ve
+      sınırsız özel uygulamalar ile hizmetinizdeyiz.
+    </p>
+  </div>
+</div>
 
 
 export default function AsansorSite() {
