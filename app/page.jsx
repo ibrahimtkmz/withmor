@@ -90,6 +90,24 @@ export default function App() {
     { name: "City Hospital", type: "MEDICAL", desc: "Hassas duruş kalkış, anti-bakteriyel yüzeyler." },
   ]);
 
+  // EKSİK OLAN REFERENCES STATE'İ EKLENDİ
+  const [references, setReferences] = useState([
+    {
+      company: "ABC İnşaat Grubu",
+      quote:
+        "Projelendirme, montaj ve satış sonrası teknik destek süreçlerinin tamamı profesyonelce yönetildi.",
+      name: "Murat Yılmaz",
+      title: "Proje Yöneticisi",
+    },
+    {
+      company: "Blue Residence Yönetimi",
+      quote:
+        "Modernizasyon sonrasında hem güvenlik hem de konfor anlamında ciddi bir iyileşme sağlandı.",
+      name: "Selin Karaca",
+      title: "Site Müdürü",
+    },
+  ]);
+
   const [companyInfo, setCompanyInfo] = useState({
     name: "WITHMOR",
     subname: "TEKNIKA",
@@ -102,10 +120,65 @@ export default function App() {
   // --- Fonksiyonlar ---
   const handleLogin = (e) => { e.preventDefault(); e.target.username.value === "admin" && e.target.password.value === "password" ? (setIsLoggedIn(true), setShowLogin(false), setLoginError("")) : setLoginError("Erişim Reddedildi."); };
   const handleLogout = () => setIsLoggedIn(false);
-  const openEdit = (type, index = null) => { /* Edit logic would go here, simplified for display */ };
-  const openAdd = (type) => { if(!isLoggedIn) setShowLogin(true); /* Add logic */ };
-  const saveEdit = () => { /* Save logic */ }; 
-  const handleDelete = () => { /* Delete logic */ };
+  
+  const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
+  const [tempValue, setTempValue] = useState({});
+
+  const openEdit = (type, index = null) => {
+    setEditModal({ open: true, type, index });
+    if (type === "hero") setTempValue(hero);
+    if (type === "company") setCompanyInfo(companyInfo);
+    if (type === "service") setTempValue(services[index || 0]);
+    if (type === "project") setTempValue(projects[index || 0]);
+    if (type === "reference") setTempValue(references[index || 0]);
+  };
+
+  const openAdd = (type) => {
+    if (!isLoggedIn) {
+      setShowLogin(true);
+      return;
+    }
+    setEditModal({ open: true, type, index: null });
+    if (type === "service") setTempValue({ id: Date.now(), name: "", desc: "", image: "" });
+    if (type === "project") setTempValue({ name: "", type: "", desc: "" });
+    if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
+  };
+
+  const saveEdit = () => {
+    const { type, index } = editModal;
+    if (type === "hero") setHero(tempValue);
+    if (type === "company") setCompanyInfo(tempValue);
+    if (type === "service") {
+      const copy = [...services]; index !== null ? copy[index] = tempValue : copy.push(tempValue); setServices(copy);
+    }
+    if (type === "project") {
+      const copy = [...projects]; index !== null ? copy[index] = tempValue : copy.push(tempValue); setProjects(copy);
+    }
+    if (type === "reference") {
+        if (index !== null) {
+          const copy = [...references];
+          copy[index] = tempValue;
+          setReferences(copy);
+        } else {
+          setReferences([...references, tempValue]);
+        }
+    }
+    setEditModal({ open: false, type: null, index: null });
+  }; 
+  
+  const handleDelete = () => {
+    const { type, index } = editModal;
+    if (type === "service") {
+        const newServices = services.filter((_, i) => i !== index);
+        setServices(newServices);
+        if (activeService >= index && activeService > 0) setActiveService(activeService - 1);
+        else if (newServices.length === 0) setActiveService(0);
+    }
+    if (type === "project") setProjects(projects.filter((_, i) => i !== index));
+    if (type === "reference") setReferences(references.filter((_, i) => i !== index));
+    setEditModal({ open: false, type: null, index: null });
+  };
+
   const handleQuoteSubmit = (e) => { e.preventDefault(); window.open(`https://wa.me/905302805526?text=${encodeURIComponent(`Teklif Talebi: ${quoteForm.name}`)}`, "_blank"); setShowQuoteModal(false); };
   const handleFastContactSubmit = (e) => { e.preventDefault(); window.open(`https://wa.me/905302805526?text=${encodeURIComponent(`İletişim: ${fastContactForm.name}`)}`, "_blank"); };
   const handleImageError = (e) => { e.target.src = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"; e.target.onerror = null; };
@@ -426,6 +499,36 @@ export default function App() {
                 WhatsApp İletimi
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal - Minimal */}
+      {editModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-slate-900 border border-slate-700 p-8 w-full max-w-lg shadow-2xl max-h-[80vh] overflow-y-auto">
+            <h3 className="text-lg font-mono mb-6 text-white">{editModal.index === null ? "ADD_ENTRY" : "EDIT_ENTRY"}</h3>
+            <div className="space-y-4">
+               {Object.keys(tempValue).map((key) => (
+                  <div key={key}>
+                     <label className="text-[10px] font-mono text-cyan-500 uppercase block mb-1">{key}</label>
+                     {key === "desc" || key === "quote" || key === "about" ? (
+                        <textarea rows={3} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full bg-black border border-slate-700 p-2 text-sm text-white outline-none focus:border-cyan-500 font-mono" />
+                     ) : (
+                        <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full bg-black border border-slate-700 p-2 text-sm text-white outline-none focus:border-cyan-500 font-mono" />
+                     )}
+                  </div>
+               ))}
+            </div>
+            <div className="mt-8 flex justify-between gap-4">
+               {editModal.index !== null && ["service", "project", "reference"].includes(editModal.type) && (
+                  <button onClick={handleDelete} className="text-red-500 text-xs font-mono font-bold hover:text-red-400">[ DELETE ]</button>
+               )}
+               <div className="flex gap-4 ml-auto">
+                  <button onClick={() => setEditModal({open: false, type: null, index: null})} className="text-slate-500 text-xs font-mono font-bold hover:text-white">[ CANCEL ]</button>
+                  <button onClick={saveEdit} className="bg-cyan-900/30 border border-cyan-500/50 text-cyan-400 px-6 py-2 text-xs font-mono font-bold hover:bg-cyan-500 hover:text-black transition-colors">[ SAVE ]</button>
+               </div>
+            </div>
           </div>
         </div>
       )}
