@@ -76,6 +76,13 @@ export default function App() {
     note: "",
   });
 
+  // Hızlı İletişim Form State'i
+  const [fastContactForm, setFastContactForm] = useState({
+    name: "",
+    phone: "",
+    message: "",
+  });
+
   // Düzenlenebilir içerikler
   const [hero, setHero] = useState({
     eyebrow: "Premium Asansör Çözümleri",
@@ -336,6 +343,18 @@ export default function App() {
 
     window.open(whatsappUrl, "_blank");
     setShowQuoteModal(false);
+  };
+
+  // Hızlı İletişim WhatsApp Gönderme Fonksiyonu
+  const handleFastContactSubmit = (e) => {
+    e.preventDefault();
+    const { name, phone, message } = fastContactForm;
+
+    const whatsappMessage = `*Hızlı İletişim Formu*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Mesaj:* ${message}`;
+
+    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(whatsappMessage)}`;
+
+    window.open(whatsappUrl, "_blank");
   };
 
   // Resim yükleme hatası durumunda çalışacak fonksiyon
@@ -794,24 +813,33 @@ export default function App() {
               Projeniz hakkında kısa bir bilgi paylaşın, mühendislik ekibimiz en kısa sürede sizinle
               iletişime geçsin.
             </p>
-            <form className="space-y-3 text-xs">
+            <form onSubmit={handleFastContactSubmit} className="space-y-3 text-xs">
               <input
+                required
                 type="text"
                 placeholder="Ad Soyad"
+                value={fastContactForm.name}
+                onChange={(e) => setFastContactForm({ ...fastContactForm, name: e.target.value })}
                 className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <input
+                required
                 type="tel"
                 placeholder="Telefon Numarası"
+                value={fastContactForm.phone}
+                onChange={(e) => setFastContactForm({ ...fastContactForm, phone: e.target.value })}
                 className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <textarea
+                required
                 rows={3}
                 placeholder="Proje türü, bina detayları, beklenen zamanlama"
+                value={fastContactForm.message}
+                onChange={(e) => setFastContactForm({ ...fastContactForm, message: e.target.value })}
                 className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <button
-                type="button"
+                type="submit"
                 className="w-full rounded-xl bg-cyan-400 py-2 text-sm font-medium text-slate-950 transition hover:bg-cyan-300"
               >
                 Gönder
