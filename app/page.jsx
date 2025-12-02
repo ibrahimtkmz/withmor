@@ -866,8 +866,7 @@ export default function App() {
               marginWidth="0"
               // Harita bağlantısı doğrudan işletme adı ve konumu içerecek şekilde güncellendi
               src="https://maps.google.com/maps?q=Withmor+Asans%C3%B6r+Market%2C+Kervanc%C4%B1+Ticaret+Merkezi%2C+Velime%C5%9Fe+OSB%2C+Tekirda%C4%9F&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              className="rounded-2xl opacity-80 grayscale-[0.3] invert-[0.9] transition-all duration-500 hover:opacity-100 hover:grayscale-0 hover:invert-0"
-              style={{ filter: "invert(90%) hue-rotate(180deg)" }}
+              className="rounded-2xl opacity-90 transition-all duration-500 hover:opacity-100"
             ></iframe>
           </div>
           <p className="mt-3 text-center text-[11px] text-slate-400">
