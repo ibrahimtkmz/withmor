@@ -1,1208 +1,740 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
-
-function ElevatorAnimation() {
-  return (
-    <div className="mt-6 flex justify-center">
-      <div className="relative h-44 w-24 overflow-hidden rounded-2xl border border-cyan-400/40 bg-slate-900/90 shadow-[0_18px_45px_rgba(15,23,42,0.8)]">
-        {/* Asansör kuyusu */}
-        <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-700/70" />
-        {/* Kat çizgileri */}
-        {Array.from({ length: 5 }).map((_, index) => (
-          <div
-            key={index}
-            className="absolute left-2 right-2 border-t border-slate-700/70"
-            style={{ top: `${(index + 1) * 16}%` }}
-          />
-        ))}
-        {/* Kat numaraları */}
-        <div className="absolute right-1 top-2 flex flex-col items-end gap-2 text-[9px] text-slate-400">
-          {[5, 4, 3, 2, 1].map((floor) => (
-            <span key={floor}>#{floor}</span>
-          ))}
-        </div>
-        {/* Kabin */}
-        <div
-          className="absolute left-2.5 right-6 h-7 rounded-xl bg-cyan-400/80 shadow-lg shadow-cyan-400/40"
-          style={{ animation: "elevatorMove 6s ease-in-out infinite" }}
-        >
-          <div className="flex h-full items-center justify-center gap-1 text-[9px] font-semibold text-slate-950">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span>Kabin</span>
-          </div>
-        </div>
-        {/* Yön oku */}
-        <div className="absolute left-2 top-2 flex items-center gap-1 text-[9px] text-emerald-300">
-          <span className="inline-flex h-3 w-3 items-center justify-center rounded-full border border-emerald-400/70">
-            ↑
-          </span>
-          <span>Yukarı</span>
-        </div>
-
-        <style>{`
-          @keyframes elevatorMove {
-            0% {
-              transform: translateY(120%);
-            }
-            50% {
-              transform: translateY(15%);
-            }
-            100% {
-              transform: translateY(-80%);
-            }
-          }
-        `}</style>
-      </div>
-    </div>
-  );
-}
+// --- ORTAK VERİ VE STATE YÖNETİMİ ---
+// Bu bileşen, tüm temaların ortak verisini tutar ve seçilen temayı render eder.
 
 export default function App() {
+  const [currentTheme, setCurrentTheme] = useState("corporate"); // Varsayılan olarak Corporate (page-1) başlasın
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [loginError, setLoginError] = useState("");
-
-  // Teklif Modalı State'leri
   const [showQuoteModal, setShowQuoteModal] = useState(false);
-  const [quoteForm, setQuoteForm] = useState({
-    name: "",
-    phone: "",
-    projectType: "Konut Asansörü",
-    floorCount: "",
-    location: "",
-    note: "",
-  });
+  
+  // -- Ortak Modallar İçin State --
+  const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
+  const [tempValue, setTempValue] = useState({});
+  const [quoteForm, setQuoteForm] = useState({ name: "", phone: "", projectType: "Konut Asansörü", floorCount: "", location: "", note: "" });
+  const [fastContactForm, setFastContactForm] = useState({ name: "", phone: "", message: "" });
 
-  // Hızlı İletişim Form State'i
-  const [fastContactForm, setFastContactForm] = useState({
-    name: "",
-    phone: "",
-    message: "",
-  });
-
-  // Düzenlenebilir içerikler
-  const [hero, setHero] = useState({
-    eyebrow: "Premium Asansör Çözümleri",
-    title: "Güvenli ve estetik dikey ulaşım mühendisliği",
-    subtitle:
-      "Konut binalarından iş merkezlerine kadar özel tasarım, montaj ve bakım hizmetleri sunuyoruz.",
-    cta: "Proje teklifi al",
-    secondaryCta: "Referansları gör",
-  });
-
-  // GÖRSELLER GÜNCELLENDİ: Hata durumunda (dosya bulunamazsa) gösterilecek yedek görsel
-  // NOT: Lütfen public klasöründeki "celik-konstruksiyonlar.webp" ismini kontrol ediniz.
-  const [services, setServices] = useState([
-    {
-      id: "celik-konstruksiyonlar",
-      name: "Çelik Konstrüksiyonlar",
-      desc:
-        "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
-      image: "/celik-konstruksiyonlar.webp",
-    },
-    {
-      id: "hidrolik-sistemler",
-      name: "Hidrolik Sistemler",
-      desc:
-        "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
-      image: "/hidrolik-sistemler.jpg",
-    },
-    {
-      id: "kabinler",
-      name: "Kabinler",
-      desc:
-        "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
-      image: "/kabinler.webp",
-    },
-    {
-      id: "yuk-asansorleri-platformlar",
-      name: "Yük Asansörleri ve Platformlar",
-      desc:
-        "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "/yuk-asansorleri-platformlar.jpg",
-    },
-    {
-      id: "makine-sasesi-mrl",
-      name: "Makine Şasesi MRL / MR",
-      desc:
-        "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
-      image: "/makine-sasesi-mrl-mr.png",
-    },
-    {
-      id: "yuk-kabinleri",
-      name: "Yük Kabinleri",
-      desc:
-        "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
-      image: "/yuk-kabinleri.jpg",
-    },
-  ]);
-
-  const [activeService, setActiveService] = useState(0);
-
-  const [projects, setProjects] = useState([
-    {
-      name: "Skyline Residence Tower",
-      type: "Panoramik yolcu asansörleri",
-      desc: "4 cam panoramik kabin, hedef seçimli kontrol sistemi ve akıllı trafik yönetimi.",
-    },
-    {
-      name: "Techno Industrial Plant",
-      type: "Ağır hizmet yük asansörleri",
-      desc: "Gün boyu yoğun kullanıma uygun, 3.500 kg kapasiteli 3 hidrolik yük asansörü.",
-    },
-    {
-      name: "City Hospital Complex",
-      type: "Sedye ve servis asansörleri",
-      desc: "Hastane standartlarında hijyen, kesintisiz çalışma ve güvenli taşıma çözümleri.",
-    },
-  ]);
-
-  const [references, setReferences] = useState([
-    {
-      company: "ABC İnşaat Grubu",
-      quote:
-        "Projelendirme, montaj ve satış sonrası teknik destek süreçlerinin tamamı profesyonelce yönetildi.",
-      name: "Murat Yılmaz",
-      title: "Proje Yöneticisi",
-    },
-    {
-      company: "Blue Residence Yönetimi",
-      quote:
-        "Modernizasyon sonrasında hem güvenlik hem de konfor anlamında ciddi bir iyileşme sağlandı.",
-      name: "Selin Karaca",
-      title: "Site Müdürü",
-    },
-  ]);
-
+  // -- İçerik Verileri (Tüm temalar bu veriyi kullanır) --
   const [companyInfo, setCompanyInfo] = useState({
     name: "Withmor Teknika Lift",
-    about:
-      "Withmor Teknika Lift, ulusal ve uluslararası standartlara uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu bir arada sunan çözümler geliştirir.",
+    subname: "MÜHENDİSLİK",
+    about: "Withmor Teknika Lift, ulusal ve uluslararası standartlara uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu bir arada sunan çözümler geliştirir.",
     phone: "+90 530 280 55 26",
     email: "info@withmor.com",
     address: "Kervanci ticaret merkezi, Velimeşe OSB, 59850 Çorlu/Tekirdağ",
   });
 
-  // Örnek Google Yorumları Verisi
-  const googleReviews = [
-    {
-      id: 1,
-      name: "Ahmet Yılmaz",
-      rating: 5,
-      text: "Asansör montaj sürecinde gösterdikleri titizlik ve profesyonellik için teşekkür ederim. Zamanında teslimat ve kaliteli işçilik.",
-      date: "2 hafta önce",
-    },
-    {
-      id: 2,
-      name: "Mehmet Demir",
-      rating: 5,
-      text: "Bakım hizmetlerinden çok memnunuz. Teknik ekip çok bilgili ve 7/24 ulaşılabilir durumda.",
-      date: "1 ay önce",
-    },
-    {
-      id: 3,
-      name: "Ayşe Kaya",
-      rating: 5,
-      text: "Villa asansörü projemizde harika bir iş çıkardılar. Hem estetik hem de çok sessiz çalışıyor.",
-      date: "3 ay önce",
-    },
-  ];
+  const [hero, setHero] = useState({
+    eyebrow: "Premium Asansör Çözümleri",
+    title: "Güvenli ve estetik dikey ulaşım mühendisliği",
+    subtitle: "Konut binalarından iş merkezlerine kadar özel tasarım, montaj ve bakım hizmetleri sunuyoruz.",
+    cta: "Proje teklifi al",
+    secondaryCta: "Referansları gör",
+  });
 
-  // Admin girişi kontrolü
+  const [services, setServices] = useState([
+    { id: "1", name: "Çelik Konstrüksiyon", desc: "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat.", image: "/celik-konstruksiyonlar.webp" },
+    { id: "2", name: "Hidrolik Sistemler", desc: "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.", image: "/hidrolik-sistemler.jpg" },
+    { id: "3", name: "Kabinler", desc: "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş dekorasyon.", image: "/kabinler.webp" },
+    { id: "4", name: "Yük Platformları", desc: "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.", image: "/yuk-asansorleri-platformlar.jpg" },
+    { id: "5", name: "Makine Şasesi MRL", desc: "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.", image: "/makine-sasesi-mrl-mr.png" },
+    { id: "6", name: "Yük Kabinleri", desc: "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.", image: "/yuk-kabinleri.jpg" },
+  ]);
+
+  const [projects, setProjects] = useState([
+    { name: "Skyline Residence Tower", type: "Panoramik", desc: "4 cam panoramik kabin, hedef seçimli kontrol sistemi." },
+    { name: "Techno Industrial Plant", type: "Ağır Hizmet", desc: "Gün boyu yoğun kullanıma uygun, 3.500 kg kapasiteli yük asansörleri." },
+    { name: "City Hospital Complex", type: "Sedye Asansörü", desc: "Hastane standartlarında hijyen, kesintisiz çalışma ve güvenli taşıma." },
+  ]);
+
+  const [references, setReferences] = useState([
+    { company: "ABC İnşaat Grubu", quote: "Projelendirme ve montaj süreçleri profesyonelce yönetildi.", name: "Murat Yılmaz", title: "Proje Yöneticisi" },
+    { company: "Blue Residence", quote: "Modernizasyon sonrası güvenlik ve konfor ciddi oranda arttı.", name: "Selin Karaca", title: "Site Müdürü" },
+  ]);
+
+  // -- Ortak Fonksiyonlar --
   const handleLogin = (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-
-    if (username === "admin" && password === "password") {
-      setIsLoggedIn(true);
-      setShowLogin(false);
-      setLoginError("");
-    } else {
-      setLoginError("Kullanıcı adı veya şifre hatalı!");
-    }
+    if (e.target.username.value === "admin" && e.target.password.value === "password") {
+      setIsLoggedIn(true); setShowLogin(false);
+    } else { alert("Hatalı giriş!"); }
   };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
-  // Genel amaçlı düzenleme modali
-  const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
-  const [tempValue, setTempValue] = useState({});
 
   const openEdit = (type, index = null) => {
     setEditModal({ open: true, type, index });
-
     if (type === "hero") setTempValue(hero);
     if (type === "company") setCompanyInfo(companyInfo);
-    if (type === "service" && index !== null) setTempValue(services[index]);
-    if (type === "project" && index !== null) setTempValue(projects[index]);
-    if (type === "reference" && index !== null) setTempValue(references[index]);
+    if (type === "service") setTempValue(services[index || 0]);
+    if (type === "project") setTempValue(projects[index || 0]);
+    if (type === "reference") setTempValue(references[index || 0]);
   };
 
-  // Yeni ekleme fonksiyonu
   const openAdd = (type) => {
-    if (!isLoggedIn) {
-      setShowLogin(true);
-      return;
-    }
+    if (!isLoggedIn) return setShowLogin(true);
     setEditModal({ open: true, type, index: null });
-
-    // Boş şablonlar
-    if (type === "service")
-      setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "" });
+    if (type === "service") setTempValue({ id: Date.now(), name: "", desc: "", image: "" });
     if (type === "project") setTempValue({ name: "", type: "", desc: "" });
     if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
   };
 
   const saveEdit = () => {
     const { type, index } = editModal;
-
-    // Tekil alanlar
     if (type === "hero") setHero(tempValue);
     if (type === "company") setCompanyInfo(tempValue);
-
-    // Listeler (Ekleme veya Düzenleme)
     if (type === "service") {
-      if (index !== null) {
-        // Düzenleme
-        const copy = [...services];
-        copy[index] = tempValue;
-        setServices(copy);
-      } else {
-        // Ekleme
-        setServices([...services, tempValue]);
-        // Yeni eklenen servisi aktif yap
-        setActiveService(services.length);
-      }
+      const copy = [...services]; index !== null ? copy[index] = tempValue : copy.push(tempValue); setServices(copy);
     }
-
     if (type === "project") {
-      if (index !== null) {
-        const copy = [...projects];
-        copy[index] = tempValue;
-        setProjects(copy);
-      } else {
-        setProjects([...projects, tempValue]);
-      }
+      const copy = [...projects]; index !== null ? copy[index] = tempValue : copy.push(tempValue); setProjects(copy);
     }
-
     if (type === "reference") {
-      if (index !== null) {
-        const copy = [...references];
-        copy[index] = tempValue;
-        setReferences(copy);
-      } else {
-        setReferences([...references, tempValue]);
-      }
+      const copy = [...references]; index !== null ? copy[index] = tempValue : copy.push(tempValue); setReferences(copy);
     }
-
     setEditModal({ open: false, type: null, index: null });
   };
 
-  // Silme Fonksiyonu
   const handleDelete = () => {
     const { type, index } = editModal;
-
-    if (type === "service" && index !== null) {
-      const newServices = services.filter((_, i) => i !== index);
-      setServices(newServices);
-      // Eğer silinen aktif servis ise veya liste boşaldıysa index'i ayarla
-      if (activeService >= index && activeService > 0) {
-        setActiveService(activeService - 1);
-      } else if (newServices.length === 0) {
-        setActiveService(0);
-      }
-    }
-
-    if (type === "project" && index !== null) {
-      const newProjects = projects.filter((_, i) => i !== index);
-      setProjects(newProjects);
-    }
-
-    if (type === "reference" && index !== null) {
-      const newReferences = references.filter((_, i) => i !== index);
-      setReferences(newReferences);
-    }
-
+    if (type === "service") setServices(services.filter((_, i) => i !== index));
+    if (type === "project") setProjects(projects.filter((_, i) => i !== index));
+    if (type === "reference") setReferences(references.filter((_, i) => i !== index));
     setEditModal({ open: false, type: null, index: null });
   };
 
-  // WhatsApp Teklif Gönderme Fonksiyonu
-  const handleQuoteSubmit = (e) => {
-    e.preventDefault();
-    const { name, phone, projectType, floorCount, location, note } = quoteForm;
-
-    const message = `*Proje Teklifi Talebi*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Proje Tipi:* ${projectType}\n*Durak Sayısı:* ${floorCount}\n*Konum/Şehir:* ${location}\n*Ek Notlar:* ${note}`;
-
-    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(message)}`;
-
-    window.open(whatsappUrl, "_blank");
-    setShowQuoteModal(false);
+  // Props paketi (Temalara aktarılacak)
+  const sharedProps = {
+    currentTheme, setCurrentTheme, isLoggedIn, setIsLoggedIn, showLogin, setShowLogin,
+    showQuoteModal, setShowQuoteModal, editModal, setEditModal, tempValue, setTempValue,
+    quoteForm, setQuoteForm, fastContactForm, setFastContactForm,
+    companyInfo, setCompanyInfo, hero, setHero, services, setServices, projects, setProjects, references, setReferences,
+    handleLogin, openEdit, openAdd, saveEdit, handleDelete
   };
 
-  // Hızlı İletişim WhatsApp Gönderme Fonksiyonu
-  const handleFastContactSubmit = (e) => {
-    e.preventDefault();
-    const { name, phone, message } = fastContactForm;
+  // Tema Seçici
+  return (
+    <>
+      {currentTheme === "dark" && <ThemeDark {...sharedProps} />}
+      {currentTheme === "corporate" && <ThemeCorporate {...sharedProps} />}
+      {currentTheme === "premium" && <ThemePremium {...sharedProps} />}
+      {currentTheme === "hightech" && <ThemeHighTech {...sharedProps} />}
+      
+      {/* Ortak Modallar */}
+      {/* Login Modal */}
+      {showLogin && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-white p-8 w-full max-w-sm rounded-xl shadow-2xl border border-slate-200">
+            <h3 className="text-xl font-bold mb-4 text-slate-900">Yönetici Girişi</h3>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <input type="text" name="username" placeholder="Kullanıcı: admin" className="w-full border p-3 rounded text-slate-900 outline-none focus:border-blue-500" />
+              <input type="password" name="password" placeholder="Şifre: password" className="w-full border p-3 rounded text-slate-900 outline-none focus:border-blue-500" />
+              <button className="w-full bg-slate-900 text-white p-3 rounded font-bold hover:bg-slate-800 transition">Giriş</button>
+            </form>
+            <button onClick={() => setShowLogin(false)} className="w-full mt-2 text-sm text-slate-500 hover:text-slate-800">İptal</button>
+          </div>
+        </div>
+      )}
 
-    const whatsappMessage = `*Hızlı İletişim Formu*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Mesaj:* ${message}`;
+      {/* Edit Modal */}
+      {editModal.open && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-white p-6 w-full max-w-lg rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto border border-slate-200">
+            <h3 className="text-lg font-bold mb-4 text-slate-900">{editModal.index === null ? "Yeni Ekle" : "Düzenle"}</h3>
+            <div className="space-y-4">
+               {Object.keys(tempValue).map((key) => (
+                  <div key={key}>
+                     <label className="text-xs font-bold text-slate-500 uppercase block mb-1">{key}</label>
+                     {key === "desc" || key === "quote" || key === "about" ? (
+                        <textarea rows={3} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full border border-slate-300 p-2 rounded text-sm text-slate-900 outline-none focus:border-blue-500 bg-slate-50" />
+                     ) : (
+                        <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full border border-slate-300 p-2 rounded text-sm text-slate-900 outline-none focus:border-blue-500 bg-slate-50" />
+                     )}
+                  </div>
+               ))}
+            </div>
+            <div className="mt-6 flex justify-between">
+               {editModal.index !== null && ["service", "project", "reference"].includes(editModal.type) ? (
+                  <button onClick={handleDelete} className="text-red-500 text-sm font-bold hover:text-red-700 bg-red-50 px-3 py-1 rounded">Sil</button>
+               ) : <div/>}
+               <div className="flex gap-2">
+                  <button onClick={() => setEditModal({open: false, type: null, index: null})} className="text-slate-500 text-sm font-bold px-4 py-2 hover:bg-slate-100 rounded">Vazgeç</button>
+                  <button onClick={saveEdit} className="bg-blue-600 text-white px-6 py-2 rounded text-sm font-bold hover:bg-blue-700 shadow-md">Kaydet</button>
+               </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
-    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(whatsappMessage)}`;
-
-    window.open(whatsappUrl, "_blank");
-  };
-
-  // Resim yükleme hatası durumunda çalışacak fonksiyon
-  const handleImageError = (e) => {
-    // Yedek bir görsel veya placeholder göster
-    // Burada güvenilir bir Unsplash görseli fallback olarak kullanılıyor
-    e.target.src = "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800";
-    e.target.onerror = null; // Sonsuz döngüyü engellemek için
-  };
+/* -------------------------------------------------------------------------- */
+/* TEMA 1: KOYU (DARK) -> page.jsx              */
+/* -------------------------------------------------------------------------- */
+function ThemeDark(props) {
+  const { hero, services, projects, references, companyInfo, isLoggedIn, setIsLoggedIn, setCurrentTheme, setShowLogin, openEdit, openAdd } = props;
+  const [activeService, setActiveService] = useState(0);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
-      {/* Arka plan glow efektleri */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#22d3ee22,_transparent_55%),_radial-gradient(circle_at_bottom_left,_#4f46e522,_transparent_55%),_radial-gradient(circle_at_bottom,_#0f766e22,_transparent_55%)]"
-      />
+    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-cyan-900 selection:text-white">
+      {/* Background Glow */}
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_#22d3ee11,_transparent_40%)]" />
 
-      {/* Navbar */}
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-cyan-400 text-sm font-bold text-slate-950 shadow-lg">
-              WL
-            </div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500 text-slate-950 font-bold">WL</div>
             <div className="leading-tight">
-              <p className="text-sm font-semibold tracking-tight">{companyInfo.name}</p>
-              <p className="text-[11px] text-slate-400">Elevator engineering &amp; solutions</p>
+              <p className="font-semibold text-sm">{companyInfo.name}</p>
+              <p className="text-[10px] text-slate-400">Dark Edition</p>
             </div>
           </div>
-
-          <nav className="hidden items-center gap-6 text-xs font-medium text-slate-300 md:flex">
-            <a href="#services" className="hover:text-white">
-              Hizmetler
-            </a>
-            <a href="#projects" className="hover:text-white">
-              Projeler
-            </a>
-            <a href="#references" className="hover:text-white">
-              Referanslar
-            </a>
-            <a href="#contact" className="hover:text-white">
-              İletişim
-            </a>
-          </nav>
-
-          {/* Profil / Login */}
-          <div className="flex items-center gap-3">
-            {isLoggedIn && (
-              <span className="hidden text-[11px] text-emerald-300/90 sm:inline">
-                Admin modu aktif
-              </span>
-            )}
-            <button
-              onClick={() => {
-                if (isLoggedIn) handleLogout();
-                else {
-                  setLoginError(""); // Reset error on open
-                  setShowLogin(true);
-                }
-              }}
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-50 shadow-sm transition hover:bg-cyan-400 hover:text-slate-950"
-            >
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-[11px] font-semibold text-slate-50">
-                {isLoggedIn ? "AD" : "G"}
-              </span>
-              {isLoggedIn ? "Çıkış yap" : "Giriş / Profil"}
-            </button>
+          
+          {/* THEME SWITCHER - DOSYA YOLU GÖRÜNÜMÜ */}
+          <div className="hidden md:flex items-center gap-4">
+             <div className="flex items-center bg-black/30 rounded border border-white/10 px-2">
+                <span className="text-xs text-slate-500 mr-2">Dosya:</span>
+                <select 
+                  value={props.currentTheme} 
+                  onChange={(e) => setCurrentTheme(e.target.value)}
+                  className="bg-transparent text-xs text-cyan-400 font-mono py-1 outline-none cursor-pointer hover:text-cyan-300"
+                >
+                    <option value="dark">page.jsx</option>
+                    <option value="corporate">page-1.jsx</option>
+                    <option value="premium">page-2.jsx</option>
+                    <option value="hightech">page-3.jsx</option>
+                </select>
+             </div>
+             
+             <nav className="flex gap-4 text-xs font-medium text-slate-300 ml-4">
+                <a href="#services" className="hover:text-cyan-400">Hizmetler</a>
+                <a href="#projects" className="hover:text-cyan-400">Projeler</a>
+                <a href="#contact" className="hover:text-cyan-400">İletişim</a>
+             </nav>
           </div>
+
+          <button onClick={() => isLoggedIn ? props.handleLogin({preventDefault:()=>{}}) && setIsLoggedIn(false) : setShowLogin(true)} className="text-xs bg-white/10 px-3 py-1.5 rounded-full hover:bg-cyan-500 hover:text-slate-950 transition">
+             {isLoggedIn ? "Çıkış" : "Giriş"}
+          </button>
         </div>
       </header>
 
-      {/* HERO – TAM GENİŞLİK BEYAZ BLOK */}
-      <section className="w-full border-b border-slate-200 bg-white py-14 text-slate-900">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:px-10 md:grid-cols-2">
-          {/* Sol kısım */}
-          <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-medium text-emerald-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              7/24 bakım ve uzaktan izleme
+      {/* Hero */}
+      <section className="py-20 px-4 border-b border-white/5 relative overflow-hidden">
+         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div>
+               <p className="text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4">{hero.eyebrow}</p>
+               <h1 className="text-4xl md:text-5xl font-bold mb-6">{hero.title}</h1>
+               <p className="text-slate-400 mb-8 max-w-lg">{hero.subtitle}</p>
+               <button className="bg-cyan-500 text-slate-950 px-6 py-3 rounded-full font-bold text-sm hover:bg-cyan-400 transition shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                  {hero.cta}
+               </button>
+               {isLoggedIn && <button onClick={() => openEdit("hero")} className="ml-4 text-xs text-slate-500 underline">Düzenle</button>}
             </div>
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
-              {hero.eyebrow}
-            </p>
-            <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.6rem]">
-              {hero.title}
-            </h1>
-            <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600">
-              {hero.subtitle}
-            </p>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => setShowQuoteModal(true)}
-                className="rounded-full bg-cyan-600 px-6 py-2 text-sm font-medium text-white shadow-md transition hover:bg-cyan-500"
-              >
-                {hero.cta}
-              </button>
-              <a
-                href="#projects"
-                className="text-sm font-medium text-cyan-700 underline underline-offset-4 hover:text-cyan-900"
-              >
-                {hero.secondaryCta}
-              </a>
+            <div className="flex justify-center relative">
+               <div className="absolute inset-0 bg-cyan-500/20 blur-[100px] rounded-full"></div>
+               <div className="relative bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
+                  {/* Basit Asansör Animasyonu (Koyu Tema) */}
+                  <div className="w-24 h-48 border-x border-slate-700 relative overflow-hidden mx-auto bg-slate-950">
+                     <div className="absolute inset-x-2 h-8 bg-cyan-500/80 rounded shadow-[0_0_15px_cyan] top-1/2 -translate-y-1/2 animate-bounce flex items-center justify-center text-[8px] text-slate-950 font-bold">KABİN</div>
+                     {[1,2,3,4,5].map(i => <div key={i} className="absolute w-full h-px bg-slate-800" style={{top: `${i*20}%`}}></div>)}
+                  </div>
+               </div>
             </div>
-            <div className="grid max-w-xl grid-cols-3 gap-4 text-center text-[11px]">
-              <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                <p className="text-lg font-bold text-sky-700">15+</p>
-                <p className="mt-1 text-slate-600">yılı aşkın mühendislik deneyimi</p>
-              </div>
-              <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                <p className="text-lg font-bold text-violet-700">250+</p>
-                <p className="mt-1 text-slate-600">tamamlanmış proje</p>
-              </div>
-              <div className="rounded-2xl bg-slate-100 px-3 py-3">
-                <p className="text-lg font-bold text-amber-700">7/24</p>
-                <p className="mt-1 text-slate-600">servis ve destek</p>
-              </div>
-            </div>
-            {isLoggedIn && (
-              <button
-                onClick={() => openEdit("hero")}
-                className="mt-4 text-[11px] text-cyan-700 underline"
-              >
-                Hero içeriğini düzenle
-              </button>
-            )}
-          </div>
-
-          {/* Sağ kısım – Sistem akışı + animasyon */}
-          <div className="flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center text-center">
-              <p className="mb-5 max-w-xs text-center text-xs font-medium leading-relaxed text-slate-600">
-                Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve
-                sınırsız özel uygulamalar ile hizmetinizdeyiz.
-              </p>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
-                <ElevatorAnimation />
-              </div>
-            </div>
-          </div>
-        </div>
+         </div>
       </section>
 
-      {/* ANA İÇERİK */}
-      <main className="mx-auto max-w-6xl px-4 pb-20">
-        {/* Hizmetler */}
-        <section
-          id="services"
-          className="mt-14 rounded-3xl border border-cyan-400/25 bg-slate-900/70 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.8)] backdrop-blur-sm"
-        >
-          <div className="flex flex-col gap-3 border-b border-white/5 pb-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                  Hizmetlerimiz
-                </p>
-                <button
-                  onClick={() => openAdd("service")}
-                  className="flex items-center gap-1 rounded bg-cyan-400/10 px-2 py-0.5 text-[10px] font-medium text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-900"
-                >
-                  <span className="text-sm">+</span> Yeni Ekle
-                </button>
-              </div>
-              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
-                Asansör sistemleri ürün grupları
-              </h2>
-              <p className="mt-1 max-w-xl text-xs text-slate-300">
-                Özel uygulamalar hariç tüm ana ürün gruplarını tek ekranda inceleyebilirsiniz.
-              </p>
-            </div>
-            {isLoggedIn && (
-              <p className="text-[11px] text-slate-400">
-                Kategori isimlerini ve açıklamaları admin profiliyle giriş yaptıktan sonra
-                yönetebilirsiniz.
-              </p>
-            )}
-          </div>
-
-          {services.length > 0 && (
-            <div className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.4fr]">
-              {/* Kategori listesi */}
-              <div className="space-y-2">
-                {services.map((service, index) => {
-                  const active = index === activeService;
-                  return (
-                    <button
-                      key={service.id}
-                      onClick={() => setActiveService(index)}
-                      className={`w-full rounded-xl border px-3 py-2 text-left text-xs font-medium transition ${
-                        active
-                          ? "border-cyan-400/70 bg-cyan-400/15 text-cyan-100"
-                          : "border-white/10 bg-slate-950/40 text-slate-200 hover:bg-slate-900"
-                      }`}
-                    >
-                      {service.name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Ana kart */}
-              <div className="flex flex-col justify-between">
-                <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
-                  <div className="grid gap-4">
-                    <div className="flex flex-col">
-                      <div className="relative mb-3 h-80 w-full overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
-                        <img
-                          src={services[activeService]?.image}
-                          alt={services[activeService]?.name}
-                          onError={handleImageError} // Hata durumunda tetiklenir
-                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                        <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                          <span className="text-[10px] font-medium text-emerald-100/90">
-                            Örnek Görünüm
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-sm font-semibold text-slate-50">
-                        {services[activeService]?.name}
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                        {services[activeService]?.desc}
-                      </p>
-                      {isLoggedIn && (
-                        <button
-                          onClick={() => openEdit("service", activeService)}
-                          className="mt-2 text-[11px] text-cyan-300 underline underline-offset-2"
-                        >
-                          Bu hizmeti düzenle
-                        </button>
-                      )}
-                    </div>
+      {/* Hizmetler */}
+      <section id="services" className="py-20 px-4 max-w-6xl mx-auto">
+         <div className="flex justify-between items-end mb-10">
+            <h2 className="text-2xl font-bold">Hizmetlerimiz</h2>
+            {isLoggedIn && <button onClick={() => openAdd("service")} className="text-xs bg-slate-800 px-3 py-1 rounded">+ Ekle</button>}
+         </div>
+         <div className="grid md:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+               <div key={index} onClick={() => setActiveService(index)} className={`cursor-pointer p-4 rounded-2xl border transition-all ${activeService === index ? "border-cyan-500/50 bg-cyan-500/10" : "border-white/5 bg-slate-900/50 hover:bg-slate-900"}`}>
+                  <div className="h-40 bg-slate-950 rounded-xl mb-4 overflow-hidden relative">
+                     <img src={service.image} alt="" className="w-full h-full object-cover opacity-80" 
+                          onError={(e) => {e.target.src="https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800"; e.target.onerror=null;}} />
                   </div>
-                </div>
-
-                {/* Thumbnail carousel */}
-                <div className="mt-4">
-                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
-                    Diğer ürün grupları
-                  </p>
-                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
-                    {services.map((service, index) => (
-                      <button
-                        key={service.id}
-                        onClick={() => setActiveService(index)}
-                        className={`group w-32 flex-shrink-0 overflow-hidden rounded-xl border text-left text-[11px] transition ${
-                          index === activeService
-                            ? "border-cyan-400/80 bg-cyan-400/15 text-cyan-50"
-                            : "border-white/10 bg-slate-950/70 text-slate-200 hover:bg-slate-900"
-                        }`}
-                      >
-                        <div className="h-24 w-full overflow-hidden bg-slate-900">
-                          <img
-                            src={service.image}
-                            alt=""
-                            onError={handleImageError} // Hata durumunda tetiklenir
-                            className="h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
-                          />
-                        </div>
-                        <div className="px-2 py-2">
-                          <p className="line-clamp-2 font-medium leading-tight">{service.name}</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* ... (Kalan kısımlar değişmedi: Projeler, Referanslar, İletişim, Footer, Modallar) ... */}
-        {/* Not: Aşağıdaki kodlar öncekiyle aynı olduğu için tekrar etmemek adına kısaltılmadı, tam dosya bütünlüğü korundu. */}
-        
-        {/* Projeler */}
-        <section
-          id="projects"
-          className="mt-16 rounded-3xl border border-sky-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950/70 p-6"
-        >
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                  Projeler
-                </p>
-                <button
-                  onClick={() => openAdd("project")}
-                  className="flex items-center gap-1 rounded bg-sky-400/10 px-2 py-0.5 text-[10px] font-medium text-sky-300 transition hover:bg-sky-400 hover:text-slate-900"
-                >
-                  <span className="text-sm">+</span> Yeni Ekle
-                </button>
-              </div>
-              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
-                Seçilmiş referans projeler
-              </h2>
-              <p className="mt-1 max-w-xl text-xs text-slate-300">
-                Portföyümüzden konut siteleri, hastaneler ve sanayi tesislerine ait örnek
-                uygulamalardan kısa bir seçki.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {projects.map((project, index) => (
-              <div
-                key={index}
-                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-900/70 p-4"
-              >
-                <div>
-                  <p className="text-sm font-semibold text-slate-50">{project.name}</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-emerald-300">
-                    {project.type}
-                  </p>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-300">{project.desc}</p>
-                </div>
-                {isLoggedIn && (
-                  <button
-                    onClick={() => openEdit("project", index)}
-                    className="mt-4 self-start text-[11px] text-cyan-300 underline underline-offset-2"
-                  >
-                    Projeyi düzenle
-                  </button>
-                )}
-              </div>
+                  <h3 className="font-bold text-slate-200">{service.name}</h3>
+                  <p className="text-xs text-slate-400 mt-2 line-clamp-2">{service.desc}</p>
+                  {isLoggedIn && <button onClick={(e) => {e.stopPropagation(); openEdit("service", index)}} className="mt-2 text-[10px] text-cyan-500">Düzenle</button>}
+               </div>
             ))}
-          </div>
-        </section>
+         </div>
+      </section>
 
-        {/* Referanslar */}
-        <section
-          id="references"
-          className="mt-16 rounded-3xl border border-emerald-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/70 p-6"
-        >
-          <div className="mb-6 flex items-center justify-between gap-4">
+      {/* Projeler & Referanslar */}
+      <section className="py-20 bg-slate-900/50 border-y border-white/5">
+         <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12">
             <div>
-              <div className="flex items-center gap-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                  Referanslar
-                </p>
-                <button
-                  onClick={() => openAdd("reference")}
-                  className="flex items-center gap-1 rounded bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300 transition hover:bg-emerald-400 hover:text-slate-900"
-                >
-                  <span className="text-sm">+</span> Yeni Ekle
-                </button>
-              </div>
-              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
-                İş ortaklarımız ne diyor
-              </h2>
-              <p className="mt-1 max-w-xl text-xs text-slate-300">
-                İnşaat firmaları, site yönetimleri ve sanayi kuruluşlarıyla uzun süreli iş
-                birliklerinden bazı yorumlar.
-              </p>
+               <div className="flex justify-between mb-6">
+                  <h2 className="text-xl font-bold text-cyan-400">Projeler</h2>
+                  {isLoggedIn && <button onClick={() => openAdd("project")} className="text-xs">+ Ekle</button>}
+               </div>
+               <div className="space-y-4">
+                  {projects.map((p, i) => (
+                     <div key={i} className="border-l-2 border-slate-700 pl-4 py-1 hover:border-cyan-500 transition-colors">
+                        <h4 className="font-bold text-sm">{p.name}</h4>
+                        <p className="text-xs text-slate-400">{p.desc}</p>
+                        {isLoggedIn && <button onClick={() => openEdit("project", i)} className="text-[10px] text-slate-500">Düzenle</button>}
+                     </div>
+                  ))}
+               </div>
             </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {references.map((ref, index) => (
-              <div
-                key={index}
-                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-950/60 p-4"
-              >
-                <p className="mb-3 text-xs leading-relaxed text-slate-200">“{ref.quote}”</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-50">{ref.company}</p>
-                    <p className="text-[11px] text-slate-400">
-                      {ref.name} • {ref.title}
-                    </p>
-                  </div>
-                  {isLoggedIn && (
-                    <button
-                      onClick={() => openEdit("reference", index)}
-                      className="text-[11px] text-cyan-300 underline underline-offset-2"
-                    >
-                      Referansı düzenle
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Hakkımızda / İletişim */}
-        <section
-          id="contact"
-          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-white p-6 text-slate-900 md:grid-cols-[1.2fr_1fr]"
-        >
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Hakkımızda</h2>
-            <p className="mt-2 text-xs leading-relaxed text-slate-600">{companyInfo.about}</p>
-            <ul className="mt-4 space-y-1.5 text-xs text-slate-700">
-              <li>
-                <span className="font-medium text-slate-900">Telefon: </span>
-                {companyInfo.phone}
-              </li>
-              <li>
-                <span className="font-medium text-slate-900">E-posta: </span>
-                {companyInfo.email}
-              </li>
-              <li>
-                <span className="font-medium text-slate-900">Adres: </span>
-                {companyInfo.address}
-              </li>
-            </ul>
-
-            {/* Sosyal Medya */}
-            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-700">
-              <a
-                href="https://www.facebook.com/TEKNIKALIFT"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full bg-[#1877F2] px-3 py-1.5 text-white transition hover:brightness-110"
-              >
-                Facebook Page
-              </a>
-              <a
-                href="https://wa.me/905302805526"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full bg-[#25D366] px-3 py-1.5 text-white transition hover:brightness-110"
-              >
-                WhatsApp Contact
-              </a>
-              <a
-                href="https://www.instagram.com/withmorlift/"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full px-3 py-1.5 text-white transition hover:brightness-110"
-                style={{
-                  background:
-                    "linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4)",
-                }}
-              >
-                Instagram Profile
-              </a>
-            </div>
-
-            {isLoggedIn && (
-              <button
-                onClick={() => openEdit("company")}
-                className="mt-4 text-[11px] text-cyan-500 underline underline-offset-2"
-              >
-                Firma bilgisini düzenle
-              </button>
-            )}
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-slate-950/85 p-4 text-slate-50">
-            <p className="mb-2 text-sm font-semibold text-slate-50">Hızlı iletişim</p>
-            <p className="mb-4 text-xs text-slate-300">
-              Projeniz hakkında kısa bir bilgi paylaşın, mühendislik ekibimiz en kısa sürede sizinle
-              iletişime geçsin.
-            </p>
-            <form onSubmit={handleFastContactSubmit} className="space-y-3 text-xs">
-              <input
-                required
-                type="text"
-                placeholder="Ad Soyad"
-                value={fastContactForm.name}
-                onChange={(e) => setFastContactForm({ ...fastContactForm, name: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
-              />
-              <input
-                required
-                type="tel"
-                placeholder="Telefon Numarası"
-                value={fastContactForm.phone}
-                onChange={(e) => setFastContactForm({ ...fastContactForm, phone: e.target.value })}
-                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
-              />
-              <textarea
-                required
-                rows={3}
-                placeholder="Proje türü, bina detayları, beklenen zamanlama"
-                value={fastContactForm.message}
-                onChange={(e) => setFastContactForm({ ...fastContactForm, message: e.target.value })}
-                className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
-              />
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-cyan-400 py-2 text-sm font-medium text-slate-950 transition hover:bg-cyan-300"
-              >
-                Gönder
-              </button>
-            </form>
-          </div>
-        </section>
-
-        {/* Google Harita / Konum */}
-        <section className="mt-16">
-          <div className="mb-4 flex items-center gap-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-              Konumumuz
-            </p>
-          </div>
-          <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/50 p-1 shadow-2xl">
-            <iframe
-              title="Ofis Konumu"
-              width="100%"
-              height="400"
-              frameBorder="0"
-              scrolling="no"
-              marginHeight="0"
-              marginWidth="0"
-              // Harita bağlantısı doğrudan işletme adı ve konumu içerecek şekilde güncellendi
-              src="https://maps.google.com/maps?q=Withmor+Asans%C3%B6r+Market%2C+Kervanc%C4%B1+Ticaret+Merkezi%2C+Velime%C5%9Fe+OSB%2C+Tekirda%C4%9F&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              className="rounded-2xl opacity-90 transition-all duration-500 hover:opacity-100"
-            ></iframe>
-          </div>
-          <p className="mt-3 text-center text-[11px] text-slate-400">
-            {companyInfo.address}
-          </p>
-        </section>
-
-        {/* Google Yorumları */}
-        <section className="mt-16 mb-10">
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Google Yorumları
-              </p>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-2xl font-bold text-slate-50">4.9</span>
-                <div className="flex text-amber-400 text-sm">
-                  {"★★★★★"}
-                </div>
-                <span className="text-xs text-slate-400">(120+ Yorum)</span>
-              </div>
+               <div className="flex justify-between mb-6">
+                  <h2 className="text-xl font-bold text-cyan-400">Referanslar</h2>
+                  {isLoggedIn && <button onClick={() => openAdd("reference")} className="text-xs">+ Ekle</button>}
+               </div>
+               <div className="space-y-4">
+                  {references.map((r, i) => (
+                     <div key={i} className="bg-slate-950 p-4 rounded-lg border border-white/5">
+                        <p className="text-xs italic text-slate-300">"{r.quote}"</p>
+                        <p className="text-[10px] text-cyan-600 mt-2 font-bold">{r.company}</p>
+                        {isLoggedIn && <button onClick={() => openEdit("reference", i)} className="text-[10px] text-slate-500">Düzenle</button>}
+                     </div>
+                  ))}
+               </div>
             </div>
-            <a
-              href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-[#4285F4]">
-                <path d="M21.35 11.1h-9.17v2.98h7.19c-.27 2.11-2.5 6.3-7.19 6.3-4.15 0-7.78-3.5-7.78-7.9s3.63-7.9 7.78-7.9c2.3 0 4.1.9 5.2 2l2.3-2.3c-2-2-5.1-3.6-7.5-3.6-6.6 0-12 5.4-12 12s5.4 12 12 12c6 0 11.5-4.5 11.5-11.5 0-.8-.1-1.5-.2-2.1z" />
-              </svg>
-              Google'da Tümünü Gör
-            </a>
+         </div>
+      </section>
+
+      <footer className="py-8 text-center text-xs text-slate-500 border-t border-white/5">
+         © {new Date().getFullYear()} {companyInfo.name} | Dark Theme
+      </footer>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* TEMA 2: KURUMSAL (CORPORATE) -> page-1.jsx     */
+/* -------------------------------------------------------------------------- */
+function ThemeCorporate(props) {
+  const { hero, services, projects, references, companyInfo, isLoggedIn, setIsLoggedIn, setCurrentTheme, setShowLogin, openEdit, openAdd } = props;
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-100">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-blue-100 shadow-sm">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            {/* Logo: Mavi-Lacivert */}
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-900 to-blue-700 text-white font-bold text-sm shadow-md">WL</div>
+            <div>
+               <p className="text-base font-bold text-slate-900 leading-none">{companyInfo.name}</p>
+               <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wide">Corporate</p>
+            </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            {googleReviews.map((review) => (
-              <div
-                key={review.id}
-                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-900/40 p-4 transition hover:bg-slate-900/60"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-900/50 text-[10px] font-bold text-cyan-200">
-                        {review.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-slate-200">{review.name}</p>
-                        <p className="text-[9px] text-slate-500">{review.date}</p>
-                      </div>
-                    </div>
-                    <div className="flex text-[10px] text-amber-400">
-                      {"★".repeat(review.rating)}
-                    </div>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-slate-300 line-clamp-3">
-                    "{review.text}"
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="mt-14 border-t border-white/5 pt-4 text-[11px] text-slate-400 sm:flex sm:items-center sm:justify-between">
-          <span>
-            © {new Date().getFullYear()} {companyInfo.name}. Tüm hakları saklıdır.
-          </span>
-          <span className="mt-1 block sm:mt-0">
-            Güvenli, verimli ve estetik dikey ulaşım için tasarlanmıştır.
-          </span>
-        </footer>
-
-        {/* Alt kısım sosyal medya butonları */}
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-300">
-          <a
-            href="https://www.facebook.com/TEKNIKALIFT"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
-          >
-            Facebook Page
-          </a>
-          <a
-            href="https://wa.me/905302805526"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
-          >
-            WhatsApp Contact
-          </a>
-          <a
-            href="https://www.instagram.com/withmorlift/"
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
-          >
-            Instagram Profile
-          </a>
-        </div>
-      </main>
-
-      {/* ... (Modallar aynı) ... */}
-      {/* Proje Teklifi Modalı */}
-      {showQuoteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-cyan-500/30 bg-slate-950 p-6 shadow-2xl">
-            <h3 className="mb-1 text-lg font-bold text-slate-50">Proje Teklifi Al</h3>
-            <p className="mb-4 text-xs text-slate-400">
-              Formu doldurduktan sonra WhatsApp üzerinden müşteri temsilcimize yönlendirileceksiniz.
-            </p>
-
-            <form onSubmit={handleQuoteSubmit} className="space-y-3">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                    Ad Soyad
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    value={quoteForm.name}
-                    onChange={(e) => setQuoteForm({ ...quoteForm, name: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    placeholder="İsim giriniz"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                    Telefon
-                  </label>
-                  <input
-                    required
-                    type="tel"
-                    value={quoteForm.phone}
-                    onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    placeholder="05XX XXX XX XX"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                  Proje Tipi
-                </label>
-                <select
-                  value={quoteForm.projectType}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, projectType: e.target.value })}
-                  className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+          <div className="hidden md:flex items-center gap-6">
+             {/* THEME SWITCHER - DOSYA YOLU */}
+             <div className="flex items-center bg-slate-100 rounded border border-slate-200 px-3 py-1">
+                <span className="text-xs text-slate-500 mr-2 font-semibold">Dosya:</span>
+                <select 
+                  value={props.currentTheme} 
+                  onChange={(e) => setCurrentTheme(e.target.value)}
+                  className="bg-transparent text-xs text-blue-700 font-bold outline-none cursor-pointer"
                 >
-                  <option>Konut Asansörü</option>
-                  <option>Yük Asansörü</option>
-                  <option>Hidrolik Sistem</option>
-                  <option>Panoramik Asansör</option>
-                  <option>Araç Platformu</option>
-                  <option>Engelli Platformu</option>
-                  <option>Diğer</option>
+                    <option value="dark">page.jsx</option>
+                    <option value="corporate">page-1.jsx</option>
+                    <option value="premium">page-2.jsx</option>
+                    <option value="hightech">page-3.jsx</option>
                 </select>
-              </div>
+             </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                    Durak Sayısı
-                  </label>
-                  <input
-                    type="number"
-                    value={quoteForm.floorCount}
-                    onChange={(e) => setQuoteForm({ ...quoteForm, floorCount: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    placeholder="Örn: 5"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                    Konum / Şehir
-                  </label>
-                  <input
-                    type="text"
-                    value={quoteForm.location}
-                    onChange={(e) => setQuoteForm({ ...quoteForm, location: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    placeholder="İlçe, Şehir"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-1 block text-[11px] font-medium text-slate-400">
-                  Ek Notlar (Opsiyonel)
-                </label>
-                <textarea
-                  rows={3}
-                  value={quoteForm.note}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, note: e.target.value })}
-                  className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="Varsa özel ölçü veya detaylar..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-2.5 text-sm font-semibold text-white shadow-lg shadow-green-900/20 transition hover:bg-[#128C7E]"
-              >
-                <span>WhatsApp ile Gönder</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="h-4 w-4"
-                  aria-hidden="true"
-                >
-                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.001.574 2.146.877 3.298.877h.001c3.182 0 5.769-2.587 5.769-5.767 0-3.181-2.586-5.767-5.768-5.767zm0 10.39c-.98 0-1.928-.276-2.731-.8l-.195-.116-1.527.4.409-1.488-.124-.196c-.559-.893-.854-1.907-.853-2.956.001-2.548 2.073-4.62 4.625-4.621 1.237.001 2.399.482 3.272 1.356.873.874 1.353 2.036 1.353 3.272 0 2.549-2.074 4.62-4.624 4.62zm2.536-3.461c-.139-.069-.821-.405-.948-.451-.128-.047-.221-.07-.315.069-.093.139-.36.452-.442.546-.081.094-.162.106-.301.035-.14-.069-.589-.217-1.121-.692-.416-.37-.696-.827-.777-.967-.082-.139-.009-.214.061-.284.062-.061.139-.162.208-.243.07-.082.093-.139.139-.232.046-.093.023-.174-.012-.243-.035-.069-.315-.759-.431-1.039-.113-.273-.228-.236-.314-.241-.081-.004-.174-.004-.267-.004-.093 0-.244.035-.371.174-.128.139-.488.477-.488 1.164 0 .687.5 1.35.569 1.443.07.094.985 1.503 2.387 2.108.334.144.595.231.797.295.334.106.638.091.879.055.27-.04.821-.335.937-.659.116-.323.116-.601.081-.659-.035-.058-.128-.093-.267-.162z" />
-                </svg>
-              </button>
-            </form>
-            <button
-              onClick={() => setShowQuoteModal(false)}
-              className="mt-3 w-full text-[11px] text-slate-400 hover:text-slate-200"
-            >
-              Kapat
-            </button>
+             <nav className="flex gap-6 text-sm font-semibold text-slate-600 ml-4">
+                <a href="#services" className="hover:text-blue-800 transition-colors">Hizmetler</a>
+                <a href="#projects" className="hover:text-blue-800 transition-colors">Projeler</a>
+                <a href="#contact" className="hover:text-blue-800 transition-colors">İletişim</a>
+             </nav>
           </div>
+          
+          <button onClick={() => isLoggedIn ? setIsLoggedIn(false) : setShowLogin(true)} className="bg-blue-800 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-blue-900 transition shadow-lg shadow-blue-200">
+             {isLoggedIn ? "Çıkış Yap" : "Giriş Yap"}
+          </button>
         </div>
-      )}
+      </header>
 
-      {/* Login Modal */}
-      {showLogin && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
-          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
-            <h3 className="mb-2 text-sm font-semibold text-slate-50">Yönetici Girişi</h3>
-            <p className="mb-4 text-[11px] text-slate-400">
-              Devam etmek için yönetici girişi yapmalısınız.
-            </p>
-            {loginError && (
-              <div className="mb-3 rounded-lg bg-red-500/20 p-2 text-center text-xs text-red-200">
-                {loginError}
-              </div>
-            )}
-            <form onSubmit={handleLogin} className="space-y-3 text-xs">
-              <input
-                type="text"
-                name="username"
-                placeholder="Kullanıcı adı"
-                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Şifre"
-                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
-              />
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-cyan-400 py-2 text-xs font-medium text-slate-950 transition hover:bg-cyan-300"
-              >
-                Giriş Yap
-              </button>
-            </form>
-            <button
-              onClick={() => setShowLogin(false)}
-              className="mt-3 w-full text-[11px] text-slate-400 hover:text-slate-200"
-            >
-              İptal
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Hero - KOYU LACİVERT İLE DEĞİŞTİRİLDİ (Beyazlığı Kırmak İçin) */}
+      <section className="bg-slate-900 py-24 px-6 border-b border-slate-800 relative overflow-hidden">
+         {/* Arka plan efekti */}
+         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-blue-950 opacity-100"></div>
+         <div className="absolute right-0 top-0 w-1/2 h-full bg-blue-600/10 skew-x-12 blur-3xl"></div>
 
-      {/* Genel Düzenleme Modalı */}
-      {editModal.open && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
-          <div className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
-            <h3 className="mb-3 text-sm font-semibold text-slate-50">
-              {editModal.index === null ? "Yeni Ekle" : "İçeriği Düzenle"}
-            </h3>
-            <div className="space-y-3 text-xs">
-              {Object.keys(tempValue).map((key) => (
-                <div key={key}>
-                  <label className="mb-1 block text-[11px] text-slate-400 capitalize">{key}</label>
-                  {key === "desc" || key === "quote" || key === "about" ? (
-                    <textarea
-                      rows={3}
-                      value={tempValue[key]}
-                      onChange={(e) =>
-                        setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
-                      }
-                      className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    />
-                  ) : (
-                    <input
-                      type="text"
-                      value={tempValue[key]}
-                      onChange={(e) =>
-                        setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
-                      }
-                      className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
-                    />
-                  )}
-                </div>
-              ))}
+         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+            <div className="flex-1">
+               <span className="bg-blue-600/20 border border-blue-500/30 text-blue-200 px-4 py-1.5 rounded-full text-xs font-bold mb-6 inline-block tracking-wide uppercase">{hero.eyebrow}</span>
+               <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight tracking-tight">{hero.title}</h1>
+               <p className="text-slate-300 mb-8 text-lg font-light leading-relaxed">{hero.subtitle}</p>
+               <div className="flex gap-4">
+                  <button className="bg-blue-600 text-white px-8 py-3.5 rounded-lg font-bold shadow-lg shadow-blue-900/50 hover:bg-blue-500 transition transform hover:-translate-y-0.5">{hero.cta}</button>
+                  <a href="#projects" className="bg-white/5 border border-white/10 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-white/10 transition">{hero.secondaryCta}</a>
+               </div>
+               {isLoggedIn && <button onClick={() => openEdit("hero")} className="mt-6 text-xs text-blue-400 font-semibold hover:text-white transition">İçeriği Düzenle →</button>}
             </div>
-            <div className="mt-4 flex justify-between text-xs">
-              {/* Sil Butonu - Sadece düzenleme modunda ve belirli tiplerde göster */}
-              {editModal.index !== null &&
-              ["service", "project", "reference"].includes(editModal.type) ? (
-                <button
-                  onClick={handleDelete}
-                  className="rounded-xl border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-red-400 hover:bg-red-500 hover:text-white"
-                >
-                  Sil
-                </button>
-              ) : (
-                <div /> /* Boş div layout dengesi için */
-              )}
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setEditModal({ open: false, type: null, index: null })}
-                  className="rounded-xl border border-white/10 px-3 py-1.5 text-slate-300 hover:bg-slate-900"
-                >
-                  Vazgeç
-                </button>
-                <button
-                  onClick={saveEdit}
-                  className="rounded-xl bg-cyan-400 px-3 py-1.5 font-medium text-slate-950 hover:bg-cyan-300"
-                >
-                  {editModal.index === null ? "Ekle" : "Kaydet"}
-                </button>
-              </div>
+            
+            {/* Animasyon Alanı */}
+            <div className="flex-1 flex justify-center">
+               <div className="w-72 h-96 bg-slate-800 border border-slate-700 rounded-2xl relative shadow-2xl overflow-hidden flex items-end justify-center p-6">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1e293b_0%,_transparent_70%)] opacity-50"></div>
+                  {/* Kabin Yolu */}
+                  <div className="w-40 h-[90%] border-x-2 border-slate-600/50 relative">
+                     <div className="absolute top-0 left-0 right-0 h-px bg-slate-600/30"></div>
+                     <div className="absolute top-1/4 left-0 right-0 h-px bg-slate-600/30"></div>
+                     <div className="absolute top-2/4 left-0 right-0 h-px bg-slate-600/30"></div>
+                     <div className="absolute top-3/4 left-0 right-0 h-px bg-slate-600/30"></div>
+                     
+                     {/* Hareketli Kabin */}
+                     <div className="absolute bottom-0 left-2 right-2 h-20 bg-blue-600 rounded-lg shadow-[0_0_20px_rgba(37,99,235,0.4)] flex items-center justify-center animate-[bounce_3s_infinite]">
+                        <span className="text-white text-xs font-bold">WL</span>
+                     </div>
+                  </div>
+               </div>
             </div>
-          </div>
-        </div>
-      )}
+         </div>
+      </section>
+
+      {/* Services - White Cards on Light Grey BG */}
+      <section id="services" className="py-24 px-6 max-w-7xl mx-auto">
+         <div className="flex justify-between items-end mb-12 border-b border-slate-200 pb-6">
+            <div>
+               <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Hizmetlerimiz</h2>
+               <p className="text-slate-500 text-sm mt-2 font-medium">Profesyonel mühendislik çözümleri ve ürün grupları</p>
+            </div>
+            {isLoggedIn && <button onClick={() => openAdd("service")} className="text-xs bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-200">+ Yeni Ekle</button>}
+         </div>
+         
+         <div className="grid md:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+               <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-blue-200 transition-all duration-300 group hover:-translate-y-1">
+                  <div className="h-48 bg-slate-100 rounded-xl mb-6 overflow-hidden relative">
+                     <div className="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/10 transition-colors z-10"></div>
+                     <img src={service.image} alt="" className="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
+                          onError={(e) => {e.target.src="https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800"; e.target.onerror=null;}}/>
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">{service.name}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed mb-4">{service.desc}</p>
+                  <div className="flex justify-between items-center border-t border-slate-100 pt-4">
+                     <span className="text-xs font-bold text-blue-600 cursor-pointer hover:underline">Detaylar →</span>
+                     {isLoggedIn && <button onClick={() => openEdit("service", index)} className="text-xs text-slate-400 font-bold hover:text-slate-600">Düzenle</button>}
+                  </div>
+               </div>
+            ))}
+         </div>
+      </section>
+
+      {/* Projeler - Beyaz Zemin (Zebra Etkisi için) */}
+      <section id="projects" className="py-24 px-6 bg-white border-t border-slate-100">
+         <div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-center mb-12">
+               <div>
+                  <span className="text-blue-600 text-xs font-bold uppercase tracking-wider mb-2 block">Referanslar</span>
+                  <h2 className="text-3xl font-bold text-slate-900">Seçilmiş Projeler</h2>
+               </div>
+               {isLoggedIn && <button onClick={() => openAdd("project")} className="text-xs bg-slate-100 text-slate-600 px-4 py-2 rounded-lg font-bold hover:bg-slate-200">+ Proje Ekle</button>}
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+               {projects.map((project, index) => (
+                  <div key={index} className="border-l-4 border-blue-600 bg-slate-50 p-6 rounded-r-xl hover:bg-blue-50 transition-colors">
+                     <span className="text-xs font-bold text-slate-400 mb-2 block uppercase tracking-wide">{project.type}</span>
+                     <h3 className="font-bold text-lg text-slate-900 mb-3">{project.name}</h3>
+                     <p className="text-sm text-slate-600 leading-relaxed">{project.desc}</p>
+                     {isLoggedIn && <button onClick={() => openEdit("project", index)} className="mt-4 text-xs text-blue-600 font-semibold hover:underline">Düzenle</button>}
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* İletişim ve Harita - Açık Gri Zemin */}
+      <section id="contact" className="py-24 px-6 bg-slate-50 border-t border-slate-200">
+         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+            <div>
+               <h2 className="text-3xl font-bold text-slate-900 mb-6">İletişime Geçin</h2>
+               <p className="text-slate-600 mb-8 leading-relaxed">{companyInfo.about}</p>
+               
+               <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">📍</div>
+                     <div>
+                        <h4 className="font-bold text-slate-900 text-sm">Adres</h4>
+                        <p className="text-sm text-slate-600">{companyInfo.address}</p>
+                     </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">📞</div>
+                     <div>
+                        <h4 className="font-bold text-slate-900 text-sm">Telefon</h4>
+                        <p className="text-sm text-slate-600">{companyInfo.phone}</p>
+                     </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">✉️</div>
+                     <div>
+                        <h4 className="font-bold text-slate-900 text-sm">E-Posta</h4>
+                        <p className="text-sm text-slate-600">{companyInfo.email}</p>
+                     </div>
+                  </div>
+               </div>
+               
+               {isLoggedIn && <button onClick={() => openEdit("company")} className="mt-8 text-xs border border-slate-300 px-4 py-2 rounded text-slate-500 hover:bg-white hover:text-slate-900">Firma Bilgilerini Düzenle</button>}
+            </div>
+
+            <div className="h-80 bg-white p-2 rounded-2xl shadow-lg border border-slate-200">
+               <iframe
+                  title="Ofis Konumu"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  className="rounded-xl"
+                  src="https://maps.google.com/maps?q=Withmor+Asans%C3%B6r+Market%2C+Kervanc%C4%B1+Ticaret+Merkezi%2C+Velime%C5%9Fe+OSB%2C+Tekirda%C4%9F&t=&z=15&ie=UTF8&iwloc=&output=embed"
+               ></iframe>
+            </div>
+         </div>
+      </section>
+
+      {/* Footer - Koyu */}
+      <footer className="bg-slate-900 text-white py-16 px-6 border-t-4 border-blue-600">
+         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+            <div>
+               <div className="flex items-center gap-2 mb-4">
+                  <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center font-bold text-sm">W</div>
+                  <h4 className="font-bold text-xl">{companyInfo.name}</h4>
+               </div>
+               <p className="text-slate-400 text-sm max-w-xs leading-relaxed">{companyInfo.about}</p>
+            </div>
+            
+            <div className="flex gap-16">
+               <div>
+                  <h5 className="font-bold mb-4 text-sm text-blue-400 uppercase tracking-wider">Hızlı Erişim</h5>
+                  <ul className="space-y-2 text-sm text-slate-400">
+                     <li><a href="#services" className="hover:text-white transition">Hizmetler</a></li>
+                     <li><a href="#projects" className="hover:text-white transition">Projeler</a></li>
+                     <li><a href="#contact" className="hover:text-white transition">İletişim</a></li>
+                  </ul>
+               </div>
+               <div>
+                  <h5 className="font-bold mb-4 text-sm text-blue-400 uppercase tracking-wider">Sosyal</h5>
+                  <ul className="space-y-2 text-sm text-slate-400">
+                     <li><a href="#" className="hover:text-white transition">Instagram</a></li>
+                     <li><a href="#" className="hover:text-white transition">Facebook</a></li>
+                     <li><a href="#" className="hover:text-white transition">LinkedIn</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-slate-800 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+            <p>© {new Date().getFullYear()} {companyInfo.name}. Tüm hakları saklıdır.</p>
+            <p>Corporate Theme Design v2.0</p>
+         </div>
+      </footer>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* TEMA 3: PREMIUM (ARCHITECTURAL) -> page-2.jsx  */
+/* -------------------------------------------------------------------------- */
+function ThemePremium(props) {
+  const { hero, services, projects, companyInfo, isLoggedIn, setIsLoggedIn, setCurrentTheme, setShowLogin, openEdit, openAdd } = props;
+
+  return (
+    <div className="min-h-screen bg-[#F5F5F4] text-stone-800 font-serif selection:bg-orange-200">
+      {/* Top Bar */}
+      <div className="bg-stone-900 text-stone-300 text-[10px] py-2 px-6 flex justify-between tracking-widest uppercase font-sans">
+         <span>Engineering Excellence</span>
+         <span>{companyInfo.address}</span>
+      </div>
+
+      <header className="sticky top-0 z-30 bg-[#F5F5F4]/95 backdrop-blur border-b border-stone-200">
+         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div>
+               <h1 className="text-2xl font-bold text-stone-900">{companyInfo.name}</h1>
+               <p className="text-[9px] font-sans font-bold text-orange-600 tracking-[0.3em] uppercase">Premium</p>
+            </div>
+            
+            <div className="hidden md:flex items-center gap-8 font-sans text-xs font-bold tracking-widest uppercase">
+               {/* THEME SWITCHER - DOSYA YOLU */}
+               <div className="flex items-center border-b border-stone-300 pb-1">
+                  <span className="text-stone-400 mr-2 text-[10px]">FILE:</span>
+                  <select 
+                     value={props.currentTheme} 
+                     onChange={(e) => setCurrentTheme(e.target.value)}
+                     className="bg-transparent text-stone-800 outline-none cursor-pointer font-bold"
+                  >
+                     <option value="dark">page.jsx</option>
+                     <option value="corporate">page-1.jsx</option>
+                     <option value="premium">page-2.jsx</option>
+                     <option value="hightech">page-3.jsx</option>
+                  </select>
+               </div>
+
+               <a href="#services" className="hover:text-orange-700 ml-4">Koleksiyon</a>
+               <a href="#projects" className="hover:text-orange-700">Projeler</a>
+            </div>
+
+            <button onClick={() => isLoggedIn ? setIsLoggedIn(false) : setShowLogin(true)} className="w-8 h-8 rounded-full border border-stone-400 flex items-center justify-center hover:bg-stone-900 hover:text-white transition">
+               <span className="font-sans text-[10px]">{isLoggedIn ? "O" : "I"}</span>
+            </button>
+         </div>
+      </header>
+
+      {/* Hero - Split */}
+      <div className="flex flex-col md:flex-row min-h-[80vh]">
+         <div className="w-full md:w-1/2 bg-[#F5F5F4] flex flex-col justify-center px-10 py-20">
+            <span className="font-sans text-orange-600 text-xs font-bold tracking-widest uppercase mb-4 block border-l-2 border-orange-600 pl-3">{hero.eyebrow}</span>
+            <h2 className="text-5xl md:text-6xl text-stone-900 leading-none mb-8">{hero.title}</h2>
+            <p className="font-sans text-stone-500 text-sm leading-relaxed max-w-md mb-10 border-l border-stone-300 pl-6">{hero.subtitle}</p>
+            <div className="flex gap-4 font-sans">
+               <button className="bg-stone-900 text-white px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-orange-700 transition">{hero.cta}</button>
+            </div>
+            {isLoggedIn && <button onClick={() => openEdit("hero")} className="mt-8 text-left text-[10px] font-sans text-stone-400 underline">Düzenle</button>}
+         </div>
+         <div className="w-full md:w-1/2 bg-stone-300 relative overflow-hidden">
+            <img src="/kabinler.webp" className="w-full h-full object-cover grayscale opacity-60" onError={(e) => {e.target.src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=800";}} />
+            <div className="absolute inset-0 flex items-center justify-center">
+               <div className="w-32 h-64 border border-white/50 rounded-t-full bg-white/10 backdrop-blur-sm relative">
+                  <div className="absolute top-1/2 left-4 right-4 h-12 bg-orange-200/80 shadow-lg border border-orange-300 animate-pulse"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      {/* Services - Masonry */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+         <div className="flex justify-between items-end mb-12">
+            <h2 className="text-3xl text-stone-900">Çözüm Koleksiyonu</h2>
+            {isLoggedIn && <button onClick={() => openAdd("service")} className="font-sans text-xs bg-stone-200 px-3 py-1 text-stone-600">+ Ekle</button>}
+         </div>
+         <div className="grid md:grid-cols-3 gap-1">
+            {services.map((s, i) => (
+               <div key={i} className="group relative h-96 bg-stone-200 overflow-hidden cursor-pointer">
+                  <img src={s.image} className="w-full h-full object-cover transition duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" 
+                       onError={(e) => {e.target.src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=800";}}/>
+                  <div className="absolute inset-0 bg-stone-900/40 group-hover:bg-stone-900/20 transition-colors p-8 flex flex-col justify-end text-white">
+                     <span className="font-sans text-[10px] text-orange-400 tracking-widest mb-2 transform translate-y-4 group-hover:translate-y-0 transition opacity-0 group-hover:opacity-100">0{i+1}</span>
+                     <h3 className="text-2xl border-l-2 border-orange-500 pl-4">{s.name}</h3>
+                     {isLoggedIn && <button onClick={(e) => {e.stopPropagation(); openEdit("service", i)}} className="absolute top-4 right-4 text-[10px] bg-white/20 p-2 font-sans">Düzenle</button>}
+                  </div>
+               </div>
+            ))}
+         </div>
+      </section>
+
+      <footer className="bg-stone-900 text-stone-500 py-16 text-center font-sans text-xs">
+         <div className="w-8 h-8 border border-stone-700 flex items-center justify-center mx-auto mb-4 text-white font-serif">W</div>
+         <p>© {new Date().getFullYear()} {companyInfo.name}. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* TEMA 4: HIGH-TECH (INDUSTRIAL) -> page-3.jsx   */
+/* -------------------------------------------------------------------------- */
+function ThemeHighTech(props) {
+  const { hero, services, projects, companyInfo, isLoggedIn, setIsLoggedIn, setCurrentTheme, setShowLogin, openEdit, openAdd } = props;
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-cyan-50 font-mono selection:bg-cyan-900 selection:text-cyan-200">
+      {/* Grid BG */}
+      <div className="fixed inset-0 pointer-events-none opacity-20" style={{backgroundImage: 'linear-gradient(rgba(6,182,212,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px'}}></div>
+
+      {/* Top Bar */}
+      <div className="bg-black border-b border-cyan-900 text-[10px] py-1 px-4 flex justify-between text-cyan-600">
+         <span>SYS: ONLINE</span>
+         <span>LOC: CORLU_TR</span>
+         <span className="animate-pulse">STATUS: READY</span>
+      </div>
+
+      <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur border-b border-cyan-900/50">
+         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+               <div className="w-10 h-10 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-bold bg-cyan-900/10">W</div>
+               <div>
+                  <p className="font-bold text-white tracking-widest">{companyInfo.name}</p>
+                  <p className="text-[10px] text-cyan-600">High-Tech System</p>
+               </div>
+            </div>
+
+            <div className="hidden md:flex items-center gap-6 text-xs">
+               {/* THEME SWITCHER - DOSYA YOLU */}
+               <div className="flex items-center bg-black border border-cyan-900 px-2 py-0.5">
+                  <span className="text-cyan-800 mr-2 text-[10px]">SRC:</span>
+                  <select 
+                     value={props.currentTheme} 
+                     onChange={(e) => setCurrentTheme(e.target.value)}
+                     className="bg-transparent text-cyan-500 outline-none cursor-pointer hover:text-cyan-400"
+                  >
+                     <option value="dark">page.jsx</option>
+                     <option value="corporate">page-1.jsx</option>
+                     <option value="premium">page-2.jsx</option>
+                     <option value="hightech">page-3.jsx</option>
+                  </select>
+               </div>
+
+               {["Hizmetler", "Projeler", "İletişim"].map((item) => (
+                  <a key={item} href={`#${item}`} className="hover:text-cyan-400 hover:bg-cyan-900/30 px-3 py-1 border border-transparent hover:border-cyan-800 transition-all">{item}</a>
+               ))}
+            </div>
+
+            <button onClick={() => isLoggedIn ? setIsLoggedIn(false) : setShowLogin(true)} className="px-4 py-1 bg-cyan-900/20 border border-cyan-700 text-cyan-400 text-xs hover:bg-cyan-500 hover:text-black transition-colors">
+               {isLoggedIn ? "LOGOUT" : "LOGIN"}
+            </button>
+         </div>
+      </header>
+
+      {/* Hero */}
+      <section className="py-20 px-6 border-b border-cyan-900/30">
+         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div>
+               <p className="text-cyan-500 text-xs mb-4">SYSTEM_MESSAGE: {hero.eyebrow}</p>
+               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 uppercase leading-tight">{hero.title}</h1>
+               <p className="text-slate-400 border-l-2 border-cyan-800 pl-4 mb-8 text-sm">{hero.subtitle}</p>
+               <button className="bg-cyan-600/20 border border-cyan-500 text-cyan-400 px-8 py-4 text-xs font-bold uppercase hover:bg-cyan-500 hover:text-black transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                  {hero.cta}
+               </button>
+               {isLoggedIn && <button onClick={() => openEdit("hero")} className="ml-4 text-[10px] text-cyan-800 hover:text-cyan-500 underline">[EDIT]</button>}
+            </div>
+            <div className="flex justify-center relative">
+               <div className="absolute inset-0 border border-dashed border-cyan-900/50 rounded-full animate-[spin_20s_linear_infinite]"></div>
+               <div className="w-32 h-64 border border-cyan-800 bg-slate-900/80 relative overflow-hidden">
+                  <div className="absolute left-0 right-0 h-1 bg-cyan-500 shadow-[0_0_10px_cyan] animate-[bounce_3s_infinite]"></div>
+                  <div className="absolute bottom-4 left-2 text-[8px] text-cyan-700">ELEVATOR_ID: 404</div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* Services - Grid */}
+      <section id="services" className="py-20 px-6 max-w-7xl mx-auto">
+         <div className="flex justify-between items-end mb-12 border-b border-cyan-900 pb-2">
+            <h2 className="text-2xl text-white font-bold"><span className="text-cyan-600">01.</span> Modüller</h2>
+            {isLoggedIn && <button onClick={() => openAdd("service")} className="text-xs bg-cyan-900/50 text-cyan-400 px-2 py-1">[+] ADD</button>}
+         </div>
+         <div className="grid md:grid-cols-3 gap-4">
+            {services.map((s, i) => (
+               <div key={i} className="bg-slate-900 border border-slate-800 hover:border-cyan-500 transition-colors p-4 group">
+                  <div className="h-40 bg-black mb-4 overflow-hidden relative border-b border-cyan-900">
+                     <img src={s.image} className="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 transition-all" 
+                          onError={(e) => {e.target.src="https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800";}}/>
+                     <div className="absolute top-0 right-0 bg-cyan-900 text-cyan-400 text-[10px] px-1">ID_{i+1}</div>
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-200 group-hover:text-cyan-400">{s.name}</h3>
+                  <p className="text-xs text-slate-500 mt-2">{s.desc}</p>
+                  {isLoggedIn && <button onClick={() => openEdit("service", i)} className="mt-4 text-[10px] text-cyan-800 hover:text-cyan-500">_EDIT_DATA</button>}
+               </div>
+            ))}
+         </div>
+      </section>
+
+      <footer className="bg-black border-t border-cyan-900 py-8 text-center text-[10px] text-slate-600">
+         <p>WITHMOR TEKNIKA SYSTEMS // ALL RIGHTS RESERVED {new Date().getFullYear()}</p>
+      </footer>
     </div>
   );
 }
