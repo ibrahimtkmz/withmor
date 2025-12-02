@@ -86,54 +86,49 @@ export default function App() {
     secondaryCta: "Referansları gör",
   });
 
+  // Görseller güncellendi - Dosya isimleri kullanıldı
   const [services, setServices] = useState([
     {
       id: "celik-konstruksiyonlar",
       name: "Çelik Konstrüksiyonlar",
       desc:
         "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
-      // Görsel: İnşaat çelik iskeleti, asansör kuyu yapısına benzer endüstriyel yapı
-      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=800",
+      image: "Çelik Konstrüksiyonlar.webp",
     },
     {
       id: "hidrolik-sistemler",
       name: "Hidrolik Sistemler",
       desc:
         "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
-      // Görsel: Endüstriyel borulama, valfler ve hidrolik üniteyi andıran mekanik
-      image: "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&q=80&w=800",
+      image: "Hidrolik Sistemler.jpg",
     },
     {
       id: "kabinler",
       name: "Kabinler",
       desc:
         "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
-      // Görsel: Modern, metalik ve ışıklı bir asansör iç görünümü
-      image: "https://images.unsplash.com/photo-1620626012761-d9574ca70d20?auto=format&fit=crop&q=80&w=800",
+      image: "Kabinler.webp",
     },
     {
       id: "yuk-asansorleri-platformlar",
       name: "Yük Asansörleri ve Platformlar",
       desc:
         "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
-      // Görsel: Endüstriyel depo, forklift ve yük alanı, makaslı platform çağrışımı
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+      image: "Yük Asansörleri ve Platformlar.jpg",
     },
     {
       id: "makine-sasesi-mrl",
       name: "Makine Şasesi MRL / MR",
       desc:
         "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
-      // Görsel: Elektrik motoru, metal aksam, dişli sistemi (şaseye en yakın endüstriyel görsel)
-      image: "https://images.unsplash.com/photo-1563805373-3c942971217e?auto=format&fit=crop&q=80&w=800",
+      image: "Makine Şasesi MRL : MR.png",
     },
     {
       id: "yuk-kabinleri",
       name: "Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
-      // Görsel: Metal zemin, çelik duvarlar, ağır sanayi tipi konteyner/kabin içi
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+      image: "Yük Kabinleri.jpg",
     },
   ]);
 
@@ -512,11 +507,11 @@ export default function App() {
                 <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
                   <div className="grid gap-4">
                     <div className="flex flex-col">
-                      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
+                      <div className="relative mb-3 h-80 w-full overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
                         <img
                           src={services[activeService]?.image}
                           alt={services[activeService]?.name}
-                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                         <div className="absolute bottom-3 left-3 flex items-center gap-2">
@@ -544,7 +539,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Thumbnail carousel */}
+                {/* Thumbnail carousel - Düzenlendi */}
                 <div className="mt-4">
                   <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
                     Diğer ürün grupları
@@ -554,13 +549,15 @@ export default function App() {
                       <button
                         key={service.id}
                         onClick={() => setActiveService(index)}
-                        className={`group min-w-[130px] flex-shrink-0 overflow-hidden rounded-xl border text-left text-[11px] transition ${
+                        // Geniş durmasın diye w-32 (128px) sabit genişlik verildi
+                        className={`group w-32 flex-shrink-0 overflow-hidden rounded-xl border text-left text-[11px] transition ${
                           index === activeService
                             ? "border-cyan-400/80 bg-cyan-400/15 text-cyan-50"
                             : "border-white/10 bg-slate-950/70 text-slate-200 hover:bg-slate-900"
                         }`}
                       >
-                        <div className="h-16 w-full overflow-hidden bg-slate-900">
+                        {/* Resim alanı kareye yakın, biraz daha yüksek yapıldı */}
+                        <div className="h-24 w-full overflow-hidden bg-slate-900">
                           <img
                             src={service.image}
                             alt=""
@@ -568,7 +565,7 @@ export default function App() {
                           />
                         </div>
                         <div className="px-2 py-2">
-                          <p className="line-clamp-2 font-medium">{service.name}</p>
+                          <p className="line-clamp-2 font-medium leading-tight">{service.name}</p>
                         </div>
                       </button>
                     ))}
