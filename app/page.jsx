@@ -267,7 +267,7 @@ function ThemeDark(props) {
          </div>
       </section>
 
-      {/* Projeler & Referanslar */}
+      {/* Projeler & Referanslar (Basitleştirilmiş) */}
       <section className="py-20 bg-slate-900/50 border-y border-white/5">
          <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12">
             <div>
@@ -426,23 +426,29 @@ function ThemeCorporate(props) {
          </div>
       </section>
 
-      {/* Projeler - Beyaz Zemin (Zebra Etkisi için) */}
-      <section id="projects" className="py-24 px-6 bg-white border-t border-slate-100">
-         <div className="max-w-6xl mx-auto">
+      {/* Projeler - KOYU RENKLİ ZEMİN (Zebra Etkisi İçin Değiştirildi) */}
+      <section id="projects" className="py-24 px-6 bg-blue-950 border-t border-blue-900 text-white relative">
+         {/* Hafif desen */}
+         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_#1e3a8a_0%,_transparent_40%)] opacity-30 pointer-events-none"></div>
+         
+         <div className="max-w-6xl mx-auto relative z-10">
             <div className="flex justify-between items-center mb-12">
                <div>
-                  <span className="text-blue-600 text-xs font-bold uppercase tracking-wider mb-2 block">Referanslar</span>
-                  <h2 className="text-3xl font-bold text-slate-900">Seçilmiş Projeler</h2>
+                  <span className="text-blue-300 text-xs font-bold uppercase tracking-wider mb-2 block">Referanslar</span>
+                  <h2 className="text-3xl font-bold text-white">Seçilmiş Projeler</h2>
                </div>
-               {isLoggedIn && <button onClick={() => openAdd("project")} className="text-xs bg-slate-100 text-slate-600 px-4 py-2 rounded-lg font-bold hover:bg-slate-200">+ Proje Ekle</button>}
+               {isLoggedIn && <button onClick={() => openAdd("project")} className="text-xs bg-blue-900 border border-blue-700 text-blue-100 px-4 py-2 rounded-lg font-bold hover:bg-blue-800">+ Proje Ekle</button>}
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
                {projects.map((project, index) => (
-                  <div key={index} className="border-l-4 border-blue-600 bg-slate-50 p-6 rounded-r-xl hover:bg-blue-50 transition-colors">
-                     <span className="text-xs font-bold text-slate-400 mb-2 block uppercase tracking-wide">{project.type}</span>
+                  <div key={index} className="bg-white p-6 rounded-xl hover:translate-y-[-5px] transition-transform duration-300 shadow-xl shadow-black/20">
+                     <span className="inline-block text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase tracking-wide mb-3">
+                        {project.type}
+                     </span>
                      <h3 className="font-bold text-lg text-slate-900 mb-3">{project.name}</h3>
-                     <p className="text-sm text-slate-600 leading-relaxed">{project.desc}</p>
+                     <p className="text-sm text-slate-600 leading-relaxed mb-4">{project.desc}</p>
+                     <div className="w-full h-1 bg-gradient-to-r from-blue-600 to-transparent rounded-full"></div>
                      {isLoggedIn && <button onClick={() => openEdit("project", index)} className="mt-4 text-xs text-blue-600 font-semibold hover:underline">Düzenle</button>}
                   </div>
                ))}
@@ -450,8 +456,8 @@ function ThemeCorporate(props) {
          </div>
       </section>
 
-      {/* İletişim ve Harita - Açık Gri Zemin */}
-      <section id="contact" className="py-24 px-6 bg-slate-50 border-t border-slate-200">
+      {/* İletişim ve Harita - AÇIK RENKLİ ZEMİN (Mavi Tonlu) */}
+      <section id="contact" className="py-24 px-6 bg-blue-50/50 border-t border-blue-100">
          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
             <div>
                <h2 className="text-3xl font-bold text-slate-900 mb-6">İletişime Geçin</h2>
@@ -459,21 +465,21 @@ function ThemeCorporate(props) {
                
                <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">📍</div>
+                     <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-700 shrink-0 font-bold border border-blue-100">📍</div>
                      <div>
                         <h4 className="font-bold text-slate-900 text-sm">Adres</h4>
                         <p className="text-sm text-slate-600">{companyInfo.address}</p>
                      </div>
                   </div>
                   <div className="flex items-start gap-4">
-                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">📞</div>
+                     <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-700 shrink-0 font-bold border border-blue-100">📞</div>
                      <div>
                         <h4 className="font-bold text-slate-900 text-sm">Telefon</h4>
                         <p className="text-sm text-slate-600">{companyInfo.phone}</p>
                      </div>
                   </div>
                   <div className="flex items-start gap-4">
-                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 shrink-0 font-bold">✉️</div>
+                     <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-700 shrink-0 font-bold border border-blue-100">✉️</div>
                      <div>
                         <h4 className="font-bold text-slate-900 text-sm">E-Posta</h4>
                         <p className="text-sm text-slate-600">{companyInfo.email}</p>
@@ -481,7 +487,7 @@ function ThemeCorporate(props) {
                   </div>
                </div>
                
-               {isLoggedIn && <button onClick={() => openEdit("company")} className="mt-8 text-xs border border-slate-300 px-4 py-2 rounded text-slate-500 hover:bg-white hover:text-slate-900">Firma Bilgilerini Düzenle</button>}
+               {isLoggedIn && <button onClick={() => openEdit("company")} className="mt-8 text-xs border border-slate-300 px-4 py-2 rounded text-slate-500 hover:bg-white hover:text-slate-900 bg-white">Firma Bilgilerini Düzenle</button>}
             </div>
 
             <div className="h-80 bg-white p-2 rounded-2xl shadow-lg border border-slate-200">
