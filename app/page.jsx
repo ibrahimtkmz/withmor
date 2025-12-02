@@ -371,7 +371,7 @@ export default function AsansorSite() {
         {/* Services */}
         <section
           id="services"
-          className="mt-14 rounded-3xl border border-white/5 bg-slate-900/60 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.8)]"
+          className="mt-14 rounded-3xl border border-cyan-400/25 bg-slate-900/70 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.8)] backdrop-blur-sm"
         >
           <div className="flex flex-col gap-3 border-b border-white/5 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -479,7 +479,7 @@ export default function AsansorSite() {
         </section>
 
         {/* Projects */}
-        <section id="projects" className="mt-16">
+        <section id="projects" className="mt-16 rounded-3xl border border-sky-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950/70 p-6">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
@@ -522,7 +522,7 @@ export default function AsansorSite() {
         </section>
 
         {/* References */}
-        <section id="references" className="mt-16 rounded-3xl border border-white/5 bg-slate-900/70 p-6">
+        <section id="references" className="mt-16 rounded-3xl border border-emerald-500/25 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/70 p-6">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
@@ -569,7 +569,7 @@ export default function AsansorSite() {
         {/* Company / Contact */}
         <section
           id="contact"
-          className="mt-16 grid gap-8 rounded-3xl border border-white/5 bg-slate-900/70 p-6 md:grid-cols-[1.2fr_1fr]"
+          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-slate-950/80 p-6 md:grid-cols-[1.2fr_1fr]"
         >
           <div>
             <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">About us</h2>
