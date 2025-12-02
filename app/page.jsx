@@ -92,42 +92,42 @@ export default function App() {
       name: "Çelik Konstrüksiyonlar",
       desc:
         "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
-      image: "/services/celik-konstruksiyonlar.jpg",
+      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "hidrolik-sistemler",
       name: "Hidrolik Sistemler",
       desc:
         "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
-      image: "/services/hidrolik-sistemler.jpg",
+      image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "kabinler",
       name: "Kabinler",
       desc:
         "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
-      image: "/services/kabinler.jpg",
+      image: "https://images.unsplash.com/photo-1545630472-23c22df50858?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-asansorleri-platformlar",
       name: "Yük Asansörleri ve Platformlar",
       desc:
         "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "/services/yuk-asansorleri-platformlar.jpg",
+      image: "https://images.unsplash.com/photo-1595246140625-573b715d1128?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "makine-sasesi-mrl",
       name: "Makine Şasesi MRL / MR",
       desc:
         "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
-      image: "/services/makine-sasesi-mrl.jpg",
+      image: "https://images.unsplash.com/photo-1565610261709-58b99d82d442?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-kabinleri",
       name: "Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
-      image: "/services/yuk-kabinleri.jpg",
+      image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=800",
     },
   ]);
 
@@ -506,11 +506,17 @@ export default function App() {
                 <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
                   <div className="grid gap-4">
                     <div className="flex flex-col">
-                      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#22d3ee44,_transparent_60%)]" />
-                        <div className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-200">
-                          <span className="rounded-full bg-black/40 px-3 py-1">
-                            {services[activeService]?.name} görsel alanı
+                      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl bg-slate-900 shadow-inner">
+                        <img
+                          src={services[activeService]?.image}
+                          alt={services[activeService]?.name}
+                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                          <span className="text-[10px] font-medium text-emerald-100/90">
+                            Örnek Görünüm
                           </span>
                         </div>
                       </div>
@@ -542,13 +548,19 @@ export default function App() {
                       <button
                         key={service.id}
                         onClick={() => setActiveService(index)}
-                        className={`min-w-[130px] flex-shrink-0 rounded-xl border text-left text-[11px] transition ${
+                        className={`group min-w-[130px] flex-shrink-0 overflow-hidden rounded-xl border text-left text-[11px] transition ${
                           index === activeService
                             ? "border-cyan-400/80 bg-cyan-400/15 text-cyan-50"
                             : "border-white/10 bg-slate-950/70 text-slate-200 hover:bg-slate-900"
                         }`}
                       >
-                        <div className="h-16 w-full rounded-t-xl bg-gradient-to-br from-slate-800 to-slate-900" />
+                        <div className="h-16 w-full overflow-hidden bg-slate-900">
+                          <img
+                            src={service.image}
+                            alt=""
+                            className="h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-110 group-hover:opacity-100"
+                          />
+                        </div>
                         <div className="px-2 py-2">
                           <p className="line-clamp-2 font-medium">{service.name}</p>
                         </div>
