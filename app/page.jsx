@@ -92,42 +92,48 @@ export default function App() {
       name: "Çelik Konstrüksiyonlar",
       desc:
         "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
-      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800",
+      // Görsel: İnşaat çelik iskeleti, asansör kuyu yapısına benzer endüstriyel yapı
+      image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "hidrolik-sistemler",
       name: "Hidrolik Sistemler",
       desc:
         "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
-      image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
+      // Görsel: Endüstriyel borulama, valfler ve hidrolik üniteyi andıran mekanik
+      image: "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "kabinler",
       name: "Kabinler",
       desc:
         "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
-      image: "https://images.unsplash.com/photo-1545630472-23c22df50858?auto=format&fit=crop&q=80&w=800",
+      // Görsel: Modern, metalik ve ışıklı bir asansör iç görünümü
+      image: "https://images.unsplash.com/photo-1620626012761-d9574ca70d20?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-asansorleri-platformlar",
       name: "Yük Asansörleri ve Platformlar",
       desc:
         "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "https://images.unsplash.com/photo-1595246140625-573b715d1128?auto=format&fit=crop&q=80&w=800",
+      // Görsel: Endüstriyel depo, forklift ve yük alanı, makaslı platform çağrışımı
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "makine-sasesi-mrl",
       name: "Makine Şasesi MRL / MR",
       desc:
         "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
-      image: "https://images.unsplash.com/photo-1565610261709-58b99d82d442?auto=format&fit=crop&q=80&w=800",
+      // Görsel: Elektrik motoru, metal aksam, dişli sistemi (şaseye en yakın endüstriyel görsel)
+      image: "https://images.unsplash.com/photo-1563805373-3c942971217e?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-kabinleri",
       name: "Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
-      image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=800",
+      // Görsel: Metal zemin, çelik duvarlar, ağır sanayi tipi konteyner/kabin içi
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
     },
   ]);
 
