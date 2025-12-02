@@ -506,7 +506,7 @@ export default function AsansorSite() {
                   <p className="mt-0.5 text-[11px] font-medium text-emerald-300">
                     {project.type}
                   </p>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-300">{project.desc}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-600">{project.desc}</p>
                 </div>
                 {isLoggedIn && (
                   <button
@@ -569,14 +569,14 @@ export default function AsansorSite() {
         {/* Company / Contact */}
         <section
           id="contact"
-          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-slate-950/80 p-6 md:grid-cols-[1.2fr_1fr]"
+          className="mt-16 grid gap-8 rounded-3xl border border-violet-500/25 bg-white text-slate-900 p-6 md:grid-cols-[1.2fr_1fr]"-[1.2fr_1fr]"
         >
           <div>
             <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">About us</h2>
-            <p className="mt-2 text-xs leading-relaxed text-slate-300">{companyInfo.about}</p>
-            <ul className="mt-4 space-y-1.5 text-xs text-slate-200">
+            <p className="mt-2 text-xs leading-relaxed text-slate-600">{companyInfo.about}</p>
+            <ul className="mt-4 space-y-1.5 text-xs text-slate-700">
               <li>
-                <span className="font-medium text-slate-50">Phone: </span>
+                <span className="font-medium text-slate-900">Phone: </span>
                 {companyInfo.phone}
               </li>
               <li>
@@ -598,7 +598,7 @@ export default function AsansorSite() {
             )}
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+          <div className="rounded-2xl border border-slate-200 bg-slate-950/85 text-slate-50 p-4">
             <p className="mb-2 text-sm font-semibold text-slate-50">Quick contact</p>
             <p className="mb-4 text-xs text-slate-300">
               Share a short summary of your project and our engineering team will get back to
