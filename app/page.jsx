@@ -773,4 +773,4 @@ export default function AsansorSite() {
       )}
     </div>
   );
-}      işaretlediğim kısmı kaldır 
+}
