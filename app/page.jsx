@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 // Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
-// Bu dosya .jsx olarak kullanılacak şekilde saf React + JSX ile yazıldı (TypeScript yok).
 
 function ElevatorAnimation() {
   return (
@@ -43,7 +42,7 @@ function ElevatorAnimation() {
           <span>Yukarı</span>
         </div>
 
-        <style jsx>{`
+        <style>{`
           @keyframes elevatorMove {
             0% {
               transform: translateY(120%);
@@ -61,7 +60,7 @@ function ElevatorAnimation() {
   );
 }
 
-export default function AsansorSite() {
+export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -185,7 +184,7 @@ export default function AsansorSite() {
     setEditModal({ open: true, type, index });
 
     if (type === "hero") setTempValue(hero);
-    if (type === "company") setTempValue(companyInfo);
+    if (type === "company") setCompanyInfo(companyInfo);
     if (type === "service" && index !== null) setTempValue(services[index]);
     if (type === "project" && index !== null) setTempValue(projects[index]);
     if (type === "reference" && index !== null) setTempValue(references[index]);
@@ -219,7 +218,7 @@ export default function AsansorSite() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
+    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
       {/* Arka plan glow efektleri */}
       <div
         aria-hidden="true"
@@ -333,15 +332,13 @@ export default function AsansorSite() {
           {/* Sağ kısım – Sistem akışı + animasyon */}
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-center justify-center text-center">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                Sistem akışı
+              <p className="mb-5 max-w-xs text-center text-xs font-medium leading-relaxed text-slate-600">
+                Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve
+                sınırsız özel uygulamalar ile hizmetinizdeyiz.
               </p>
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
                 <ElevatorAnimation />
               </div>
-              <p className="mt-3 max-w-xs text-[11px] text-slate-600">
-                Çok katlı asansör animasyonu makine dairesiz sistemin demo görünümüdür.
-              </p>
             </div>
           </div>
         </div>
@@ -432,7 +429,7 @@ export default function AsansorSite() {
                   <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
                     Diğer ürün grupları
                   </p>
-                  <div className="flex gap-3 overflow-x-auto pb-2">
+                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
                     {services.map((service, index) => (
                       <button
                         key={service.id}
@@ -578,6 +575,7 @@ export default function AsansorSite() {
               <a
                 href="https://www.facebook.com/TEKNIKALIFT"
                 target="_blank"
+                rel="noreferrer"
                 className="rounded-full bg-[#1877F2] px-3 py-1.5 text-white transition hover:brightness-110"
               >
                 Facebook Page
@@ -585,6 +583,7 @@ export default function AsansorSite() {
               <a
                 href="https://wa.me/905302805526"
                 target="_blank"
+                rel="noreferrer"
                 className="rounded-full bg-[#25D366] px-3 py-1.5 text-white transition hover:brightness-110"
               >
                 WhatsApp Contact
@@ -592,6 +591,7 @@ export default function AsansorSite() {
               <a
                 href="https://www.instagram.com/withmorlift/"
                 target="_blank"
+                rel="noreferrer"
                 className="rounded-full px-3 py-1.5 text-white transition hover:brightness-110"
                 style={{
                   background:
@@ -659,6 +659,7 @@ export default function AsansorSite() {
           <a
             href="https://www.facebook.com/TEKNIKALIFT"
             target="_blank"
+            rel="noreferrer"
             className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
           >
             Facebook Page
@@ -666,6 +667,7 @@ export default function AsansorSite() {
           <a
             href="https://wa.me/905302805526"
             target="_blank"
+            rel="noreferrer"
             className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
           >
             WhatsApp Contact
@@ -673,6 +675,7 @@ export default function AsansorSite() {
           <a
             href="https://www.instagram.com/withmorlift/"
             target="_blank"
+            rel="noreferrer"
             className="rounded-full bg-white/10 px-3 py-1.5 hover:bg-white/20 transition"
           >
             Instagram Profile
