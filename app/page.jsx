@@ -190,28 +190,61 @@ export default function App() {
     if (type === "reference" && index !== null) setTempValue(references[index]);
   };
 
+  // Yeni ekleme fonksiyonu
+  const openAdd = (type) => {
+    if (!isLoggedIn) {
+      setShowLogin(true);
+      return;
+    }
+    setEditModal({ open: true, type, index: null });
+
+    // Boş şablonlar
+    if (type === "service")
+      setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "" });
+    if (type === "project") setTempValue({ name: "", type: "", desc: "" });
+    if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
+  };
+
   const saveEdit = () => {
     const { type, index } = editModal;
 
+    // Tekil alanlar
     if (type === "hero") setHero(tempValue);
     if (type === "company") setCompanyInfo(tempValue);
 
-    if (type === "service" && index !== null) {
-      const copy = [...services];
-      copy[index] = tempValue;
-      setServices(copy);
+    // Listeler (Ekleme veya Düzenleme)
+    if (type === "service") {
+      if (index !== null) {
+        // Düzenleme
+        const copy = [...services];
+        copy[index] = tempValue;
+        setServices(copy);
+      } else {
+        // Ekleme
+        setServices([...services, tempValue]);
+        // Yeni eklenen servisi aktif yap
+        setActiveService(services.length);
+      }
     }
 
-    if (type === "project" && index !== null) {
-      const copy = [...projects];
-      copy[index] = tempValue;
-      setProjects(copy);
+    if (type === "project") {
+      if (index !== null) {
+        const copy = [...projects];
+        copy[index] = tempValue;
+        setProjects(copy);
+      } else {
+        setProjects([...projects, tempValue]);
+      }
     }
 
-    if (type === "reference" && index !== null) {
-      const copy = [...references];
-      copy[index] = tempValue;
-      setReferences(copy);
+    if (type === "reference") {
+      if (index !== null) {
+        const copy = [...references];
+        copy[index] = tempValue;
+        setReferences(copy);
+      } else {
+        setReferences([...references, tempValue]);
+      }
     }
 
     setEditModal({ open: false, type: null, index: null });
@@ -353,9 +386,17 @@ export default function App() {
         >
           <div className="flex flex-col gap-3 border-b border-white/5 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Hizmetlerimiz
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                  Hizmetlerimiz
+                </p>
+                <button
+                  onClick={() => openAdd("service")}
+                  className="flex items-center gap-1 rounded bg-cyan-400/10 px-2 py-0.5 text-[10px] font-medium text-cyan-300 transition hover:bg-cyan-400 hover:text-slate-900"
+                >
+                  <span className="text-sm">+</span> Yeni Ekle
+                </button>
+              </div>
               <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
                 Asansör sistemleri ürün grupları
               </h2>
@@ -460,9 +501,17 @@ export default function App() {
         >
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Projeler
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                  Projeler
+                </p>
+                <button
+                  onClick={() => openAdd("project")}
+                  className="flex items-center gap-1 rounded bg-sky-400/10 px-2 py-0.5 text-[10px] font-medium text-sky-300 transition hover:bg-sky-400 hover:text-slate-900"
+                >
+                  <span className="text-sm">+</span> Yeni Ekle
+                </button>
+              </div>
               <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
                 Seçilmiş referans projeler
               </h2>
@@ -506,9 +555,17 @@ export default function App() {
         >
           <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Referanslar
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                  Referanslar
+                </p>
+                <button
+                  onClick={() => openAdd("reference")}
+                  className="flex items-center gap-1 rounded bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300 transition hover:bg-emerald-400 hover:text-slate-900"
+                >
+                  <span className="text-sm">+</span> Yeni Ekle
+                </button>
+              </div>
               <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
                 İş ortaklarımız ne diyor
               </h2>
@@ -724,11 +781,13 @@ export default function App() {
       {editModal.open && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
           <div className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
-            <h3 className="mb-3 text-sm font-semibold text-slate-50">İçeriği Düzenle</h3>
+            <h3 className="mb-3 text-sm font-semibold text-slate-50">
+              {editModal.index === null ? "Yeni Ekle" : "İçeriği Düzenle"}
+            </h3>
             <div className="space-y-3 text-xs">
               {Object.keys(tempValue).map((key) => (
                 <div key={key}>
-                  <label className="mb-1 block text-[11px] text-slate-400">{key}</label>
+                  <label className="mb-1 block text-[11px] text-slate-400 capitalize">{key}</label>
                   {key === "desc" || key === "quote" || key === "about" ? (
                     <textarea
                       rows={3}
@@ -762,7 +821,7 @@ export default function App() {
                 onClick={saveEdit}
                 className="rounded-xl bg-cyan-400 px-3 py-1.5 font-medium text-slate-950 hover:bg-cyan-300"
               >
-                Kaydet
+                {editModal.index === null ? "Ekle" : "Kaydet"}
               </button>
             </div>
           </div>
