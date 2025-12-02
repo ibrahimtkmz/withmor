@@ -222,7 +222,7 @@ export default function AsansorSite() {
       {/* Background glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#22d3ee22,_transparent_55%),_radial-gradient(circle_at_bottom,_#0f766e22,_transparent_55%)]"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#22d3ee22,_transparent_55%),_radial-gradient(circle_at_bottom_left,_#4f46e522,_transparent_55%),_radial-gradient(circle_at_bottom,_#0f766e22,_transparent_55%)]"
       />
 
       {/* Navbar */}
@@ -296,7 +296,7 @@ export default function AsansorSite() {
             </p>
 
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <button className="rounded-full bg-cyan-400 px-6 py-2 text-sm font-medium text-slate-950 shadow-lg shadow-cyan-400/30 transition hover:bg-cyan-300">
+              <button className="rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 px-6 py-2 text-sm font-medium text-slate-950 shadow-lg shadow-sky-400/40 transition hover:brightness-110">
                 {hero.cta}
               </button>
               <a
@@ -309,15 +309,15 @@ export default function AsansorSite() {
 
             <div className="grid max-w-xl grid-cols-3 gap-4 text-center text-[11px] text-slate-300">
               <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                <p className="text-lg font-semibold text-cyan-300">15+</p>
+                <p className="text-lg font-semibold text-sky-300">15+</p>
                 <p>years of engineering experience</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                <p className="text-lg font-semibold text-cyan-300">250+</p>
+                <p className="text-lg font-semibold text-violet-300">250+</p>
                 <p>completed elevator projects</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
-                <p className="text-lg font-semibold text-cyan-300">7/24</p>
+                <p className="text-lg font-semibold text-amber-300">7/24</p>
                 <p>service & remote support</p>
               </div>
             </div>
@@ -363,10 +363,7 @@ export default function AsansorSite() {
                   </p>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -left-4 h-16 w-16 rounded-3xl border border-cyan-400/40 bg-slate-950/80 p-3 text-[10px] text-slate-200">
-                <p className="text-[11px] font-semibold text-cyan-300">Remote data</p>
-                <p>Live cabin status, error logs and traffic reports.</p>
-              </div>
+              
             </div>
           </div>
         </section>
@@ -379,19 +376,18 @@ export default function AsansorSite() {
           <div className="flex flex-col gap-3 border-b border-white/5 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Hizmetlerimiz
+                Our Services
               </p>
               <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
-                Asansör sistemleri için ürün gruplarımız
+                Product groups for elevator systems
               </h2>
               <p className="mt-1 max-w-xl text-xs text-slate-300">
-                Uygulamalarımız hariç, çelik konstrüksiyondan yük kabinlerine kadar ana ürün
-                gruplarımızı tek ekranda inceleyebilirsiniz.
+                Except for special applications, you can review all main product groups from steel constructions to heavy-duty cabins in a single view.
               </p>
             </div>
             {isLoggedIn && (
               <p className="text-[11px] text-slate-400">
-                Kategorileri ve açıklamaları admin girişi ile düzenleyebilirsiniz.
+                You can manage categories and descriptions after logging in to the admin profile.
               </p>
             )}
           </div>
@@ -428,7 +424,7 @@ export default function AsansorSite() {
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#22d3ee44,_transparent_60%)]" />
                         <div className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-200">
                           <span className="rounded-full bg-black/40 px-3 py-1">
-                            {services[activeService]?.name} görsel alanı
+                            {services[activeService]?.name} image placeholder
                           </span>
                         </div>
                       </div>
@@ -447,8 +443,7 @@ export default function AsansorSite() {
                       </p>
                       <ElevatorAnimation />
                       <p className="mt-2 text-center text-[10px] text-slate-400">
-                        Kat kat yukarı çıkan animasyon, asansörünüzün seyir hareketini temsil eden
-                        demo görseldir.
+                        The multi-floor elevator animation is a demo visual representing the travel movement of your system.
                       </p>
                     </div>
                   </div>
@@ -457,7 +452,7 @@ export default function AsansorSite() {
                 {/* Thumbnail carousel */}
                 <div className="mt-4">
                   <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
-                    Diğer ürün grupları
+                    Other product groups
                   </p>
                   <div className="flex gap-3 overflow-x-auto pb-2">
                     {services.map((service, index) => (
