@@ -2,29 +2,8 @@
 
 import { useState } from "react";
 
-{/* Sağ taraf - ürün görseli ve açıklama */}
-<div className="flex items-center justify-center">
-  <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
-    <div className="relative flex justify-center">
-      <div className="relative h-48 w-full max-w-md">
-        <img
-          src="/images/withmor-lift-components.png" // görseli public/images içine bu isimle koy
-          alt="Asansör kabini, şase ve makine grubu"
-          className="h-full w-full object-contain rounded-2xl"
-        />
-      </div>
-      <p className="absolute right-4 top-3 text-[10px] font-bold text-slate-600">
-        Withmor Teknika Lift
-      </p>
-    </div>
-    <p className="mt-3 mx-auto max-w-xs text-center text-[11px] text-slate-600">
-      Yük asansörleri, yük platformları, hidrolik asansörler, villa asansörleri ve
-      sınırsız özel uygulamalar ile hizmetinizdeyiz.
-    </p>
-  </div>
-</div>
-
-
+// Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
+// Bu dosya .jsx/.tsx içinde sorunsuz derlenecek şekilde yazıldı.
 
 export default function AsansorSite() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -132,7 +111,7 @@ export default function AsansorSite() {
   });
 
   // Basit demo login; prod ortamda gerçek auth ile değiştirilmeli.
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggedIn(true);
     setShowLogin(false);
@@ -143,10 +122,14 @@ export default function AsansorSite() {
   };
 
   // Genel amaçlı düzenleme modali
-  const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
-  const [tempValue, setTempValue] = useState({});
+  const [editModal, setEditModal] = useState<{ open: boolean; type: string | null; index: number | null }>({
+    open: false,
+    type: null,
+    index: null,
+  });
+  const [tempValue, setTempValue] = useState<any>({});
 
-  const openEdit = (type, index = null) => {
+  const openEdit = (type: string, index: number | null = null) => {
     setEditModal({ open: true, type, index });
 
     if (type === "hero") setTempValue(hero);
@@ -295,21 +278,25 @@ export default function AsansorSite() {
             )}
           </div>
 
-          {/* Sağ taraf - animasyon ve açıklama */}
+          {/* Sağ taraf - ürün görseli */}
           <div className="flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center text-center">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
-                <div className="relative flex justify-center">
-                  <ElevatorAnimation />
-                  <p className="absolute right-0 top-0 -translate-x-2 translate-y-4 text-[10px] font-bold text-slate-600 whitespace-nowrap">
-                    Withmor Teknika Lift
-                  </p>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-inner">
+              <div className="relative flex justify-center">
+                <div className="relative h-48 w-full max-w-md">
+                  <img
+                    src="/images/withmor-lift-components.png" // PNG'yi buraya koy
+                    alt="Asansör kabini, kılavuz ray sistemi ve makine grubu"
+                    className="h-full w-full rounded-2xl object-contain"
+                  />
                 </div>
-                <p className="mt-3 max-w-xs text-center text-[11px] text-slate-600">
-                  Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve
-                  sınırsız özel uygulamalar ile hizmetinizdesiniz.
+                <p className="absolute right-4 top-3 text-[10px] font-bold text-slate-600">
+                  Withmor Teknika Lift
                 </p>
               </div>
+              <p className="mt-3 mx-auto max-w-xs text-center text-[11px] text-slate-600">
+                Yük asansörleri, yük platformları, hidrolik asansörler, villa asansörleri ve
+                sınırsız özel uygulamalar ile hizmetinizdeyiz.
+              </p>
             </div>
           </div>
         </div>
@@ -366,7 +353,7 @@ export default function AsansorSite() {
                 })}
               </div>
 
-              {/* Ana kart: görsel placeholder + açıklama */}
+              {/* Ana kart */}
               <div className="flex flex-col justify-between">
                 <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
                   <div className="grid gap-4">
@@ -537,7 +524,7 @@ export default function AsansorSite() {
                 {companyInfo.phone}
               </li>
               <li>
-                <span className="font-medium text-slate-900">E‑posta: </span>
+                <span className="font-medium text-slate-900">E-posta: </span>
                 {companyInfo.email}
               </li>
               <li>
@@ -703,7 +690,7 @@ export default function AsansorSite() {
                       rows={3}
                       value={tempValue[key]}
                       onChange={(e) =>
-                        setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
+                        setTempValue((prev: any) => ({ ...prev, [key]: e.target.value }))
                       }
                       className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
                     />
@@ -712,7 +699,7 @@ export default function AsansorSite() {
                       type="text"
                       value={tempValue[key]}
                       onChange={(e) =>
-                        setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
+                        setTempValue((prev: any) => ({ ...prev, [key]: e.target.value }))
                       }
                       className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
                     />
