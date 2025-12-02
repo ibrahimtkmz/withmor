@@ -63,6 +63,7 @@ function ElevatorAnimation() {
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   // Düzenlenebilir içerikler
   const [hero, setHero] = useState({
@@ -165,11 +166,19 @@ export default function App() {
     address: "Alipaşa mah. Salih Omurtak cad no:23a, Çorlu / TEKİRDAĞ",
   });
 
-  // Basit demo login; prod ortamda gerçek auth ile değiştirilmeli.
+  // Admin girişi kontrolü
   const handleLogin = (e) => {
     e.preventDefault();
-    setIsLoggedIn(true);
-    setShowLogin(false);
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+
+    if (username === "admin" && password === "password") {
+      setIsLoggedIn(true);
+      setShowLogin(false);
+      setLoginError("");
+    } else {
+      setLoginError("Kullanıcı adı veya şifre hatalı!");
+    }
   };
 
   const handleLogout = () => {
@@ -250,6 +259,34 @@ export default function App() {
     setEditModal({ open: false, type: null, index: null });
   };
 
+  // Silme Fonksiyonu
+  const handleDelete = () => {
+    const { type, index } = editModal;
+
+    if (type === "service" && index !== null) {
+      const newServices = services.filter((_, i) => i !== index);
+      setServices(newServices);
+      // Eğer silinen aktif servis ise veya liste boşaldıysa index'i ayarla
+      if (activeService >= index && activeService > 0) {
+        setActiveService(activeService - 1);
+      } else if (newServices.length === 0) {
+        setActiveService(0);
+      }
+    }
+
+    if (type === "project" && index !== null) {
+      const newProjects = projects.filter((_, i) => i !== index);
+      setProjects(newProjects);
+    }
+
+    if (type === "reference" && index !== null) {
+      const newReferences = references.filter((_, i) => i !== index);
+      setReferences(newReferences);
+    }
+
+    setEditModal({ open: false, type: null, index: null });
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
       {/* Arka plan glow efektleri */}
@@ -296,7 +333,10 @@ export default function App() {
             <button
               onClick={() => {
                 if (isLoggedIn) handleLogout();
-                else setShowLogin(true);
+                else {
+                  setLoginError(""); // Reset error on open
+                  setShowLogin(true);
+                }
               }}
               className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-50 shadow-sm transition hover:bg-cyan-400 hover:text-slate-950"
             >
@@ -746,17 +786,23 @@ export default function App() {
           <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
             <h3 className="mb-2 text-sm font-semibold text-slate-50">Yönetici Girişi</h3>
             <p className="mb-4 text-[11px] text-slate-400">
-              Bu giriş yalnızca demo amaçlıdır. Gerçek projede bu alanı kendi kimlik doğrulama
-              sisteminizle entegre etmeniz gerekir.
+              Devam etmek için yönetici girişi yapmalısınız.
             </p>
+            {loginError && (
+              <div className="mb-3 rounded-lg bg-red-500/20 p-2 text-center text-xs text-red-200">
+                {loginError}
+              </div>
+            )}
             <form onSubmit={handleLogin} className="space-y-3 text-xs">
               <input
                 type="text"
+                name="username"
                 placeholder="Kullanıcı adı"
                 className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <input
                 type="password"
+                name="password"
                 placeholder="Şifre"
                 className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
@@ -810,19 +856,34 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex justify-end gap-2 text-xs">
-              <button
-                onClick={() => setEditModal({ open: false, type: null, index: null })}
-                className="rounded-xl border border-white/10 px-3 py-1.5 text-slate-300 hover:bg-slate-900"
-              >
-                Vazgeç
-              </button>
-              <button
-                onClick={saveEdit}
-                className="rounded-xl bg-cyan-400 px-3 py-1.5 font-medium text-slate-950 hover:bg-cyan-300"
-              >
-                {editModal.index === null ? "Ekle" : "Kaydet"}
-              </button>
+            <div className="mt-4 flex justify-between text-xs">
+              {/* Sil Butonu - Sadece düzenleme modunda ve belirli tiplerde göster */}
+              {editModal.index !== null &&
+              ["service", "project", "reference"].includes(editModal.type) ? (
+                <button
+                  onClick={handleDelete}
+                  className="rounded-xl border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-red-400 hover:bg-red-500 hover:text-white"
+                >
+                  Sil
+                </button>
+              ) : (
+                <div /> /* Boş div layout dengesi için */
+              )}
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setEditModal({ open: false, type: null, index: null })}
+                  className="rounded-xl border border-white/10 px-3 py-1.5 text-slate-300 hover:bg-slate-900"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  onClick={saveEdit}
+                  className="rounded-xl bg-cyan-400 px-3 py-1.5 font-medium text-slate-950 hover:bg-cyan-300"
+                >
+                  {editModal.index === null ? "Ekle" : "Kaydet"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
