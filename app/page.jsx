@@ -110,26 +110,26 @@ export default function AsansorSite() {
     address: "Alipaşa mah. Salih Omurtak cad no:23a, Çorlu / TEKİRDAĞ",
   });
 
-  // Basit demo login; prod ortamda gerçek auth ile değiştirilmeli.
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggedIn(true);
-    setShowLogin(false);
-  };
+ // Basit demo login; prod ortamda gerçek auth ile değiştirilmeli.
+const handleLogin = (e) => {
+  e.preventDefault();
+  setIsLoggedIn(true);
+  setShowLogin(false);
+};
+
 
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
 
-  // Genel amaçlı düzenleme modali
-  const [editModal, setEditModal] = useState<{ open: boolean; type: string | null; index: number | null }>({
-    open: false,
-    type: null,
-    index: null,
-  });
-  const [tempValue, setTempValue] = useState<any>({});
+ const [editModal, setEditModal] = useState({
+  open: false,
+  type: null,
+  index: null,
+});
+const [tempValue, setTempValue] = useState({});
 
-  const openEdit = (type: string, index: number | null = null) => {
+  const openEdit = (type, index = null) => {
     setEditModal({ open: true, type, index });
 
     if (type === "hero") setTempValue(hero);
@@ -690,8 +690,8 @@ export default function AsansorSite() {
                       rows={3}
                       value={tempValue[key]}
                       onChange={(e) =>
-                        setTempValue((prev: any) => ({ ...prev, [key]: e.target.value }))
-                      }
+  setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
+}
                       className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
                     />
                   ) : (
