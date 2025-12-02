@@ -65,6 +65,17 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
 
+  // Teklif Modalı State'leri
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [quoteForm, setQuoteForm] = useState({
+    name: "",
+    phone: "",
+    projectType: "Konut Asansörü",
+    floorCount: "",
+    location: "",
+    note: "",
+  });
+
   // Düzenlenebilir içerikler
   const [hero, setHero] = useState({
     eyebrow: "Premium Asansör Çözümleri",
@@ -287,6 +298,19 @@ export default function App() {
     setEditModal({ open: false, type: null, index: null });
   };
 
+  // WhatsApp Teklif Gönderme Fonksiyonu
+  const handleQuoteSubmit = (e) => {
+    e.preventDefault();
+    const { name, phone, projectType, floorCount, location, note } = quoteForm;
+
+    const message = `*Proje Teklifi Talebi*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Proje Tipi:* ${projectType}\n*Durak Sayısı:* ${floorCount}\n*Konum/Şehir:* ${location}\n*Ek Notlar:* ${note}`;
+
+    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank");
+    setShowQuoteModal(false);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans">
       {/* Arka plan glow efektleri */}
@@ -368,7 +392,10 @@ export default function App() {
               {hero.subtitle}
             </p>
             <div className="mb-6 flex flex-wrap items-center gap-3">
-              <button className="rounded-full bg-cyan-600 px-6 py-2 text-sm font-medium text-white shadow-md transition hover:bg-cyan-500">
+              <button
+                onClick={() => setShowQuoteModal(true)}
+                className="rounded-full bg-cyan-600 px-6 py-2 text-sm font-medium text-white shadow-md transition hover:bg-cyan-500"
+              >
                 {hero.cta}
               </button>
               <a
@@ -779,6 +806,129 @@ export default function App() {
           </a>
         </div>
       </main>
+
+      {/* Proje Teklifi Modalı */}
+      {showQuoteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-cyan-500/30 bg-slate-950 p-6 shadow-2xl">
+            <h3 className="mb-1 text-lg font-bold text-slate-50">Proje Teklifi Al</h3>
+            <p className="mb-4 text-xs text-slate-400">
+              Formu doldurduktan sonra WhatsApp üzerinden müşteri temsilcimize yönlendirileceksiniz.
+            </p>
+
+            <form onSubmit={handleQuoteSubmit} className="space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                    Ad Soyad
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    value={quoteForm.name}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, name: e.target.value })}
+                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                    placeholder="İsim giriniz"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                    Telefon
+                  </label>
+                  <input
+                    required
+                    type="tel"
+                    value={quoteForm.phone}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
+                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                    placeholder="05XX XXX XX XX"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                  Proje Tipi
+                </label>
+                <select
+                  value={quoteForm.projectType}
+                  onChange={(e) => setQuoteForm({ ...quoteForm, projectType: e.target.value })}
+                  className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                >
+                  <option>Konut Asansörü</option>
+                  <option>Yük Asansörü</option>
+                  <option>Hidrolik Sistem</option>
+                  <option>Panoramik Asansör</option>
+                  <option>Araç Platformu</option>
+                  <option>Engelli Platformu</option>
+                  <option>Diğer</option>
+                </select>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                    Durak Sayısı
+                  </label>
+                  <input
+                    type="number"
+                    value={quoteForm.floorCount}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, floorCount: e.target.value })}
+                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                    placeholder="Örn: 5"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                    Konum / Şehir
+                  </label>
+                  <input
+                    type="text"
+                    value={quoteForm.location}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, location: e.target.value })}
+                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                    placeholder="İlçe, Şehir"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-slate-400">
+                  Ek Notlar (Opsiyonel)
+                </label>
+                <textarea
+                  rows={3}
+                  value={quoteForm.note}
+                  onChange={(e) => setQuoteForm({ ...quoteForm, note: e.target.value })}
+                  className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
+                  placeholder="Varsa özel ölçü veya detaylar..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-2.5 text-sm font-semibold text-white shadow-lg shadow-green-900/20 transition hover:bg-[#128C7E]"
+              >
+                <span>WhatsApp ile Gönder</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.001.574 2.146.877 3.298.877h.001c3.182 0 5.769-2.587 5.769-5.767 0-3.181-2.586-5.767-5.768-5.767zm0 10.39c-.98 0-1.928-.276-2.731-.8l-.195-.116-1.527.4.409-1.488-.124-.196c-.559-.893-.854-1.907-.853-2.956.001-2.548 2.073-4.62 4.625-4.621 1.237.001 2.399.482 3.272 1.356.873.874 1.353 2.036 1.353 3.272 0 2.549-2.074 4.62-4.624 4.62zm2.536-3.461c-.139-.069-.821-.405-.948-.451-.128-.047-.221-.07-.315.069-.093.139-.36.452-.442.546-.081.094-.162.106-.301.035-.14-.069-.589-.217-1.121-.692-.416-.37-.696-.827-.777-.967-.082-.139-.009-.214.061-.284.062-.061.139-.162.208-.243.07-.082.093-.139.139-.232.046-.093.023-.174-.012-.243-.035-.069-.315-.759-.431-1.039-.113-.273-.228-.236-.314-.241-.081-.004-.174-.004-.267-.004-.093 0-.244.035-.371.174-.128.139-.488.477-.488 1.164 0 .687.5 1.35.569 1.443.07.094.985 1.503 2.387 2.108.334.144.595.231.797.295.334.106.638.091.879.055.27-.04.821-.335.937-.659.116-.323.116-.601.081-.659-.035-.058-.128-.093-.267-.162z" />
+                </svg>
+              </button>
+            </form>
+            <button
+              onClick={() => setShowQuoteModal(false)}
+              className="mt-3 w-full text-[11px] text-slate-400 hover:text-slate-200"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Login Modal */}
       {showLogin && (
