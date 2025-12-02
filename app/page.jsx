@@ -5,7 +5,64 @@ import { useState } from "react";
 // Withmor Teknika Lift için koyu temalı, modern bir asansör landing page tasarımı
 // Bu dosya .jsx/.tsx içinde sorunsuz derlenecek şekilde yazıldı.
 
+function ElevatorAnimation() {
+  return (
+    <div className="mt-6 flex justify-center">
+      <div className="relative h-44 w-24 overflow-hidden rounded-2xl border border-cyan-400/40 bg-slate-900/90 shadow-[0_18px_45px_rgba(15,23,42,0.8)]">
+        {/* Asansör kuyusu */}
+        <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-700/70" />
+        {/* Kat çizgileri */}
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div
+            key={index}
+            className="absolute left-2 right-2 border-t border-slate-700/70"
+            style={{ top: `${(index + 1) * 16}%` }}
+          />
+        ))}
+        {/* Kat numaraları */}
+        <div className="absolute right-1 top-2 flex flex-col items-end gap-2 text-[9px] text-slate-400">
+          {[5, 4, 3, 2, 1].map((floor) => (
+            <span key={floor}>#{floor}</span>
+          ))}
+        </div>
+        {/* Kabin */}
+        <div
+          className="absolute left-2.5 right-6 h-7 rounded-xl bg-cyan-400/80 shadow-lg shadow-cyan-400/40"
+          style={{ animation: "elevatorMove 6s ease-in-out infinite" }}
+        >
+          <div className="flex h-full items-center justify-center gap-1 text-[9px] font-semibold text-slate-950">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span>Kabin</span>
+          </div>
+        </div>
+        {/* Yön oku */}
+        <div className="absolute left-2 top-2 flex items-center gap-1 text-[9px] text-emerald-300">
+          <span className="inline-flex h-3 w-3 items-center justify-center rounded-full border border-emerald-400/70">
+            ↑
+          </span>
+          <span>Yukarı</span>
+        </div>
+        <style jsx>{`
+          @keyframes elevatorMove {
+            0% {
+              transform: translateY(120%);
+            }
+            50% {
+              transform: translateY(15%);
+            }
+            100% {
+              transform: translateY(-80%);
+            }
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+}
 
+export default function AsansorSite() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   // Düzenlenebilir içerikler
   const [hero, setHero] = useState({
@@ -716,4 +773,4 @@ import { useState } from "react";
       )}
     </div>
   );
-}
+}      işaretlediğim kısmı kaldır 
