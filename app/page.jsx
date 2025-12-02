@@ -2,8 +2,63 @@
 
 import { useState } from "react";
 
-// Simple, single-file React page for an elevator (asansör) company
-// TailwindCSS compatible. You can drop this into a Next.js `app/page.tsx` or `pages/index.tsx`.
+// Withmor tarzına yakın, koyu arka planlı, modern bir asansör sitesi tasarımı
+// Tüm içerik yine profille giriş yaptıktan sonra düzenlenebilir.
+
+function ElevatorAnimation() {
+  return (
+    <div className="mt-6 flex justify-center">
+      <div className="relative h-44 w-24 overflow-hidden rounded-2xl border border-cyan-400/40 bg-slate-900/90 shadow-[0_18px_45px_rgba(15,23,42,0.8)]">
+        {/* Asansör kuyusu */}
+        <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-700/70" />
+        {/* Kat çizgileri */}
+        {Array.from({ length: 5 }).map((_, index) => (
+          <div
+            key={index}
+            className="absolute left-2 right-2 border-t border-slate-700/70"
+            style={{ top: `${(index + 1) * 16}%` }}
+          />
+        ))}
+        {/* Kat numaraları */}
+        <div className="absolute right-1 top-2 flex flex-col items-end gap-2 text-[9px] text-slate-400">
+          {[5, 4, 3, 2, 1].map((floor) => (
+            <span key={floor}>#{floor}</span>
+          ))}
+        </div>
+        {/* Kabin */}
+        <div
+          className="absolute left-2.5 right-6 h-7 rounded-xl bg-cyan-400/80 shadow-lg shadow-cyan-400/40"
+          style={{ animation: "elevatorMove 6s ease-in-out infinite" }}
+        >
+          <div className="flex h-full items-center justify-center gap-1 text-[9px] font-semibold text-slate-950">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span>Kabin</span>
+          </div>
+        </div>
+        {/* Yön oku */}
+        <div className="absolute left-2 top-2 flex items-center gap-1 text-[9px] text-emerald-300">
+          <span className="inline-flex h-3 w-3 items-center justify-center rounded-full border border-emerald-400/70">
+            ↑
+          </span>
+          <span>Yukarı</span>
+        </div>
+        <style jsx>{`
+          @keyframes elevatorMove {
+            0% {
+              transform: translateY(120%);
+            }
+            50% {
+              transform: translateY(15%);
+            }
+            100% {
+              transform: translateY(-80%);
+            }
+          }
+        `}</style>
+      </div>
+    </div>
+  );
+}
 
 export default function AsansorSite() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,64 +66,103 @@ export default function AsansorSite() {
 
   // Editable content state
   const [hero, setHero] = useState({
-    title: "Güvenli ve Modern Asansör Çözümleri",
+    eyebrow: "Premium Elevator Solutions",
+    title: "Engineering safe and elegant vertical journeys",
     subtitle:
-      "Yeni montaj, bakım ve modernizasyon hizmetlerimizle binalarınıza değer katıyoruz.",
-    cta: "Teklif Al",
+      "From residential buildings to high-rise business centers, we design, install and maintain tailor‑made elevator systems.",
+    cta: "Request a project offer",
+    secondaryCta: "See references",
   });
 
   const [services, setServices] = useState([
     {
-      title: "Yeni Asansör Montajı",
-      desc: "Konut, işyeri ve alışveriş merkezleri için projeye özel asansör çözümleri.",
+      id: "celik-konstruksiyonlar",
+      name: "Çelik Konstrüksiyonlar",
+      desc:
+        "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
+      image: "/services/celik-konstruksiyonlar.jpg",
     },
     {
-      title: "Bakım ve Onarım",
-      desc: "Periyodik bakım, arıza tespiti ve 7/24 hızlı müdahale hizmeti.",
+      id: "hidrolik-sistemler",
+      name: "Hidrolik Sistemler",
+      desc:
+        "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
+      image: "/services/hidrolik-sistemler.jpg",
     },
     {
-      title: "Modernizasyon",
-      desc: "Eski asansörlerinizi yönetmeliklere uygun, konforlu sistemlere dönüştürüyoruz.",
+      id: "kabinler",
+      name: "Kabinler",
+      desc:
+        "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
+      image: "/services/kabinler.jpg",
+    },
+    {
+      id: "yuk-asansorleri-platformlar",
+      name: "Yük Asansör ve Platformlarımız",
+      desc:
+        "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
+      image: "/services/yuk-asansorleri-platformlar.jpg",
+    },
+    {
+      id: "makine-sasesi-mrl",
+      name: "Makine Şasesi MRL / MR",
+      desc:
+        "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
+      image: "/services/makine-sasesi-mrl.jpg",
+    },
+    {
+      id: "yuk-kabinleri",
+      name: "Yük Kabinleri",
+      desc:
+        "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
+      image: "/services/yuk-kabinleri.jpg",
     },
   ]);
 
+  const [activeService, setActiveService] = useState(0);
+
   const [projects, setProjects] = useState([
     {
-      name: "Beyaz Park Rezidans",
-      type: "Panoramik Yolcu Asansörü",
-      desc: "3 blok, 9 duraklı tam otomatik asansör sistemi kurulumu.",
+      name: "Skyline Residence Tower",
+      type: "Panoramic passenger elevators",
+      desc: "4 glass panoramic cabins, destination control system, smart traffic management.",
     },
     {
-      name: "Kule İş Merkezi",
-      type: "Yük Asansörü",
-      desc: "Fabrika ve depo alanları için ağır yük taşıma sistemleri.",
+      name: "Techno Industrial Plant",
+      type: "Heavy‑duty freight elevators",
+      desc: "3 hydraulic freight elevators with 3.500 kg capacity for intensive daily use.",
+    },
+    {
+      name: "City Hospital Complex",
+      type: "Bed & service elevators",
+      desc: "Hospital‑grade elevators with high hygiene standards and uninterrupted operation.",
     },
   ]);
 
   const [references, setReferences] = useState([
     {
-      company: "ABC İnşaat",
+      company: "ABC Construction Group",
       quote:
-        "Teslim süresi ve teknik destekten çok memnun kaldık. Tüm projelerimizde birlikte çalışıyoruz.",
+        "Project planning, execution and after‑sales technical support were all handled very professionally.",
       name: "Murat Yılmaz",
-      title: "Proje Müdürü",
+      title: "Project Manager",
     },
     {
-      company: "Mavi Rezidans Sitesi",
+      company: "Blue Residence Management",
       quote:
-        "Bakım ekibi her aramamızda hızlı dönüş yapıyor. Sakinlerimiz çok daha güvende hissediyor.",
+        "Our residents feel much safer and more comfortable after the modernisation works.",
       name: "Selin Karaca",
-      title: "Site Yöneticisi",
+      title: "Site Manager",
     },
   ]);
 
   const [companyInfo, setCompanyInfo] = useState({
-    name: "Örnek Asansör Sistemleri",
+    name: "Example Elevator Systems",
     about:
-      "Yılların tecrübesiyle, ulusal standartlara uygun, güvenli ve konforlu asansör çözümleri sunuyoruz.",
+      "We deliver tailor‑made elevator solutions designed according to international standards, focusing on safety, durability and passenger comfort.",
     phone: "+90 532 000 00 00",
-    email: "info@ornekasansor.com",
-    address: "İstanbul / Türkiye",
+    email: "info@exampleelevator.com",
+    address: "Istanbul / Türkiye",
   });
 
   // Simple login (sadece demo). Gerçek projede backend ile entegre edin.
@@ -124,40 +218,46 @@ export default function AsansorSite() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-950 text-slate-50">
+      {/* Background glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#22d3ee22,_transparent_55%),_radial-gradient(circle_at_bottom,_#0f766e22,_transparent_55%)]"
+      />
+
       {/* Navbar */}
-      <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-2xl bg-slate-900 flex items-center justify-center text-white font-bold text-lg">
-              A
+      <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-cyan-400 text-sm font-bold text-slate-950 shadow-lg">
+              AE
             </div>
-            <div>
-              <p className="font-semibold tracking-tight">{companyInfo.name}</p>
-              <p className="text-xs text-slate-500">Asansör Sistemleri</p>
+            <div className="leading-tight">
+              <p className="text-sm font-semibold tracking-tight">{companyInfo.name}</p>
+              <p className="text-[11px] text-slate-400">Elevator engineering & solutions</p>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#hizmetler" className="hover:text-slate-900 text-slate-600">
-              Hizmetler
+          <nav className="hidden items-center gap-6 text-xs font-medium text-slate-300 md:flex">
+            <a href="#services" className="hover:text-white">
+              Services
             </a>
-            <a href="#projeler" className="hover:text-slate-900 text-slate-600">
-              Yapılan İşler
+            <a href="#projects" className="hover:text-white">
+              Projects
             </a>
-            <a href="#referanslar" className="hover:text-slate-900 text-slate-600">
-              Referanslar
+            <a href="#references" className="hover:text-white">
+              References
             </a>
-            <a href="#iletisim" className="hover:text-slate-900 text-slate-600">
-              İletişim
+            <a href="#contact" className="hover:text-white">
+              Contact
             </a>
           </nav>
 
           {/* Profil / Login */}
           <div className="flex items-center gap-3">
             {isLoggedIn && (
-              <span className="hidden sm:inline text-xs text-slate-500">
-                Yönetici olarak giriş yaptınız
+              <span className="hidden text-[11px] text-emerald-300/90 sm:inline">
+                Admin mode active
               </span>
             )}
             <button
@@ -165,149 +265,260 @@ export default function AsansorSite() {
                 if (isLoggedIn) handleLogout();
                 else setShowLogin(true);
               }}
-              className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs sm:text-sm hover:bg-slate-900 hover:text-white transition"
+              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-50 shadow-sm transition hover:bg-cyan-400 hover:text-slate-950"
             >
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-white text-xs font-semibold">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-[11px] font-semibold text-slate-50">
                 {isLoggedIn ? "AD" : "G"}
               </span>
-              {isLoggedIn ? "Çıkış Yap" : "Giriş / Profil"}
+              {isLoggedIn ? "Log out" : "Login / Profile"}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <main className="max-w-6xl mx-auto px-4 pb-16">
-        <section className="grid md:grid-cols-2 gap-10 items-center pt-10 md:pt-16">
+      {/* Main */}
+      <main className="mx-auto max-w-6xl px-4 pb-20">
+        {/* Hero */}
+        <section className="grid gap-10 border-b border-white/5 pb-16 pt-10 md:grid-cols-[1.2fr_1fr] md:pt-16">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 mb-4">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              7/24 Asansör Bakım ve Servis
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-200">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              24/7 maintenance & remote monitoring
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight mb-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
+              {hero.eyebrow}
+            </p>
+            <h1 className="mb-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[2.6rem]">
               {hero.title}
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">
+            <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-300">
               {hero.subtitle}
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <button className="rounded-2xl bg-slate-900 text-white px-5 py-2.5 text-sm font-medium shadow-sm hover:shadow-md">
+
+            <div className="mb-6 flex flex-wrap items-center gap-3">
+              <button className="rounded-full bg-cyan-400 px-6 py-2 text-sm font-medium text-slate-950 shadow-lg shadow-cyan-400/30 transition hover:bg-cyan-300">
                 {hero.cta}
               </button>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Ücretsiz keşif ve fiyatlandırma için hemen bizimle iletişime geçin.
-              </p>
+              <a
+                href="#projects"
+                className="text-xs font-medium text-slate-200 underline underline-offset-4 hover:text-white"
+              >
+                {hero.secondaryCta}
+              </a>
+            </div>
+
+            <div className="grid max-w-xl grid-cols-3 gap-4 text-center text-[11px] text-slate-300">
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
+                <p className="text-lg font-semibold text-cyan-300">15+</p>
+                <p>years of engineering experience</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
+                <p className="text-lg font-semibold text-cyan-300">250+</p>
+                <p>completed elevator projects</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
+                <p className="text-lg font-semibold text-cyan-300">7/24</p>
+                <p>service & remote support</p>
+              </div>
             </div>
 
             {isLoggedIn && (
               <button
                 onClick={() => openEdit("hero")}
-                className="mt-4 text-xs text-slate-500 underline underline-offset-2"
+                className="mt-4 text-[11px] text-slate-300 underline underline-offset-2"
               >
-                Bu alanı düzenle
+                Edit hero content
               </button>
             )}
           </div>
 
-          <div className="relative">
-            <div className="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-xl">
-              <p className="text-sm font-medium mb-4">Neden Biz?</p>
-              <ul className="space-y-3 text-xs sm:text-sm text-slate-100">
-                <li>• TSE ve EN 81 standartlarına uygun projelendirme</li>
-                <li>• Deneyimli montaj ve bakım ekibi</li>
-                <li>• Yedek parça ve servis sürekliliği garantisi</li>
-                <li>• Konut, işyeri, hastane ve AVM'lere özel çözümler</li>
-              </ul>
-              <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs border-t border-slate-700 pt-4">
-                <div>
-                  <p className="text-lg font-semibold">15+</p>
-                  <p className="text-slate-300">Yıllık Deneyim</p>
+          {/* Hero visual */}
+          <div className="relative flex items-center justify-center">
+            <div className="relative h-72 w-full max-w-sm">
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-cyan-400 via-emerald-400 to-slate-900 opacity-80" />
+              <div className="absolute inset-4 rounded-[1.5rem] border border-white/20 bg-slate-950/60 backdrop-blur">
+                <div className="flex h-full flex-col justify-between p-4">
+                  <div className="flex items-center justify-between text-[11px] text-slate-200">
+                    <span>Machine room‑less</span>
+                    <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-emerald-200">
+                      EN 81 compatible
+                    </span>
+                  </div>
+                  <div className="space-y-2 text-xs text-slate-200">
+                    <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+                      <span>Travel height</span>
+                      <span className="font-semibold">18 floors</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+                      <span>Cabin capacity</span>
+                      <span className="font-semibold">1000 kg</span>
+                    </div>
+                    <div className="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2">
+                      <span>Energy class</span>
+                      <span className="font-semibold">A</span>
+                    </div>
+                  </div>
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    Example indicative configuration. Final design is tailored for each project.
+                  </p>
                 </div>
-                <div>
-                  <p className="text-lg font-semibold">250+</p>
-                  <p className="text-slate-300">Tamamlanan Proje</p>
-                </div>
-                <div>
-                  <p className="text-lg font-semibold">7/24</p>
-                  <p className="text-slate-300">Servis Hizmeti</p>
-                </div>
+              </div>
+              <div className="absolute -bottom-6 -left-4 h-16 w-16 rounded-3xl border border-cyan-400/40 bg-slate-950/80 p-3 text-[10px] text-slate-200">
+                <p className="text-[11px] font-semibold text-cyan-300">Remote data</p>
+                <p>Live cabin status, error logs and traffic reports.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Services */}
-        <section id="hizmetler" className="mt-16">
-          <div className="flex items-center justify-between mb-6">
+        <section
+          id="services"
+          className="mt-14 rounded-3xl border border-white/5 bg-slate-900/60 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.8)]"
+        >
+          <div className="flex flex-col gap-3 border-b border-white/5 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
                 Hizmetlerimiz
+              </p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
+                Asansör sistemleri için ürün gruplarımız
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Projenize özel asansör çözümlerimizi keşfedin.
+              <p className="mt-1 max-w-xl text-xs text-slate-300">
+                Uygulamalarımız hariç, çelik konstrüksiyondan yük kabinlerine kadar ana ürün
+                gruplarımızı tek ekranda inceleyebilirsiniz.
               </p>
             </div>
             {isLoggedIn && (
-              <p className="text-[11px] text-slate-400">Her kartın altından düzenleyebilirsiniz.</p>
+              <p className="text-[11px] text-slate-400">
+                Kategorileri ve açıklamaları admin girişi ile düzenleyebilirsiniz.
+              </p>
             )}
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className="rounded-2xl bg-white p-4 sm:p-5 shadow-sm border border-slate-100 flex flex-col justify-between"
-              >
-                <div>
-                  <p className="text-sm font-semibold mb-2">{service.title}</p>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {service.desc}
-                  </p>
-                </div>
-                {isLoggedIn && (
-                  <button
-                    onClick={() => openEdit("service", index)}
-                    className="mt-4 text-[11px] text-slate-500 underline underline-offset-2 self-start"
-                  >
-                    Kartı düzenle
-                  </button>
-                )}
+          {services.length > 0 && (
+            <div className="mt-6 grid gap-6 md:grid-cols-[0.9fr_1.4fr]">
+              {/* Kategori listesi */}
+              <div className="space-y-2">
+                {services.map((service, index) => {
+                  const active = index === activeService;
+                  return (
+                    <button
+                      key={service.id}
+                      onClick={() => setActiveService(index)}
+                      className={`w-full rounded-xl border px-3 py-2 text-left text-xs font-medium transition
+                        ${active
+                          ? "border-cyan-400/70 bg-cyan-400/15 text-cyan-100"
+                          : "border-white/10 bg-slate-950/40 text-slate-200 hover:bg-slate-900"}
+                      `}
+                    >
+                      {service.name}
+                    </button>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+
+              {/* Ana kart + asansör animasyonu */}
+              <div className="flex flex-col justify-between">
+                <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4 sm:p-5">
+                  <div className="grid gap-4 md:grid-cols-[1.4fr_0.9fr]">
+                    {/* Büyük görsel alanı */}
+                    <div className="flex flex-col">
+                      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_#22d3ee44,_transparent_60%)]" />
+                        <div className="absolute inset-0 flex items-center justify-center text-[11px] text-slate-200">
+                          <span className="rounded-full bg-black/40 px-3 py-1">
+                            {services[activeService]?.name} görsel alanı
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-50">
+                        {services[activeService]?.name}
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                        {services[activeService]?.desc}
+                      </p>
+                    </div>
+
+                    {/* Asansör animasyonu */}
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-cyan-300">
+                        Sistem akışı
+                      </p>
+                      <ElevatorAnimation />
+                      <p className="mt-2 text-center text-[10px] text-slate-400">
+                        Kat kat yukarı çıkan animasyon, asansörünüzün seyir hareketini temsil eden
+                        demo görseldir.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Thumbnail carousel */}
+                <div className="mt-4">
+                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
+                    Diğer ürün grupları
+                  </p>
+                  <div className="flex gap-3 overflow-x-auto pb-2">
+                    {services.map((service, index) => (
+                      <button
+                        key={service.id}
+                        onClick={() => setActiveService(index)}
+                        className={`min-w-[130px] flex-shrink-0 rounded-xl border text-left text-[11px] transition
+                          ${index === activeService
+                            ? "border-cyan-400/80 bg-cyan-400/15 text-cyan-50"
+                            : "border-white/10 bg-slate-950/70 text-slate-200 hover:bg-slate-900"}
+                        `}
+                      >
+                        <div className="h-16 w-full rounded-t-xl bg-gradient-to-br from-slate-800 to-slate-900" />
+                        <div className="px-2 py-2">
+                          <p className="line-clamp-2 font-medium">{service.name}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Projects */}
-        <section id="projeler" className="mt-16">
-          <div className="flex items-center justify-between mb-6">
+        <section id="projects" className="mt-16">
+          <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
-                Seçili Projelerimiz
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                Projects
+              </p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
+                Selected reference projects
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Tamamlanan bazı asansör projelerimizi inceleyin.
+              <p className="mt-1 max-w-xl text-xs text-slate-300">
+                A snapshot from our portfolio, ranging from residential complexes to hospitals
+                and industrial facilities.
               </p>
             </div>
           </div>
-          <div className="space-y-4">
+
+          <div className="grid gap-4 md:grid-cols-3">
             {projects.map((project, index) => (
               <div
                 key={index}
-                className="rounded-2xl bg-white p-4 sm:p-5 shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-900/70 p-4"
               >
                 <div>
-                  <p className="text-sm font-semibold">{project.name}</p>
-                  <p className="text-xs text-emerald-700 mt-0.5">{project.type}</p>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                    {project.desc}
+                  <p className="text-sm font-semibold text-slate-50">{project.name}</p>
+                  <p className="mt-0.5 text-[11px] font-medium text-emerald-300">
+                    {project.type}
                   </p>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-300">{project.desc}</p>
                 </div>
                 {isLoggedIn && (
                   <button
                     onClick={() => openEdit("project", index)}
-                    className="text-[11px] text-slate-500 underline underline-offset-2 self-start sm:self-end"
+                    className="mt-4 self-start text-[11px] text-cyan-300 underline underline-offset-2"
                   >
-                    Projeyi düzenle
+                    Edit project
                   </button>
                 )}
               </div>
@@ -316,39 +527,42 @@ export default function AsansorSite() {
         </section>
 
         {/* References */}
-        <section id="referanslar" className="mt-16">
-          <div className="flex items-center justify-between mb-6">
+        <section id="references" className="mt-16 rounded-3xl border border-white/5 bg-slate-900/70 p-6">
+          <div className="mb-6 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
-                Referanslar
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                References
+              </p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">
+                What our partners say
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Çalıştığımız firma ve sitelerden bazı yorumlar.
+              <p className="mt-1 max-w-xl text-xs text-slate-300">
+                Long‑term cooperation with construction companies, site managements and
+                industrial facilities.
               </p>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+
+          <div className="grid gap-4 md:grid-cols-2">
             {references.map((ref, index) => (
               <div
                 key={index}
-                className="rounded-2xl bg-white p-4 sm:p-5 shadow-sm border border-slate-100 flex flex-col justify-between"
+                className="flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-950/60 p-4"
               >
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
-                  “{ref.quote}”
-                </p>
+                <p className="mb-3 text-xs leading-relaxed text-slate-200">“{ref.quote}”</p>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold">{ref.company}</p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-sm font-semibold text-slate-50">{ref.company}</p>
+                    <p className="text-[11px] text-slate-400">
                       {ref.name} • {ref.title}
                     </p>
                   </div>
                   {isLoggedIn && (
                     <button
                       onClick={() => openEdit("reference", index)}
-                      className="text-[11px] text-slate-500 underline underline-offset-2"
+                      className="text-[11px] text-cyan-300 underline underline-offset-2"
                     >
-                      Referansı düzenle
+                      Edit reference
                     </button>
                   )}
                 </div>
@@ -358,107 +572,111 @@ export default function AsansorSite() {
         </section>
 
         {/* Company / Contact */}
-        <section id="iletisim" className="mt-16 grid md:grid-cols-[1.2fr_1fr] gap-8 items-start">
-          <div className="rounded-2xl bg-white p-5 sm:p-6 shadow-sm border border-slate-100">
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-2">
-              Hakkımızda
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
-              {companyInfo.about}
-            </p>
-            <ul className="text-xs sm:text-sm text-slate-600 space-y-1.5">
+        <section
+          id="contact"
+          className="mt-16 grid gap-8 rounded-3xl border border-white/5 bg-slate-900/70 p-6 md:grid-cols-[1.2fr_1fr]"
+        >
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">About us</h2>
+            <p className="mt-2 text-xs leading-relaxed text-slate-300">{companyInfo.about}</p>
+            <ul className="mt-4 space-y-1.5 text-xs text-slate-200">
               <li>
-                <span className="font-medium">Telefon: </span>
+                <span className="font-medium text-slate-50">Phone: </span>
                 {companyInfo.phone}
               </li>
               <li>
-                <span className="font-medium">E-posta: </span>
+                <span className="font-medium text-slate-50">E‑mail: </span>
                 {companyInfo.email}
               </li>
               <li>
-                <span className="font-medium">Adres: </span>
+                <span className="font-medium text-slate-50">Address: </span>
                 {companyInfo.address}
               </li>
             </ul>
             {isLoggedIn && (
               <button
                 onClick={() => openEdit("company")}
-                className="mt-4 text-[11px] text-slate-500 underline underline-offset-2"
+                className="mt-4 text-[11px] text-cyan-300 underline underline-offset-2"
               >
-                Firma bilgilerini düzenle
+                Edit company info
               </button>
             )}
           </div>
 
-          <div className="rounded-2xl bg-slate-900 text-white p-5 sm:p-6 shadow-sm">
-            <p className="text-sm font-semibold mb-2">Hızlı İletişim</p>
-            <p className="text-xs sm:text-sm text-slate-200 mb-4">
-              Projenizi birkaç cümleyle anlatın, en kısa sürede sizi arayalım.
+          <div className="rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+            <p className="mb-2 text-sm font-semibold text-slate-50">Quick contact</p>
+            <p className="mb-4 text-xs text-slate-300">
+              Share a short summary of your project and our engineering team will get back to
+              you as soon as possible.
             </p>
-            <form className="space-y-3 text-xs sm:text-sm">
+            <form className="space-y-3 text-xs">
               <input
                 type="text"
-                placeholder="Adınız Soyadınız"
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2 text-xs sm:text-sm outline-none focus:border-emerald-400"
+                placeholder="Full name"
+                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <input
                 type="tel"
-                placeholder="Telefon Numaranız"
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2 text-xs sm:text-sm outline-none focus:border-emerald-400"
+                placeholder="Phone number"
+                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <textarea
                 rows={3}
-                placeholder="Konut / işyeri / proje tipiniz hakkında kısaca bilgi verin"
-                className="w-full rounded-xl border border-slate-700 bg-slate-900/40 px-3 py-2 text-xs sm:text-sm outline-none focus:border-emerald-400 resize-none"
+                placeholder="Project type, building details, expected timeline"
+                className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <button
                 type="button"
-                className="w-full rounded-xl bg-emerald-400 text-slate-900 font-medium py-2 text-sm hover:bg-emerald-300"
+                className="w-full rounded-xl bg-cyan-400 py-2 text-sm font-medium text-slate-950 transition hover:bg-cyan-300"
               >
-                Talebimi Gönder
+                Send request
               </button>
             </form>
           </div>
         </section>
 
-        <footer className="mt-16 pb-6 text-[11px] text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-200 pt-4">
-          <span>© {new Date().getFullYear()} {companyInfo.name}. Tüm hakları saklıdır.</span>
-          <span>Asansör yönetmeliklerine uygun projelendirme ve montaj.</span>
+        <footer className="mt-14 border-t border-white/5 pt-4 text-[11px] text-slate-400 sm:flex sm:items-center sm:justify-between">
+          <span>
+            © {new Date().getFullYear()} {companyInfo.name}. All rights reserved.
+          </span>
+          <span className="mt-1 block sm:mt-0">
+            Designed for safe, efficient and aesthetic vertical transportation.
+          </span>
         </footer>
       </main>
 
       {/* Login Modal */}
       {showLogin && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl">
-            <h3 className="text-sm font-semibold mb-2">Yönetici Girişi</h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Demo amaçlıdır. Gerçek projede burayı kendi kullanıcı sisteminizle
-              entegre edin.
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
+          <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
+            <h3 className="mb-2 text-sm font-semibold text-slate-50">Admin login</h3>
+            <p className="mb-4 text-[11px] text-slate-400">
+              This login is for demo purposes only. In production you should connect this
+              area to your own authentication system.
             </p>
             <form onSubmit={handleLogin} className="space-y-3 text-xs">
               <input
                 type="text"
-                placeholder="Kullanıcı Adı"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs outline-none focus:border-slate-900"
+                placeholder="Username"
+                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <input
                 type="password"
-                placeholder="Şifre"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs outline-none focus:border-slate-900"
+                placeholder="Password"
+                className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none placeholder:text-slate-500 focus:border-cyan-400"
               />
               <button
                 type="submit"
-                className="w-full rounded-xl bg-slate-900 text-white font-medium py-2 text-xs hover:bg-slate-800"
+                className="w-full rounded-xl bg-cyan-400 py-2 text-xs font-medium text-slate-950 transition hover:bg-cyan-300"
               >
-                Giriş Yap
+                Login
               </button>
             </form>
             <button
               onClick={() => setShowLogin(false)}
-              className="mt-3 w-full text-[11px] text-slate-500 hover:text-slate-700"
+              className="mt-3 w-full text-[11px] text-slate-400 hover:text-slate-200"
             >
-              Vazgeç
+              Cancel
             </button>
           </div>
         </div>
@@ -466,15 +684,13 @@ export default function AsansorSite() {
 
       {/* Generic Edit Modal */}
       {editModal.open && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-xl max-h-[80vh] overflow-y-auto">
-            <h3 className="text-sm font-semibold mb-3">İçerik Düzenleme</h3>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60">
+          <div className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/10 bg-slate-950 p-5 shadow-xl">
+            <h3 className="mb-3 text-sm font-semibold text-slate-50">Edit content</h3>
             <div className="space-y-3 text-xs">
               {Object.keys(tempValue).map((key) => (
                 <div key={key}>
-                  <label className="block text-[11px] text-slate-500 mb-1">
-                    {key}
-                  </label>
+                  <label className="mb-1 block text-[11px] text-slate-400">{key}</label>
                   {key === "desc" || key === "quote" || key === "about" ? (
                     <textarea
                       rows={3}
@@ -482,7 +698,7 @@ export default function AsansorSite() {
                       onChange={(e) =>
                         setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
                       }
-                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs outline-none focus:border-slate-900 resize-none"
+                      className="w-full resize-none rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
                     />
                   ) : (
                     <input
@@ -491,24 +707,24 @@ export default function AsansorSite() {
                       onChange={(e) =>
                         setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
                       }
-                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs outline-none focus:border-slate-900"
+                      className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3 py-2 text-xs text-slate-50 outline-none focus:border-cyan-400"
                     />
                   )}
                 </div>
               ))}
             </div>
-            <div className="flex justify-end gap-2 mt-4 text-xs">
+            <div className="mt-4 flex justify-end gap-2 text-xs">
               <button
                 onClick={() => setEditModal({ open: false, type: null, index: null })}
-                className="rounded-xl border border-slate-200 px-3 py-1.5 text-slate-600"
+                className="rounded-xl border border-white/10 px-3 py-1.5 text-slate-300 hover:bg-slate-900"
               >
-                İptal
+                Cancel
               </button>
               <button
                 onClick={saveEdit}
-                className="rounded-xl bg-slate-900 text-white px-3 py-1.5"
+                className="rounded-xl bg-cyan-400 px-3 py-1.5 font-medium text-slate-950 hover:bg-cyan-300"
               >
-                Kaydet
+                Save
               </button>
             </div>
           </div>
