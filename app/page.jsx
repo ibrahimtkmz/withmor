@@ -86,49 +86,49 @@ export default function App() {
     secondaryCta: "Referansları gör",
   });
 
-  // Görseller güncellendi - Dosya isimleri kullanıldı
+  // GÖRSELLER GÜNCELLENDİ: Türkçe karakterler ve boşluklar temizlendi
   const [services, setServices] = useState([
     {
       id: "celik-konstruksiyonlar",
       name: "Çelik Konstrüksiyonlar",
       desc:
         "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel imalat ve montaj.",
-      image: "Çelik Konstrüksiyonlar.webp",
+      image: "/celik-konstruksiyonlar.webp",
     },
     {
       id: "hidrolik-sistemler",
       name: "Hidrolik Sistemler",
       desc:
         "Villa, yük ve makine dairesiz çözümler için sessiz ve güvenli hidrolik asansör sistemleri.",
-      image: "Hidrolik Sistemler.jpg",
+      image: "/hidrolik-sistemler.jpg",
     },
     {
       id: "kabinler",
       name: "Kabinler",
       desc:
         "Standart ve panoramik kabin tasarımları, zemin ve aydınlatma seçenekleri ile zenginleştirilmiş iç dekorasyon.",
-      image: "Kabinler.webp",
+      image: "/kabinler.webp",
     },
     {
       id: "yuk-asansorleri-platformlar",
       name: "Yük Asansörleri ve Platformlar",
       desc:
         "Sanayi tesisleri, depolar ve otoparklar için ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "Yük Asansörleri ve Platformlar.jpg",
+      image: "/yuk-asansorleri-platformlar.jpg",
     },
     {
       id: "makine-sasesi-mrl",
       name: "Makine Şasesi MRL / MR",
       desc:
         "MRL ve geleneksel makine daireli asansörler için titreşimi azaltan, uzun ömürlü makine şaseleri.",
-      image: "Makine Şasesi MRL : MR.png",
+      image: "/makine-sasesi-mrl-mr.png",
     },
     {
       id: "yuk-kabinleri",
       name: "Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli ve yüksek tavanlı yük kabinleri.",
-      image: "Yük Kabinleri.jpg",
+      image: "/yuk-kabinleri.jpg",
     },
   ]);
 
