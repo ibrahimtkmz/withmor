@@ -70,7 +70,7 @@ function ElevatorAnimation() {
               {/* Asansör Kabini */}
               <div
                 className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center"
-                style={{ top: '6%', animation: "elevatorMove 8s ease-in-out infinite" }}
+                style={{ top: '6%', animation: "elevatorMove 20s ease-in-out infinite" }}
               >
                 {/* Kabin Kapısı Efekti */}
                 <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
@@ -93,7 +93,7 @@ function ElevatorAnimation() {
                   key={floor} 
                   className="flex items-center gap-3 group w-full"
                   style={{ 
-                    animation: `highlightFloor${floor} 8s infinite` 
+                    animation: `highlightFloor${floor} 20s infinite` 
                   }}
                 >
                   {/* Yuvarlak Kat İkonu */}
@@ -112,60 +112,57 @@ function ElevatorAnimation() {
       </div>
 
       <style>{`
-        /* Asansör Hareketi */
+        /* Asansör Hareketi: 1. Kattan 5. Kata Doğru (Aşağıdan Yukarı) */
         @keyframes elevatorMove {
-          0%, 15% { transform: translateY(0%); } /* 5. Kat */
-          50%, 65% { transform: translateY(390%); } /* 1. Kat */
-          100% { transform: translateY(0%); } /* 5. Kat */
+          0%, 15% { transform: translateY(390%); }    /* 1. Kat Bekle */
+          20%, 35% { transform: translateY(292%); }   /* 2. Kat Bekle */
+          40%, 55% { transform: translateY(195%); }   /* 3. Kat Bekle */
+          60%, 75% { transform: translateY(98%); }    /* 4. Kat Bekle */
+          80%, 95% { transform: translateY(0%); }     /* 5. Kat Bekle */
+          100% { transform: translateY(390%); }       /* Başa Dön */
         }
 
-        /* Kat İkonlarını Boyama Animasyonları */
-        @keyframes highlightFloor5 {
-          0%, 15% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          20%, 90% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); box-shadow: none; } }
-          95%, 100% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-        }
-        @keyframes highlightFloor4 {
-          0%, 15% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-          18%, 25% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          28%, 88% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); } }
-          90%, 95% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          98%, 100% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-        }
-        @keyframes highlightFloor3 {
-          0%, 25% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-          28%, 35% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          38%, 78% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); } }
-          80%, 87% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          90%, 100% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-        }
-        @keyframes highlightFloor2 {
-          0%, 35% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-          38%, 45% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          48%, 68% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); } }
-          70%, 77% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          80%, 100% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-        }
-        @keyframes highlightFloor1 {
-          0%, 45% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; } }
-          50%, 65% { :first-child { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } }
-          70%, 100% { :first-child { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); box-shadow: none; } }
-        }
-        
+        /* Kat İkonlarını Boyama Animasyonları - Yukarı Çıkışa Göre Ayarlandı */
         /* Child selector workaround for React Inline Styles */
         .group > div { transition: all 0.3s; }
-        @keyframes highlightFloor5-bg { 0%, 15%, 95%, 100% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); } 20%, 90% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); } }
-        @keyframes highlightFloor4-bg { 18%, 25%, 90%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); } 0%, 15%, 28%, 88%, 98%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; } }
-        @keyframes highlightFloor3-bg { 28%, 35%, 80%, 87% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); } 0%, 25%, 38%, 78%, 90%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; } }
-        @keyframes highlightFloor2-bg { 38%, 45%, 70%, 77% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); } 0%, 35%, 48%, 68%, 80%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; } }
-        @keyframes highlightFloor1-bg { 50%, 65% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); } 0%, 45%, 70%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; } }
         
-        /* Uygulamak için sınıflar ekliyoruz (React style prop yerine) */
-        .flex:nth-child(1) .group > div { animation: highlightFloor5-bg 8s infinite; }
-        .flex:nth-child(2) .group > div { animation: highlightFloor4-bg 8s infinite; }
-        .flex:nth-child(3) .group > div { animation: highlightFloor3-bg 8s infinite; }
-        .flex:nth-child(4) .group > div { animation: highlightFloor2-bg 8s infinite; }
-        .flex:nth-child(5) .group > div { animation: highlightFloor1-bg 8s infinite; }
+        /* 5. Kat Işığı (En Üst) */
+        @keyframes highlightFloor5-bg { 
+          80%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } 
+          0%, 79%, 96%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); box-shadow: none; }
+        }
+        
+        /* 4. Kat Işığı */
+        @keyframes highlightFloor4-bg { 
+          60%, 75% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          0%, 59%, 76%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+        }
+        
+        /* 3. Kat Işığı */
+        @keyframes highlightFloor3-bg { 
+          40%, 55% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          0%, 39%, 56%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+        }
+        
+        /* 2. Kat Işığı */
+        @keyframes highlightFloor2-bg { 
+          20%, 35% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          0%, 19%, 36%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+        }
+        
+        /* 1. Kat Işığı (En Alt) */
+        @keyframes highlightFloor1-bg { 
+          0%, 15% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          16%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+        }
+        
+        /* Uygulamak için sınıflar ekliyoruz */
+        /* Not: Sıralama 5,4,3,2,1 şeklinde olduğu için nth-child sırası terstir */
+        .flex:nth-child(1) .group > div { animation: highlightFloor5-bg 20s infinite; }
+        .flex:nth-child(2) .group > div { animation: highlightFloor4-bg 20s infinite; }
+        .flex:nth-child(3) .group > div { animation: highlightFloor3-bg 20s infinite; }
+        .flex:nth-child(4) .group > div { animation: highlightFloor2-bg 20s infinite; }
+        .flex:nth-child(5) .group > div { animation: highlightFloor1-bg 20s infinite; }
       `}</style>
     </div>
   );
