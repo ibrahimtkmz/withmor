@@ -22,9 +22,6 @@ const Icons = {
   ArrowRight: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   ),
-  ArrowRightCircle: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m8 12 4 4 4-4"/></svg>
-  ),
   CheckCircle2: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
   ),
@@ -67,15 +64,39 @@ const Icons = {
   ChevronsRight: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
   ),
+  // Yeni eklenen ikonlar
+  ShieldCheck: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+  ),
+  Zap: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+  ),
+  Award: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+  ),
+  Cpu: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>
+  ),
+  Smile: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
+  ),
 };
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
+  const floorData = [
+    { num: 5, label: "İnovasyon", icon: Icons.Cpu },
+    { num: 4, label: "Konfor", icon: Icons.Smile },
+    { num: 3, label: "Hız", icon: Icons.Zap },
+    { num: 2, label: "Güvenlik", icon: Icons.ShieldCheck },
+    { num: 1, label: "Kalite", icon: Icons.Award },
+  ];
+
   return (
     <div className="mt-6 flex justify-center">
-      {/* Ana konteyner 1.5x büyütüldü: h-96 w-48 (önceki h-64 w-32) */}
-      <div className="relative h-96 w-48 overflow-hidden rounded-md border border-slate-300 bg-slate-100 shadow-inner">
+      {/* Ana konteyner büyütüldü: h-96 w-64 */}
+      <div className="relative h-96 w-64 overflow-hidden rounded-md border border-slate-300 bg-slate-100 shadow-inner">
         <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-300" />
         {/* Kat çizgileri */}
         {Array.from({ length: 5 }).map((_, index) => (
@@ -85,23 +106,26 @@ function ElevatorAnimation() {
             style={{ top: `${(index + 1) * 19}%` }}
           />
         ))}
-        {/* Kat numaraları - text ve gap büyütüldü */}
-        <div className="absolute right-2 top-4 flex flex-col items-end gap-6 text-sm text-slate-400 font-mono">
-          {[5, 4, 3, 2, 1].map((floor) => (
-            <span key={floor}>{floor}</span>
+        {/* Kat numaraları ve Metinler */}
+        <div className="absolute right-2 top-4 flex flex-col items-end gap-6 text-sm text-slate-500 font-mono w-full px-2">
+          {floorData.map((item, index) => (
+            <div key={index} className="flex items-center gap-2 justify-end w-full pr-1">
+              <span className="text-[10px] font-bold uppercase tracking-tighter text-blue-800">{item.label}</span>
+              <item.icon size={14} className="text-blue-600" />
+              <span className="font-bold">{item.num}</span>
+            </div>
           ))}
         </div>
-        {/* Kabin - h-14 yapıldı, yatay konum ayarlandı */}
+        {/* Kabin */}
         <div
-          className="absolute left-4 right-8 h-14 rounded border border-blue-600 bg-blue-500 shadow-md"
+          className="absolute left-4 right-32 h-14 rounded border border-blue-600 bg-blue-500 shadow-md z-10"
           style={{ top: '8%', animation: "elevatorMove 8s ease-in-out infinite" }}
         >
-          {/* Kabin içi yazı büyütüldü */}
           <div className="flex h-full items-center justify-center gap-1 text-xs font-bold text-white tracking-wider uppercase">
             WL
           </div>
         </div>
-        {/* Oklar büyütüldü */}
+        {/* Oklar */}
         <div className="absolute left-3 top-3 flex items-center gap-1 text-sm text-blue-600 font-bold">
           <span>▲▼</span>
         </div>
@@ -109,7 +133,7 @@ function ElevatorAnimation() {
         <style>{`
           @keyframes elevatorMove {
             0%, 15% { transform: translateY(0%); }
-            50%, 65% { transform: translateY(520%); } /* Mesafe ayarlandı */
+            50%, 65% { transform: translateY(520%); }
             100% { transform: translateY(0%); }
           }
         `}</style>
@@ -640,7 +664,7 @@ export default function App() {
       </section>
 
       {/* KURUMSAL */}
-      <section id="about" className="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20 relative bg-[url('https://images.unsplash.com/photo-1519642918688-7e43b19245d8?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center bg-no-repeat bg-fixed overflow-hidden">
+      <section id="about" className="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20 relative bg-[url('https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center bg-no-repeat bg-fixed overflow-hidden">
         {/* Koyu Bulanık Katman */}
         <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
         
@@ -709,11 +733,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ANA İÇERİK */}
-      <main className="mx-auto max-w-6xl px-6 py-20 space-y-24">
+      {/* ANA İÇERİK - DÜZENLEME: Main container kısıtlamaları kaldırıldı */}
+      <main className="w-full bg-white">
         
-        {/* Hizmetler */}
-        <section id="services" className="scroll-mt-24">
+        {/* Hizmetler - DÜZENLEME: İçerik ortalama ve boşluklar buraya taşındı */}
+        <section id="services" className="scroll-mt-24 max-w-6xl mx-auto px-6 py-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-slate-200 pb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -730,29 +754,22 @@ export default function App() {
           </div>
 
           <div className="grid lg:grid-cols-12 gap-8">
-            {/* Sol Liste - MOBİLDE YATAY SCROLL */}
-            <div className="lg:col-span-4 flex flex-col gap-2 w-full">
-              {/* Mobil İçin Kaydırma İpucu Butonu */}
-              <div className="lg:hidden w-full flex justify-end mb-2 animate-pulse">
-                 <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-full flex items-center gap-1">
-                    Yana Kaydır <Icons.ChevronsRight size={10} />
-                 </span>
-              </div>
-
-              <div className="flex lg:flex-col gap-3 lg:gap-1 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide snap-x w-full">
+            {/* Sol Liste - MOBİLDE TEK SÜTUN (Alt Alta), Masaüstünde Liste */}
+            <div className="lg:col-span-4 w-full">
+              <div className="grid grid-cols-1 lg:flex lg:flex-col gap-3 lg:gap-1 w-full">
                 {services.map((service, index) => (
                   <button
                     key={service.id}
                     onClick={() => setActiveService(index)}
                     className={`
-                      flex-none min-w-fit lg:w-full text-left px-5 py-3 lg:py-4 rounded-full lg:rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between group snap-start whitespace-nowrap lg:whitespace-normal border
+                      w-full text-left px-4 py-3 lg:px-5 lg:py-4 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between group border h-full
                       ${index === activeService
                         ? "bg-slate-900 text-white shadow-lg lg:transform lg:scale-105 border-slate-900"
                         : "bg-white text-slate-600 hover:bg-slate-50 border-slate-200 lg:border-transparent hover:border-slate-300"
                       }
                     `}
                   >
-                    {service.name}
+                    <span className="line-clamp-2">{service.name}</span>
                     {index === activeService && <Icons.ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
                   </button>
                 ))}
@@ -762,8 +779,7 @@ export default function App() {
             {/* Sağ Detay */}
             <div className="lg:col-span-8">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-2 h-full flex flex-col">
-                {/* Resim mobilde sola yaslandı (justify-start), masaüstünde ortalandı (lg:justify-center) */}
-                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-start lg:justify-center">
+                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-center">
                    <img
                       src={services[activeService]?.image}
                       alt={services[activeService]?.name}
@@ -816,8 +832,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* Projeler - GÜNCELLENEN KISIM */}
-        <section id="projects" className="scroll-mt-24">
+        {/* Projeler - DÜZENLEME: İçerik ortalama ve boşluklar buraya taşındı */}
+        <section id="projects" className="scroll-mt-24 max-w-6xl mx-auto px-6 py-20">
           <div className="flex items-center justify-between mb-8">
              <div>
                <div className="flex items-center gap-2 mb-2">
@@ -867,7 +883,7 @@ export default function App() {
           )}
         </section>
 
-        {/* Referanslar - ARKAPLAN DESENİ VE TAM EKRAN */}
+        {/* Referanslar - TAM EKRAN (Ana container kısıtlamasından kurtulduğu için artık tam ekran) */}
         <section id="references" className="bg-blue-900 w-full py-20 text-white relative overflow-hidden">
            {/* SOLUK DESEN KATMANI - TIRNAK İŞARETLERİ */}
            <div className="absolute inset-0 pointer-events-none select-none opacity-5">
@@ -973,8 +989,8 @@ export default function App() {
            </div>
         </section>
 
-        {/* İletişim */}
-        <section id="contact" className="grid lg:grid-cols-2 gap-12">
+        {/* İletişim - DÜZENLEME: İçerik ortalama ve boşluklar buraya taşındı */}
+        <section id="contact" className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto px-6 py-20">
            <div>
               <span className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2 block">Bize Ulaşın</span>
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Projenizi Birlikte Planlayalım</h2>
