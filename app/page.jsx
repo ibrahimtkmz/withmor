@@ -25,6 +25,9 @@ const Icons = {
   Quote: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" {...props}><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>),
   ChevronsRight: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>),
   Image: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>),
+  ZoomIn: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></svg>),
+  Edit: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>),
+  Trash: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>),
 };
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
@@ -178,10 +181,11 @@ export default function App() {
   
   // Tab State
   const [activeAboutTab, setActiveAboutTab] = useState("biz-kimiz");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Göster/Gizle State'leri
   const [showAllReferences, setShowAllReferences] = useState(false);
-  const [showAllProjects, setShowAllProjects] = useState(false); // Projeler için yeni state
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
 
   const [showQuoteModal, setShowQuoteModal] = useState(false);
@@ -209,30 +213,42 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // Tab İçerik Verisi
-  const aboutTabs = {
+  const [galleryImages, setGalleryImages] = useState(Array(8).fill(""));
+
+  const [aboutTabs, setAboutTabs] = useState({
     "biz-kimiz": {
-        title: "Biz Kimiz?",
+        title: "Biz Kimiz",
         heading: "Mühendislik Temelli Çözüm Ortağınız",
         subHeading: "15 Yıllık Tecrübeyle Dikey Ulaşımda Güven...",
         text1: "İstanbul'un dinamik atmosferinde, asansör sektöründe 15 yıldır mühendislik odaklı çözümler üretiyoruz. Özveriyle, tutkuyla ve teknik uzmanlıkla şekillendirdiğimiz projelerimizde, sadece bir asansör değil, güvenli bir yolculuk deneyimi sunuyoruz.",
-        text2: "Montaj ve modernizasyonun ötesinde, EN-81 standartlarına tam uyumlu, enerji verimliliği yüksek sistemler tasarlıyoruz. Sektördeki teknolojik gelişmeleri yakından takip ederek, müşterilerimize en yenilikçi dikey ulaşım çözümlerini sunmayı ilke edindik."
+        text2: "Montaj ve modernizasyonun ötesinde, EN-81 standartlarına tam uyumlu, enerji verimliliği yüksek sistemler tasarlıyoruz.",
+        longText: "Withmor Teknika Lift olarak, dikey ulaşım sektöründeki yolculuğumuza 15 yılı aşkın bir süre önce başladık. Kurulduğumuz günden bu yana, sadece bir asansör firması olmanın ötesine geçerek, binaların yaşam damarlarını inşa eden bir mühendislik partneri olmayı hedefledik. Globalleşen dünyada teknolojiyi yakından takip eden Ar-Ge ekibimiz, yerel üretim gücümüzü uluslararası standartlarla birleştiriyor. Müşteri memnuniyetini merkeze alan yaklaşımımızla, konutlardan gökdelenlere, hastanelerden alışveriş merkezlerine kadar geniş bir yelpazede güvenli, konforlu ve enerji verimliliği yüksek çözümler sunuyoruz. Geleceğin akıllı şehirlerine uyumlu, sürdürülebilir ve estetik asansör sistemlerimizle, Türkiye'den dünyaya açılan bir teknoloji köprüsü kurmanın gururunu yaşıyoruz."
     },
-    "yetkinliklerimiz": {
-        title: "Yetkinliklerimiz",
-        heading: "Teknolojik Altyapı ve Uzman Kadro",
-        subHeading: "Her Projeye Özel Mühendislik Çözümleri...",
-        text1: "Makine dairesiz (MRL) asansörlerden, yüksek tonajlı hidrolik yük platformlarına kadar geniş bir teknik yetkinliğe sahibiz. Projelendirme aşamasından ruhsatlandırma sürecine kadar tüm adımları kendi bünyemizdeki mühendis kadromuzla yönetiyoruz.",
-        text2: "PLC tabanlı otomasyon sistemleri, akıllı trafik yönetimi ve rejeneratif enerji üniteleri gibi ileri teknolojileri projelerimize entegre ediyoruz. Withmor Teknika olarak, karmaşık mimari projelere özel şaft içi çelik konstrüksiyon çözümleri de sunmaktayız."
+    "imalat": {
+        title: "İmalat",
+        heading: "Yüksek Kaliteli Üretim Standartları",
+        subHeading: "Projeye Özel İmalat Çözümleri...",
+        text1: "Kendi tesislerimizde, uluslararası kalite standartlarına uygun olarak kabin, karkas ve süspansiyon sistemleri imalatı gerçekleştiriyoruz.",
+        text2: "Modern tezgahlarımız ve uzman üretim kadromuzla, her projenin teknik gereksinimlerine uygun, dayanıklı ve estetik imalatlar yapıyoruz.",
+        longText: "Velimeşe OSB'de yer alan modern üretim tesisimiz, endüstri 4.0 standartlarına uygun makine parkuru ile donatılmıştır. Yüksek hassasiyetli lazer kesim makineleri, CNC abkant büküm tezgahları ve robotik kaynak sistemlerimiz sayesinde, milimetrik hassasiyette üretim gerçekleştiriyoruz. Kullandığımız her hammadde, giriş kalite kontrol testlerinden geçirilerek üretim hattına alınır. Kabin karkaslarından süspansiyon sistemlerine, ağırlık şaselerinden kapı mekanizmalarına kadar tüm bileşenler, uzun yıllar sorunsuz çalışacak dayanıklılıkta tasarlanır ve üretilir. Sadece standart ürünler değil, mimari projenize özel, sıra dışı ölçü ve formlardaki asansör bileşenlerini de kendi bünyemizde, esnek üretim kabiliyetimizle hayata geçiriyoruz."
     },
-    "prensiplerimiz": {
-        title: "Çalışma Prensiplerimiz",
-        heading: "Önce Güvenlik, Sonra Konfor",
-        subHeading: "Sürdürülebilir ve Şeffaf Hizmet Anlayışı...",
-        text1: "Çalışma felsefemizin temelinde 'Sıfır Hata' prensibi yatar. İnsan hayatını taşıdığımızın bilinciyle, güvenlikten asla taviz vermeyiz. Kullanılan her komponentin sertifikalı ve test edilmiş olmasına özen gösteriyoruz.",
-        text2: "Müşterilerimizle kurduğumuz ilişki proje teslimiyle bitmez. 7/24 teknik destek ve şeffaf bakım raporlaması ile asansörlerinizin ömrünü uzatır, işletme maliyetlerinizi düşürürüz. Dürüstlük ve teknik mükemmeliyet, değişmez değerlerimizdir."
+    "montaj": {
+        title: "Montaj",
+        heading: "Kusursuz Kurulum ve Devreye Alma",
+        subHeading: "Güvenli ve Hızlı Montaj Süreçleri...",
+        text1: "Sertifikalı montaj ekiplerimiz, şantiye güvenliğini ön planda tutarak asansör sistemlerinin kurulumunu titizlikle gerçekleştirir.",
+        text2: "Ray montajından motor grubu yerleşimine, kumanda panosu bağlantılarından son kontrollere kadar her aşama mühendis denetiminde ilerler.",
+        longText: "Montaj süreçlerimiz, sahadaki en kritik aşamadır ve sıfır hata prensibiyle yönetilir. Proje başlangıcında, şantiye şeflerimiz tarafından yapılan detaylı kuyu rölöve çalışmaları ile sürprizlere yer bırakmıyoruz. Rayların lazer hizalama ile montajından, motor grubunun titreşimsiz yerleşimine kadar her adım, EN-81-20/50 standartlarına sıkı sıkıya bağlı kalınarak yürütülür. İş güvenliği, ekiplerimiz için vazgeçilmez bir önceliktir; tüm personelimiz yüksekte çalışma ve iş güvenliği sertifikalarına sahiptir. Montaj sonrası, bağımsız kalite kontrol birimimiz tarafından yapılan kapsamlı testler ve yük denemeleri ile asansörünüzün en yoğun trafik koşullarında bile performansından ödün vermeden çalışacağını garanti altına alıyoruz."
+    },
+    "tasarim": {
+        title: "Tasarım",
+        heading: "Estetik ve Fonksiyonelliğin Uyumu",
+        subHeading: "Yenilikçi Kabin ve Kuyu Tasarımları...",
+        text1: "Mimari projenizle bütünleşen, modern ve şık kabin tasarımları sunuyoruz. 3D modelleme teknolojileri ile üretim öncesi görselleştirme sağlıyoruz.",
+        text2: "Mühendislerimiz, kuyu optimizasyonu yaparak mevcut alandan en yüksek verimi almanızı sağlayacak teknik tasarımlar geliştirir.",
+        longText: "Tasarım felsefemiz, teknolojiyi estetikle buluşturarak kullanıcı deneyimini zirveye taşımaktır. İç mimarlarımız ve endüstriyel tasarımcılarımız, binanızın karakterine uygun, paslanmaz çelik, cam, ahşap ve doğal taş gibi premium malzemeleri harmanlayarak özgün kabin iç mekanları yaratır. Fonksiyonel açıdan ise mühendislerimiz, trafik analizleri yaparak binanızın insan akışını en verimli şekilde yönetecek hız ve kapasite hesaplamalarını gerçekleştirir. 3 boyutlu simülasyonlarımız sayesinde, asansörünüzün bitmiş halini henüz üretim aşamasına geçmeden sanal ortamda deneyimlemenize olanak tanıyoruz. Panoramik cam kapsüllerden, yük asansörlerinde dayanıklılığı ön planda tutan endüstriyel tasarımlara kadar her detay, Withmor imzasını taşır."
     }
-  };
+  });
 
   const [companyInfo, setCompanyInfo] = useState({
     name: "Withmor Teknika Lift",
@@ -248,32 +264,52 @@ export default function App() {
 
   const [services, setServices] = useState([
     {
-      id: "insan-asansorleri",
-      name: "İnsan Asansörleri",
-      desc:
-        "Modern yaşamın ayrılmaz bir parçası olan insan asansörleri, binaların katlarını güvenli ve konforlu bir şekilde aşmanızı sağlar.",
-      image: "",
+      id: "hidrolik-yuk",
+      name: "Hidrolik Yük Asansörü",
+      desc: "Ağır sanayi ve depolar için yüksek taşıma kapasitesine sahip, dayanıklı ve güvenli hidrolik kaldırma çözümleri.",
+      image: "/images/services/hidrolik-yuk.jpg",
     },
     {
-      id: "yuk-asansorleri",
-      name: "Yük Asansörleri",
-      desc:
-        "Endüstriyel tesislerden depolara kadar geniş bir yelpazede kullanılan, ağır yükleri kaldırmak ve taşımak için özel tasarlanmış asansörlerdir.",
-      image: "",
+      id: "mrl-yuk",
+      name: "Makine Dairesiz Yük Asansörü",
+      desc: "Bina hacminden tasarruf sağlayan, dişlisiz motor teknolojisiyle enerji verimli ve sessiz çalışan yük asansörleri.",
+      image: "/images/services/mrl-yuk.jpg",
     },
     {
-      id: "hidrolik-asansorler",
-      name: "Hidrolik Asansörler",
-      desc:
-        "Hidrolik basınç kullanarak hareket eden, bina içi ve dışında yükseklik farklılıklarını aşmak için güvenilir çözümlerdir.",
-      image: "",
+      id: "homelift",
+      name: "Homelift",
+      desc: "Müstakil evler, villalar ve dubleks daireler için özel tasarlanmış, minimum kuyu dibi gerektiren konforlu ev asansörleri.",
+      image: "/images/services/homelift.jpg",
     },
     {
-      id: "hastane-sedye",
-      name: "Hastane & Sedye Asansörleri",
-      desc:
-        "Sağlık sektöründe hayati bir rol oynayan, hijyenik, sarsıntısız ve hızlı ulaşım sağlayan özel asansörlerdir.",
-      image: "",
+      id: "insan-asansoru",
+      name: "İnsan Asansörü",
+      desc: "Konutlar, iş merkezleri ve oteller için EN-81 standartlarına uygun, konforlu ve güvenli yolcu taşıma sistemleri.",
+      image: "/images/services/insan-asansoru.jpg",
+    },
+    {
+      id: "konveyor",
+      name: "Konveyör Asansörler",
+      desc: "Lojistik merkezleri ve fabrikalarda sürekli malzeme akışını sağlamak için tasarlanan dikey konveyör sistemleri.",
+      image: "/images/services/konveyor.jpg",
+    },
+    {
+      id: "panoramik",
+      name: "Panoramik Asansörler",
+      desc: "AVM ve plazalar için mimari estetiği tamamlayan, cam kabinli ve geniş görüş açılı prestij asansörleri.",
+      image: "/images/services/panoramik.jpg",
+    },
+    {
+      id: "yatay-yamac",
+      name: "Yatay Yamaç Asansörler",
+      desc: "Eğimli arazilerde, sahil tesislerinde veya peyzaj projelerinde ulaşımı kolaylaştıran özel raylı sistemler.",
+      image: "/images/services/yatay-yamac.jpg",
+    },
+    {
+      id: "ozel-projeler",
+      name: "Özel Projeler",
+      desc: "Standart dışı kuyu ölçüleri veya özel taşıma ihtiyaçlarınız için terzi işi mühendislik ve tasarım çözümleri.",
+      image: "/images/services/ozel-projeler.jpg",
     },
   ]);
 
@@ -398,6 +434,49 @@ export default function App() {
     }
   ]);
 
+  // Yeni Fonksiyon: Bölüm Kaydırma ve Tab Değiştirme
+  const scrollToAbout = (tabKey) => {
+    setActiveAboutTab(tabKey);
+    setIsExpanded(false); // Tab değiştiğinde genişletmeyi kapat
+    const section = document.getElementById("about");
+    if (section) {
+      // Sticky header offset
+      const headerOffset = 80;
+      const elementPosition = section.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileMenuOpen(false); // Mobil menüyü kapat
+  };
+
+  // YENİ FONKSİYON: Hizmet/Ürün Kaydırma
+  const scrollToService = (serviceId) => {
+    setMobileMenuOpen(false);
+    
+    // Önce hizmet kartına scroll etmeyi dene
+    const element = document.getElementById(serviceId);
+    if (element) {
+      const headerOffset = 100; // Header height + padding
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    } else {
+      // Eğer spesifik kart bulunamazsa genel bölüme git
+      const section = document.getElementById("services");
+      if (section) {
+         window.scrollTo({ top: section.offsetTop - 80, behavior: 'smooth' });
+      }
+    }
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
     const username = e.target.username.value;
@@ -424,14 +503,20 @@ export default function App() {
 
     if (type === "hero") setTempValue(hero);
     if (type === "company") setCompanyInfo(companyInfo);
-    // if (type === "aboutSection") setTempValue(aboutContent); // About content static in object now
     if (type === "service" && index !== null) setTempValue(services[index]);
     if (type === "project" && index !== null) setTempValue(projects[index]);
     if (type === "reference" && index !== null) setTempValue(references[index]);
+    
+    if (type === "aboutTab") {
+        setTempValue({ ...aboutTabs[index] });
+    }
+
+    if (type === "gallery" && index !== null) {
+        setTempValue({ image: galleryImages[index] });
+    }
   };
 
   const openAdd = (type) => {
-    // DEĞİŞİKLİK: Sadece referans eklemek için giriş zorunluluğu kaldırıldı
     if (!isLoggedIn && type !== "reference") {
       setShowLogin(true);
       return;
@@ -442,6 +527,7 @@ export default function App() {
       setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "" });
     if (type === "project") setTempValue({ name: "", type: "", desc: "" });
     if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
+    if (type === "gallery") setTempValue({ image: "" });
   };
 
   const saveEdit = () => {
@@ -449,7 +535,23 @@ export default function App() {
 
     if (type === "hero") setHero(tempValue);
     if (type === "company") setCompanyInfo(tempValue);
-    // if (type === "aboutSection") setAboutContent(tempValue);
+
+    if (type === "aboutTab" && index) {
+        setAboutTabs(prev => ({
+            ...prev,
+            [index]: tempValue
+        }));
+    }
+
+    if (type === "gallery") {
+        if (index !== null) {
+            const copy = [...galleryImages];
+            copy[index] = tempValue.image;
+            setGalleryImages(copy);
+        } else {
+            setGalleryImages([...galleryImages, tempValue.image]);
+        }
+    }
 
     if (type === "service") {
       if (index !== null) {
@@ -498,6 +600,11 @@ export default function App() {
       }
     }
 
+    if (type === "gallery" && index !== null) {
+        const newGallery = galleryImages.filter((_, i) => i !== index);
+        setGalleryImages(newGallery);
+    }
+
     if (type === "project" && index !== null) {
       const newProjects = projects.filter((_, i) => i !== index);
       setProjects(newProjects);
@@ -538,7 +645,7 @@ export default function App() {
     // overflow-x-hidden eklendi: Mobilde sağa sola kaymayı engeller
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
       
-      {/* Navbar */}
+      {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
@@ -551,9 +658,47 @@ export default function App() {
             </div>
           </div>
 
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <a href="#about" className="hover:text-blue-700 transition-colors">Kurumsal</a>
-            <a href="#services" className="hover:text-blue-700 transition-colors">Hizmetler</a>
+          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex h-full">
+            {/* Kurumsal Dropdown Menü */}
+            <div className="relative group h-full flex items-center">
+                <a href="#about" onClick={(e) => { e.preventDefault(); scrollToAbout('biz-kimiz'); }} className="hover:text-blue-700 transition-colors flex items-center gap-1 py-4">
+                    Kurumsal <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+                </a>
+                <div className="absolute left-0 top-full pt-2 w-48 hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden py-1">
+                        {Object.keys(aboutTabs).map((key) => (
+                            <button
+                                key={key}
+                                onClick={() => scrollToAbout(key)}
+                                className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-colors border-l-2 border-transparent hover:border-blue-700"
+                            >
+                                {aboutTabs[key].title}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* YENİ: Ürünlerimiz Dropdown Menü */}
+            <div className="relative group h-full flex items-center">
+                <a href="#services" onClick={(e) => { e.preventDefault(); scrollToService('services'); }} className="hover:text-blue-700 transition-colors flex items-center gap-1 py-4">
+                    Ürünlerimiz <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+                </a>
+                <div className="absolute left-0 top-full pt-2 w-56 hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden py-1">
+                        {services.map((service) => (
+                            <button
+                                key={service.id}
+                                onClick={() => scrollToService(service.id)}
+                                className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-colors border-l-2 border-transparent hover:border-blue-700"
+                            >
+                                {service.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
             <a href="#projects" className="hover:text-blue-700 transition-colors">Projeler</a>
             <a href="#references" className="hover:text-blue-700 transition-colors">Referanslar</a>
             <a href="#contact" className="hover:text-blue-700 transition-colors">İletişim</a>
@@ -588,7 +733,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Nav Overlay */}
+        {/* Mobile Nav Overlay - GÜNCELLENDİ (Alt Menü Eklendi) */}
         {mobileMenuOpen && (
           <div className="fixed inset-0 z-[100] bg-white h-[100dvh] flex flex-col animate-in slide-in-from-right duration-200 md:hidden">
              <div className="p-4 flex justify-between items-center border-b border-slate-100">
@@ -597,12 +742,39 @@ export default function App() {
                   <Icons.X size={24} />
                 </button>
              </div>
-             <nav className="flex flex-col p-6 gap-6 text-lg font-medium text-slate-700">
-                <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Kurumsal</a>
-                <a href="#services" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Hizmetler</a>
+             <nav className="flex flex-col p-6 gap-4 text-lg font-medium text-slate-700 overflow-y-auto">
+                <div>
+                    <span className="text-blue-900 font-bold block mb-2">Kurumsal</span>
+                    <div className="pl-4 flex flex-col gap-3 text-base border-l-2 border-slate-100">
+                        {Object.keys(aboutTabs).map((key) => (
+                            <button
+                                key={key}
+                                onClick={() => scrollToAbout(key)}
+                                className="text-left text-slate-600 hover:text-blue-700"
+                            >
+                                {aboutTabs[key].title}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div>
+                    <span className="text-blue-900 font-bold block mb-2">Ürünlerimiz</span>
+                    <div className="pl-4 flex flex-col gap-3 text-base border-l-2 border-slate-100">
+                        {services.map((service) => (
+                            <button
+                                key={service.id}
+                                onClick={() => scrollToService(service.id)}
+                                className="text-left text-slate-600 hover:text-blue-700"
+                            >
+                                {service.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
                 <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Projeler</a>
                 <a href="#references" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Referanslar</a>
                 <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">İletişim</a>
+                
                 <div className="h-px bg-slate-100 my-2" />
                 <button
                   onClick={() => {
@@ -701,7 +873,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* YENİ BÖLÜM: BİZ KİMİZ (About Us - Tabbed Interface) */}
+      {/* BİZ KİMİZ (About Us) - TAB'LI YAPI */}
       <section id="about" className="py-20 bg-white border-b border-slate-100 scroll-mt-20">
          <div className="mx-auto max-w-6xl px-6">
            {/* Section Headers (Clickable Tabs) */}
@@ -709,7 +881,7 @@ export default function App() {
               {Object.keys(aboutTabs).map((key) => (
                 <button
                     key={key}
-                    onClick={() => setActiveAboutTab(key)}
+                    onClick={() => { setActiveAboutTab(key); setIsExpanded(false); }}
                     className={`pb-4 text-sm md:text-lg font-bold transition-all duration-300 relative whitespace-nowrap ${
                         activeAboutTab === key 
                         ? "text-blue-900 border-b-2 border-blue-900" 
@@ -722,20 +894,27 @@ export default function App() {
            </div>
 
            {/* Tab Content Area */}
-           <div className="grid lg:grid-cols-12 gap-12 items-start animate-in fade-in duration-500 key={activeAboutTab}">
-              {/* Sol: Bina Görseli (Dikey) */}
+           <div key={activeAboutTab} className="grid lg:grid-cols-12 gap-12 items-start animate-in fade-in duration-500">
+              {/* Sol: Bina Görseli (Dikey) - Placeholder */}
               <div className="lg:col-span-4">
-                 <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-lg group">
-                    <img 
-                      src="https://images.unsplash.com/photo-1625233821804-432964626953?auto=format&fit=crop&q=80&w=800" 
-                      alt="Asansör Görseli" 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                 <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-lg group bg-slate-100 flex items-center justify-center">
+                    <div className="text-center text-slate-400">
+                        <Icons.Image className="w-16 h-16 mx-auto mb-2 opacity-50" />
+                        <span className="text-sm font-bold uppercase tracking-wider">Görsel Alanı</span>
+                    </div>
                  </div>
               </div>
 
-              {/* Orta: Metin İçeriği (Dynamic) */}
+              {/* Orta: Metin İçeriği (Dynamic with Expand) */}
               <div className="lg:col-span-4 flex flex-col justify-center h-full pt-4">
+                 {isLoggedIn && (
+                    <button 
+                        onClick={() => openEdit("aboutTab", activeAboutTab)} 
+                        className="mb-4 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold hover:bg-blue-100 w-fit"
+                    >
+                        <Icons.Edit size={12}/> Bu Sekmeyi Düzenle
+                    </button>
+                 )}
                  <h3 className="text-xl font-bold text-slate-800 mb-2">{aboutTabs[activeAboutTab].heading}</h3>
                  <h4 className="text-lg font-bold text-blue-700 mb-6">{aboutTabs[activeAboutTab].subHeading}</h4>
                  
@@ -746,48 +925,62 @@ export default function App() {
                     {aboutTabs[activeAboutTab].text2}
                  </p>
 
-                 <button className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide group w-fit hover:text-blue-700 transition-colors">
-                    <span className="w-1 h-4 bg-blue-600 block"></span>
-                    Daha Fazla
+                 {/* Genişletilmiş İçerik */}
+                 {isExpanded && (
+                    <div className="animate-in fade-in slide-in-from-top-4 duration-500 mb-6">
+                        <p className="text-slate-600 text-sm leading-relaxed border-l-2 border-blue-900 pl-4 py-1">
+                            {aboutTabs[activeAboutTab].longText}
+                        </p>
+                    </div>
+                 )}
+
+                 <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide group w-fit hover:text-blue-700 transition-colors"
+                 >
+                    <span className={`w-1 h-4 ${isExpanded ? "bg-red-500" : "bg-blue-600"} block transition-colors`}></span>
+                    {isExpanded ? "Daha Az Göster" : "Daha Fazla"}
                  </button>
               </div>
 
-              {/* Sağ: Profil Kartı */}
+              {/* Sağ: Profil Kartı - Placeholder */}
               <div className="lg:col-span-4">
                  <div className="bg-slate-50 p-8 rounded-2xl text-center border border-slate-100 h-full flex flex-col justify-center items-center">
-                    {/* Profil Resmi Kaldırıldı */}
-                    <h3 className="text-xl font-bold text-slate-900">Berna Yılmaz</h3>
-                    <p className="text-sm font-bold text-slate-500 mb-6">Proje Müdürü</p>
+                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center">
+                        <Icons.User className="w-16 h-16 text-slate-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900">İsim Soyisim</h3>
+                    <p className="text-sm font-bold text-slate-500 mb-6">Unvan</p>
                     <p className="text-slate-600 text-sm italic relative px-4">
                        <span className="text-4xl text-slate-200 absolute -top-4 left-0">"</span>
-                       Siz değerli müşterilerimizle başlattığımız her projeyi, istek ve talepleriniz doğrultusunda özenle planlayarak, en yüksek memnuniyet düzeyine ulaştırmayı hedefliyoruz.
+                       Buraya yönetici veya ilgili kişi için bir alıntı veya mesaj eklenebilir.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
                     
-                    {/* WhatsApp Action */}
-                    <div className="mt-8 flex items-center justify-center gap-3 bg-white p-3 rounded-lg shadow-sm w-full max-w-xs border border-slate-100">
+                    {/* WhatsApp Action Button */}
+                    <button 
+                       onClick={() => window.open(companyInfo.whatsapp, "_blank")}
+                       className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
+                    >
                        <div className="text-left">
-                          <p className="text-[10px] text-slate-400">Yardım Edebilir Miyim?</p>
-                          <p className="text-xs font-bold text-slate-700">WhatsApp'tan Yaz</p>
+                          <p className="text-[10px] font-medium text-white/90">Yardım Edebilir Miyim?</p>
+                          <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
                        </div>
-                       <button 
-                          onClick={() => window.open(companyInfo.whatsapp, "_blank")}
-                          className="bg-[#25D366] text-white p-2 rounded-full hover:bg-[#128C7E] transition shadow-sm"
-                       >
-                          <Icons.MessageCircle size={20} />
-                       </button>
-                    </div>
+                       <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
+                          <Icons.MessageCircle size={20} className="text-white" />
+                       </div>
+                    </button>
                  </div>
               </div>
            </div>
          </div>
       </section>
 
-      {/* YENİ BÖLÜM: 5 ANA NEDEN (Why Us) */}
+      {/* 4 ANA NEDEN (Why Us) */}
       <section className="py-20 bg-slate-50 border-b border-slate-200">
          <div className="mx-auto max-w-6xl px-6">
             <h2 className="text-3xl lg:text-4xl font-extrabold text-center text-slate-900 mb-16 uppercase tracking-tight">
-               Bizimle Çalışmanız İçin 5 Ana Neden
+               Bizimle Çalışmanız İçin 4 Ana Neden
             </h2>
 
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -834,49 +1027,18 @@ export default function App() {
                   </div>
                </div>
 
-               {/* Sağ: İllüstrasyon */}
-               <div className="relative h-full min-h-[500px] bg-blue-900 rounded-xl overflow-hidden flex items-center justify-center p-8 shadow-2xl">
-                  {/* Basit Asansör Şematiği CSS ile */}
-                  <div className="relative w-full h-full flex justify-center gap-8">
-                     {/* Sol Kuyu */}
-                     <div className="w-1/4 h-full bg-blue-800/50 border-r border-blue-700/50 relative">
-                        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-16 h-20 border-2 border-white/20 flex items-center justify-center">
-                           <Icons.User className="text-white/40" />
-                        </div>
-                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-16 h-16 border-2 border-white rounded-lg flex items-center justify-center bg-blue-600">
-                           <div className="w-8 h-1 bg-white rounded-full"></div>
-                        </div>
-                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-white/10 border-dashed border-l border-white/20"></div>
-                     </div>
-                     {/* Orta Kuyu */}
-                     <div className="w-1/4 h-full bg-blue-800/50 border-r border-blue-700/50 relative">
-                        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-16 h-20 border-2 border-white flex items-center justify-center bg-blue-700">
-                           <Icons.User className="text-white" />
-                           <Icons.User className="text-white" />
-                        </div>
-                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-16 h-16 border-2 border-white rounded-lg flex items-center justify-center bg-blue-600">
-                           <div className="w-8 h-1 bg-white rounded-full"></div>
-                        </div>
-                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-white/20"></div>
-                     </div>
-                     {/* Sağ Kuyu */}
-                     <div className="w-1/4 h-full bg-blue-800/50 relative">
-                         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-16 h-20 border-2 border-white flex items-center justify-center">
-                           <Icons.User className="text-white" />
-                        </div>
-                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-white/20"></div>
-                     </div>
-                     
-                     <div className="absolute top-1/2 left-10 w-32 h-32 bg-blue-950 rounded-full flex items-center justify-center text-center p-4 border border-blue-800 shadow-xl z-10">
-                        <span className="text-white text-xs font-bold">Yüksek Verimlilik</span>
-                     </div>
+               {/* Sağ: İllüstrasyon - Placeholder */}
+               <div className="relative h-80 lg:h-96 w-full lg:w-4/5 mx-auto rounded-xl overflow-hidden shadow-xl group bg-white border border-slate-100 flex items-center justify-center">
+                  <div className="text-center text-slate-400">
+                      <Icons.Image className="w-20 h-20 mx-auto mb-2 opacity-50" />
+                      <span className="text-sm font-bold uppercase tracking-wider">Görsel Alanı</span>
                   </div>
                </div>
             </div>
          </div>
       </section>
 
-      {/* ANA İÇERİK - HİZMETLER (SERVICES) - YENİ GRID YAPISI */}
+      {/* HİZMETLER (SERVICES) - GRID YAPISI */}
       <main className="w-full bg-white">
         
         <section id="services" className="scroll-mt-24 max-w-6xl mx-auto px-6 py-20">
@@ -892,10 +1054,10 @@ export default function App() {
             </div>
           </div>
 
-          {/* YENİ GRID YAPISI */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* YENİ GRID YAPISI - ID Eklendi */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {services.map((service, index) => (
-               <div key={service.id} className="group flex flex-col h-full bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100">
+               <div key={service.id} id={service.id} className="group flex flex-col h-full bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-transparent hover:border-slate-100">
                   {/* Görsel Alanı */}
                   <div className="relative aspect-square overflow-hidden bg-slate-100 flex items-center justify-center text-slate-300">
                      {service.image ? (
@@ -906,7 +1068,6 @@ export default function App() {
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                               onError={handleImageError}
                            />
-                           {/* Overlay */}
                            <div className="absolute inset-0 bg-black/0 group-hover:bg-blue-900/10 transition-colors duration-300" />
                         </>
                      ) : (
@@ -960,7 +1121,6 @@ export default function App() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {/* Slice mantığı ile sınırlama */}
             {projects.slice(0, showAllProjects ? projects.length : 3).map((project, index) => (
               <div key={index} className="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-in fade-in zoom-in duration-300">
                 <div className="flex flex-col h-full">
@@ -981,7 +1141,6 @@ export default function App() {
             ))}
           </div>
 
-          {/* Projeler için Daha Fazla Göster Butonu */}
           {projects.length > 3 && (
             <div className="mt-8 text-center">
               <button 
@@ -1000,7 +1159,6 @@ export default function App() {
 
         {/* Referanslar - MEVCUT KOD */}
         <section id="references" className="bg-blue-900 w-full py-20 text-white relative overflow-hidden">
-           {/* SOLUK DESEN KATMANI - TIRNAK İŞARETLERİ */}
            <div className="absolute inset-0 pointer-events-none select-none opacity-5">
              <Icons.Quote className="absolute -top-10 -left-10 w-64 h-64 text-white transform rotate-12" />
              <Icons.Quote className="absolute top-1/3 right-10 w-32 h-32 text-white transform -rotate-12" />
@@ -1009,11 +1167,9 @@ export default function App() {
 
            <div className="max-w-6xl mx-auto px-6 relative z-10">
               <div className="grid md:grid-cols-2 gap-16">
-                 {/* Kurumsal Referanslar */}
                  <div>
                     <div className="flex items-center gap-2 mb-6">
                        <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
-                       {/* DEĞİŞİKLİK: Herkese Açık Ekleme */}
                        <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>
                     </div>
                     
@@ -1049,7 +1205,6 @@ export default function App() {
                     )}
                  </div>
 
-                 {/* Google Yorumları */}
                  <div>
                     <div className="flex items-center justify-between mb-6">
                        <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
@@ -1104,80 +1259,48 @@ export default function App() {
            </div>
         </section>
 
-        {/* İletişim - MEVCUT KOD */}
-        <section id="contact" className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto px-6 py-20">
-           <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2 block">Bize Ulaşın</span>
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Projenizi Birlikte Planlayalım</h2>
-              <p className="text-slate-600 mb-8 leading-relaxed text-sm">
-                 {companyInfo.about}
-              </p>
-              
-              <div className="space-y-6 mb-8">
-                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.MapPin className="w-5 h-5" />
-                    </div>
-                    <div>
-                       <p className="text-sm font-bold text-slate-900">Adres</p>
-                       <p className="text-sm text-slate-600 mt-1">{companyInfo.address}</p>
-                    </div>
-                 </div>
-                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.Phone className="w-5 h-5" />
-                    </div>
-                    <div>
-                       <p className="text-sm font-bold text-slate-900">Telefon</p>
-                       <p className="text-sm text-slate-600 mt-1">{companyInfo.phone}</p>
-                    </div>
-                 </div>
-                 <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.Mail className="w-5 h-5" />
-                    </div>
-                    <div>
-                       <p className="text-sm font-bold text-slate-900">E-Posta</p>
-                       <p className="text-sm text-slate-600 mt-1">{companyInfo.email}</p>
-                    </div>
-                 </div>
-              </div>
-
-              {isLoggedIn && <button onClick={() => openEdit("company")} className="flex items-center gap-2 text-xs font-semibold text-blue-600 border border-blue-200 px-3 py-2 rounded hover:bg-blue-50"><Icons.Settings size={14}/> Firma Bilgilerini Düzenle</button>}
-           </div>
-
-           {/* Sağ: Form ve Harita */}
-           <div className="space-y-8">
-              <div className="relative overflow-hidden rounded-2xl p-[3px] shadow-lg group">
-                 <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+        {/* GALERİ BÖLÜMÜ */}
+        <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
+           <div className="mx-auto max-w-6xl px-6">
+              <div className="text-center mb-12 relative">
+                 <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
+                 <p className="text-slate-500 text-sm">Üretim tesisimiz ve tamamlanan projelerimizden kareler.</p>
                  
-                 <div className="relative h-full w-full bg-slate-50 border border-slate-200 p-6 rounded-xl">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4">Hızlı İletişim</h3>
-                    <form onSubmit={handleFastContactSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <input required type="text" placeholder="Ad Soyad" value={fastContactForm.name} onChange={(e) => setFastContactForm({...fastContactForm, name: e.target.value})} className="w-full rounded-lg border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
-                          <input required type="tel" placeholder="Telefon" value={fastContactForm.phone} onChange={(e) => setFastContactForm({...fastContactForm, phone: e.target.value})} className="w-full rounded-lg border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
-                        </div>
-                        <textarea required rows={3} placeholder="Mesajınız" value={fastContactForm.message} onChange={(e) => setFastContactForm({...fastContactForm, message: e.target.value})} className="w-full rounded-lg border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none" />
-                        <button type="submit" className="w-full bg-blue-900 text-white rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-800 transition-colors flex items-center justify-center gap-2">
-                          <Icons.Phone size={16} /> WhatsApp ile Gönder
-                        </button>
-                    </form>
-                 </div>
+                 {isLoggedIn && (
+                    <button 
+                       onClick={() => openAdd("gallery")} 
+                       className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
+                    >
+                       <Icons.Plus size={12}/> Yeni Resim Ekle
+                    </button>
+                 )}
               </div>
-
-              <div className="h-64 w-full rounded-2xl overflow-hidden shadow-md border border-slate-200">
-                 <iframe
-                   title="Ofis Konumu"
-                   width="100%"
-                   height="100%"
-                   frameBorder="0"
-                   scrolling="no"
-                   marginHeight="0"
-                   marginWidth="0"
-                   src="https://maps.google.com/maps?q=Withmor+Asans%C3%B6r+Market%2C+Kervanc%C4%B1+Ticaret+Merkezi%2C+Velime%C5%9Fe+OSB%2C+Tekirda%C4%9F&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                   className="opacity-90 hover:opacity-100 transition-opacity"
-                 ></iframe>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                 {galleryImages.map((img, i) => (
+                    <div key={i} className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300">
+                       {img ? (
+                          <>
+                             <img src={img} alt={`Galeri ${i+1}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onError={handleImageError} />
+                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                             </div>
+                          </>
+                       ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-50">
+                             <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                             <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Resim Alanı {i+1}</span>
+                          </div>
+                       )}
+                       
+                       {isLoggedIn && (
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                             <button onClick={() => openEdit("gallery", i)} className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"><Icons.Edit size={12}/></button>
+                             <button onClick={() => { setEditModal({open: true, type: "gallery", index: i}); }} className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"><Icons.Trash size={12}/></button>
+                          </div>
+                       )}
+                    </div>
+                 ))}
               </div>
            </div>
         </section>
@@ -1273,26 +1396,42 @@ export default function App() {
           </div>
         </div>
       )}
-      {/* Edit Modal */}
+      {/* Edit Modal - GÜNCELLENDİ (Dinamik İçerik Yönetimi) */}
       {editModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl max-h-[80vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
             <h3 className="mb-4 text-lg font-bold text-slate-900">{editModal.index === null ? "Yeni Ekle" : "İçeriği Düzenle"}</h3>
             <div className="space-y-3">
-               {Object.keys(tempValue).map((key) => (
-                  <div key={key}>
-                     <label className="mb-1 block text-[10px] font-bold text-slate-500 uppercase">{key}</label>
-                     {key === "desc" || key === "quote" || key === "about" ? (
-                        <textarea rows={3} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                     ) : (
-                        <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                     )}
-                  </div>
-               ))}
+               {Object.keys(tempValue).map((key) => {
+                  // Filtreleme: 'id' gibi sistem alanlarını gizle
+                  if (key === 'id' || key === 'title') return null;
+
+                  return (
+                    <div key={key}>
+                       <label className="mb-1 block text-[10px] font-bold text-slate-500 uppercase">
+                          {key === 'desc' ? 'Açıklama' : 
+                           key === 'name' ? 'Başlık' : 
+                           key === 'image' ? 'Resim URL' : 
+                           key === 'heading' ? 'Ana Başlık' :
+                           key === 'subHeading' ? 'Alt Başlık' :
+                           key === 'text1' ? 'Paragraf 1' :
+                           key === 'text2' ? 'Paragraf 2' :
+                           key === 'quote' ? 'Yorum' :
+                           key === 'company' ? 'Şirket' :
+                           key}
+                       </label>
+                       {key === "desc" || key === "quote" || key === "about" || key.startsWith("text") || key === "longText" ? (
+                          <textarea rows={key === "longText" ? 8 : 4} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
+                       ) : (
+                          <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
+                       )}
+                    </div>
+                  );
+               })}
             </div>
             <div className="mt-6 flex justify-between gap-3">
-               {editModal.index !== null && ["service", "project", "reference"].includes(editModal.type) ? (
-                  <button onClick={handleDelete} className="rounded border border-red-200 text-red-600 px-4 py-2 text-xs font-bold hover:bg-red-50">Sil</button>
+               {editModal.index !== null && ["service", "project", "reference", "gallery"].includes(editModal.type) ? (
+                  <button onClick={handleDelete} className="rounded border border-red-200 text-red-600 px-4 py-2 text-xs font-bold hover:bg-red-50 flex items-center gap-1"><Icons.Trash size={12}/> Sil</button>
                ) : <div/>}
                <div className="flex gap-2">
                   <button onClick={() => setEditModal({open: false, type: null, index: null})} className="rounded border border-slate-200 text-slate-600 px-4 py-2 text-xs font-bold hover:bg-slate-50">Vazgeç</button>
