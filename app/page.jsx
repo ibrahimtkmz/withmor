@@ -1438,33 +1438,6 @@ export default function App() {
                     </div>
                 </div>
 
-                {/* 2. Google Maps (Sizin verdiğiniz kod) */}
-                <div id="google-map" className="w-full h-64 bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-lg relative group">
-                    {/* Harita Yükleniyor Efekti */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-100 z-0">
-                      <Icons.MapPin className="text-slate-300 w-10 h-10 animate-bounce" />
-                    </div>
-                    
-                    {/* Iframe */}
-                    <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.3644050212036!2d27.915783276535547!3d41.06093551621644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b48b71d491f24d%3A0xc6651915998a46b0!2sVelime%C5%9Fe%20OSB%20M%C3%BCd%C3%BCrl%C3%BC%C4%9F%C3%BC!5e0!3m2!1str!2str!4v1738204646700!5m2!1str!2str" 
-                      width="100%" 
-                      height="100%" 
-                      style={{ border: 0 }} 
-                      allowFullScreen="" 
-                      loading="lazy" 
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="relative z-10 w-full h-full grayscale group-hover:grayscale-0 transition-all duration-500"
-                      title="Google Maps"
-                    ></iframe>
-
-                    {/* Üstüne Yazı */}
-                    <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-slate-200 pointer-events-none">
-                      <p className="text-[10px] font-bold text-slate-700 flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-blue-600"></span> Withmor Genel Merkez
-                      </p>
-                    </div>
-                </div>
 
               </div>
             </div>
