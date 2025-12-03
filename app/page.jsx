@@ -921,16 +921,17 @@ export default function App() {
 
            {/* Tab Content Area */}
            <div key={activeAboutTab} className="grid lg:grid-cols-12 gap-12 items-start animate-in fade-in duration-500">
-              {/* Sol: Bina Görseli (Dikey) - GÜNCELLENDİ (Yerel Dosya Yolu) */}
+             {/* Sol: Bina Görseli (Dikey) - GÜNCELLENDİ */}
               <div className="lg:col-span-4">
-                 <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-lg group bg-slate-100 flex items-center justify-center">
+                 {/* AŞAĞIDAKİ SATIR GÜNCELLENDİ: h-[500px] yerine h-[150px] lg:h-[500px] yapıldı */}
+                 <div className="relative h-[150px] lg:h-[500px] w-full rounded-lg overflow-hidden shadow-lg group bg-slate-100 flex items-center justify-center">
                     <img 
                         src="/images/about/kurumsal-bina.jpg" 
                         alt="Kurumsal Bina" 
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         onError={(e) => {
-                            e.target.style.display = 'none'; // Resim yüklenemezse gizle ve placeholder göster
-                            e.target.parentElement.classList.add('flex'); // Flex ile placeholder'ı ortala
+                            e.target.style.display = 'none'; 
+                            e.target.parentElement.classList.add('flex');
                         }}
                     />
                     <div className="text-center text-slate-400">
