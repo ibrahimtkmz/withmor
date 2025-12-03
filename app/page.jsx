@@ -172,7 +172,7 @@ export default function App() {
       name: "Endüstriyel Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli, güçlendirilmiş çelik yük kabinleri.",
-      image: "yuk-asansorleri-platformlar.jpg?auto=format&fit=crop&q=80&w=800",
+      image: "yuk-kabinleri.jpg?auto=format&fit=crop&q=80&w=800",
     },
   ]);
 
