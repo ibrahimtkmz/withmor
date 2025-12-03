@@ -158,7 +158,7 @@ export default function App() {
       name: "Yük Asansörleri & Platformlar",
       desc:
         "Sanayi tesisleri ve depolar için yüksek kapasiteli ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "kabinler.webp?auto=format&fit=crop&q=80&w=800",
+      image: "yuk-asansorleri-platformlar.jpg?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "makine-sasesi-mrl",
