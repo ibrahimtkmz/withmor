@@ -213,7 +213,17 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  const [galleryImages, setGalleryImages] = useState(Array(8).fill(""));
+  // GALERİ İÇİN STATE - DÜZELTİLDİ (Yerel Dosya Yolları)
+  const [galleryImages, setGalleryImages] = useState([
+    "/images/gallery/galeri-1.jpg",
+    "/images/gallery/galeri-2.jpg",
+    "/images/gallery/galeri-3.jpg",
+    "/images/gallery/galeri-4.jpg",
+    "/images/gallery/galeri-5.jpg",
+    "/images/gallery/galeri-6.jpg",
+    "/images/gallery/galeri-7.jpg",
+    "/images/gallery/galeri-8.jpg"
+  ]);
 
   const [aboutTabs, setAboutTabs] = useState({
     "biz-kimiz": {
@@ -262,6 +272,7 @@ export default function App() {
     whatsapp: "https://wa.me/905302805526"
   });
 
+  // HİZMETLER İÇİN YEREL GÖRSELLER (DÜZELTİLDİ)
   const [services, setServices] = useState([
     {
       id: "hidrolik-yuk",
@@ -895,9 +906,18 @@ export default function App() {
 
            {/* Tab Content Area */}
            <div key={activeAboutTab} className="grid lg:grid-cols-12 gap-12 items-start animate-in fade-in duration-500">
-              {/* Sol: Bina Görseli (Dikey) - Placeholder */}
+              {/* Sol: Bina Görseli (Dikey) - GÜNCELLENDİ (Yerel Dosya Yolu) */}
               <div className="lg:col-span-4">
                  <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-lg group bg-slate-100 flex items-center justify-center">
+                    <img 
+                        src="/images/about/kurumsal-bina.jpg" 
+                        alt="Kurumsal Bina" 
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => {
+                            e.target.style.display = 'none'; // Resim yüklenemezse gizle ve placeholder göster
+                            e.target.parentElement.classList.add('flex'); // Flex ile placeholder'ı ortala
+                        }}
+                    />
                     <div className="text-center text-slate-400">
                         <Icons.Image className="w-16 h-16 mx-auto mb-2 opacity-50" />
                         <span className="text-sm font-bold uppercase tracking-wider">Görsel Alanı</span>
@@ -943,10 +963,16 @@ export default function App() {
                  </button>
               </div>
 
-              {/* Sağ: Profil Kartı - Placeholder */}
+              {/* Sağ: Profil Kartı - GÜNCELLENDİ (Yerel Dosya Yolu) */}
               <div className="lg:col-span-4">
                  <div className="bg-slate-50 p-8 rounded-2xl text-center border border-slate-100 h-full flex flex-col justify-center items-center">
-                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center">
+                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center relative">
+                        <img 
+                            src="/images/about/profil-resmi.jpg" 
+                            alt="Profil" 
+                            className="absolute inset-0 w-full h-full object-cover"
+                            onError={(e) => e.target.style.display = 'none'}
+                        />
                         <Icons.User className="w-16 h-16 text-slate-400" />
                     </div>
                     <h3 className="text-xl font-bold text-slate-900">İsim Soyisim</h3>
@@ -1027,8 +1053,14 @@ export default function App() {
                   </div>
                </div>
 
-               {/* Sağ: İllüstrasyon - Placeholder */}
+               {/* Sağ: İllüstrasyon - GÜNCELLENDİ (Yerel Dosya Yolu) */}
                <div className="relative h-80 lg:h-96 w-full lg:w-4/5 mx-auto rounded-xl overflow-hidden shadow-xl group bg-white border border-slate-100 flex items-center justify-center">
+                  <img 
+                     src="/images/home/neden-biz.jpg" 
+                     alt="Neden Biz" 
+                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                     onError={(e) => e.target.style.display = 'none'}
+                  />
                   <div className="text-center text-slate-400">
                       <Icons.Image className="w-20 h-20 mx-auto mb-2 opacity-50" />
                       <span className="text-sm font-bold uppercase tracking-wider">Görsel Alanı</span>
