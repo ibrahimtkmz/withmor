@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// Lucide-react kütüphanesi bağımlılığı kaldırıldı, ikonlar SVG olarak doğrudan koda gömüldü.
 
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
@@ -24,20 +23,21 @@ const Icons = {
   ChevronUp: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m18 15-6-6-6 6"/></svg>),
   MessageCircle: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>),
   Quote: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" {...props}><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>),
+  ChevronsRight: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>),
 };
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
   return (
-    <div className="mt-6 flex flex-col items-center justify-center">
-      {/* Üst Metin */}
-      <div className="mb-4 text-center">
+    <div className="flex flex-col items-start justify-center w-full">
+      {/* Üst Metin - Sola hizalandı */}
+      <div className="mb-6 text-left w-full">
         <h3 className="text-lg font-bold text-slate-800">Akıllı Dikey Ulaşım Sistemleri</h3>
         <p className="text-sm text-slate-500">Geleceğin teknolojisi ile donatılmış, güvenli ve konforlu asansör çözümleri.</p>
       </div>
 
-      <div className="flex justify-center items-center gap-6">
+      <div className="flex justify-start items-center gap-6 w-full">
         {/* SOL: Asansör Kuyusu */}
         <div className="relative h-96 w-40 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
           {/* Kuyu Duvarları */}
@@ -598,9 +598,9 @@ export default function App() {
         )}
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - DÜZENLENDİ: Üst Hizalama (Items Start) */}
       <section className="w-full border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-16 lg:py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:px-8 md:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:px-8 md:grid-cols-2">
           {/* Sol Kısım */}
           <div>
             {/* Vurgulu Metinler (Kopyalanan Kısım) */}
@@ -672,16 +672,9 @@ export default function App() {
             )}
           </div>
 
-          {/* Sağ Kısım - Animasyon */}
-          <div className="flex flex-col items-center justify-center mt-10 md:mt-0">
-             <p className="mb-6 max-w-xs text-center text-sm font-medium leading-relaxed text-slate-500">
-                Yük asansörleri, Yük platformları, Hidrolik sistemler ve Villa asansörleri ile özel çözümler.
-              </p>
-            <div className="relative rounded-2xl bg-white p-2 shadow-2xl shadow-slate-200 border border-slate-100">
-              <div className="rounded-xl bg-slate-50 px-8 py-8 border border-slate-200">
-                <ElevatorAnimation />
-              </div>
-            </div>
+          {/* Sağ Kısım - Animasyon - DÜZENLENDİ: Üst Hizalama */}
+          <div className="flex flex-col items-start justify-start w-full">
+             <ElevatorAnimation />
           </div>
         </div>
       </section>
@@ -802,7 +795,8 @@ export default function App() {
             {/* Sağ Detay */}
             <div className="lg:col-span-8">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-2 h-full flex flex-col">
-                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-center">
+                {/* Resim mobilde sola yaslandı (justify-start), masaüstünde ortalandı (lg:justify-center) - DÜZENLENDİ: justify-start for mobile */}
+                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-start">
                    <img
                       src={services[activeService]?.image}
                       alt={services[activeService]?.name}
