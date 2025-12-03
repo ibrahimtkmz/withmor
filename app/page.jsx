@@ -18,7 +18,7 @@ const Icons = {
   Settings: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>),
   LogOut: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>),
   User: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>),
-  Plus: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>),
+  Plus: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5v14"/></svg>),
   ChevronDown: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 9 6 6 6-6"/></svg>),
   ChevronUp: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m18 15-6-6-6 6"/></svg>),
   MessageCircle: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>),
@@ -959,7 +959,7 @@ export default function App() {
                  </button>
               </div>
 
-              {/* Sağ: Profil Kartı - GÜNCELLENDİ (Yerel Dosya Yolu) */}
+              {/* Sağ: Profil Kartı - GÜNCELLENDİ (Yerel Dosya Yolu ve Bilgiler) */}
               <div className="lg:col-span-4">
                  <div className="bg-slate-50 p-8 rounded-2xl text-center border border-slate-100 h-full flex flex-col justify-center items-center">
                     <div className="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center relative">
@@ -971,11 +971,11 @@ export default function App() {
                         />
                         <Icons.User className="w-16 h-16 text-slate-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">İsim Soyisim</h3>
-                    <p className="text-sm font-bold text-slate-500 mb-6">Unvan</p>
+                    <h3 className="text-xl font-bold text-slate-900">Aygün Yılmaz</h3>
+                    <p className="text-sm font-bold text-slate-500 mb-6">Proje Müdürü</p>
                     <p className="text-slate-600 text-sm italic relative px-4">
                        <span className="text-4xl text-slate-200 absolute -top-4 left-0">"</span>
-                       Buraya yönetici veya ilgili kişi için bir alıntı veya mesaj eklenebilir.
+                       Her projemizde müşteri memnuniyetini ve mühendislik kalitesini en üst düzeyde tutmayı hedefliyoruz. Yenilikçi çözümlerimizle binalarınıza değer katmak için buradayız.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
                     
@@ -1347,7 +1347,7 @@ export default function App() {
 
       </main>
       
-      {/* Footer - MEVCUT KOD */}
+      {/* Footer - GÜNCELLENDİ (Bizi Takip Edin) */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
          <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2">
@@ -1368,7 +1368,8 @@ export default function App() {
                </ul>
             </div>
             <div>
-               <h4 className="text-white font-bold text-sm mb-4">Sosyal Medya</h4>
+               {/* BAŞLIK DEĞİŞTİRİLDİ */}
+               <h4 className="text-white font-bold text-sm mb-4">Bizi Takip Edin</h4>
                <div className="flex gap-2">
                   <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition-colors text-white">
                     <Icons.Facebook size={16} />
