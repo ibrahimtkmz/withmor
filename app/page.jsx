@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// Lucide-react kütüphanesi bağımlılığı kaldırıldı, ikonlar SVG olarak doğrudan koda gömüldü.
 
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
@@ -91,17 +90,15 @@ function ElevatorAnimation() {
               {[5, 4, 3, 2, 1].map((floor) => (
                 <div 
                   key={floor} 
-                  className="flex items-center gap-3 group w-full"
-                  style={{ 
-                    animation: `highlightFloor${floor} 20s infinite` 
-                  }}
+                  data-floor={floor} // Veri etiketi eklendi
+                  className="floor-indicator flex items-center gap-3 group w-full"
                 >
-                  {/* Yuvarlak Kat İkonu */}
-                  <div className="w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center text-sm font-bold text-slate-400 transition-all duration-300 group-data-[active=true]:border-blue-600 group-data-[active=true]:bg-blue-600 group-data-[active=true]:text-white group-data-[active=true]:shadow-lg group-data-[active=true]:scale-110">
+                  {/* Yuvarlak Kat İkonu - Stiller CSS'ten gelecek */}
+                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center text-sm font-bold text-slate-400 transition-all duration-300">
                     {floor}
                   </div>
                   {/* Kat Yazısı */}
-                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wide whitespace-nowrap group-data-[active=true]:text-blue-600 transition-colors">
+                  <span className="indicator-text text-xs font-medium text-slate-400 uppercase tracking-wide whitespace-nowrap transition-colors">
                     {floor === 1 ? 'Zemin' : `${floor}. Kat`}
                   </span>
                 </div>
@@ -122,47 +119,57 @@ function ElevatorAnimation() {
           100% { transform: translateY(390%); }       /* Başa Dön */
         }
 
-        /* Kat İkonlarını Boyama Animasyonları - Yukarı Çıkışa Göre Ayarlandı */
-        /* Child selector workaround for React Inline Styles */
-        .group > div { transition: all 0.3s; }
+        /* Kat Işığı Animasyonları */
         
-        /* 5. Kat Işığı (En Üst) */
-        @keyframes highlightFloor5-bg { 
+        /* 5. Kat */
+        @keyframes floorLight5 { 
           80%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } 
           0%, 79%, 96%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); box-shadow: none; }
         }
         
-        /* 4. Kat Işığı */
-        @keyframes highlightFloor4-bg { 
+        /* 4. Kat */
+        @keyframes floorLight4 { 
           60%, 75% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
           0%, 59%, 76%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
         
-        /* 3. Kat Işığı */
-        @keyframes highlightFloor3-bg { 
+        /* 3. Kat */
+        @keyframes floorLight3 { 
           40%, 55% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
           0%, 39%, 56%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
         
-        /* 2. Kat Işığı */
-        @keyframes highlightFloor2-bg { 
+        /* 2. Kat */
+        @keyframes floorLight2 { 
           20%, 35% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
           0%, 19%, 36%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
         
-        /* 1. Kat Işığı (En Alt) */
-        @keyframes highlightFloor1-bg { 
+        /* 1. Kat */
+        @keyframes floorLight1 { 
           0%, 15% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
           16%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
         
-        /* Uygulamak için sınıflar ekliyoruz */
-        /* Not: Sıralama 5,4,3,2,1 şeklinde olduğu için nth-child sırası terstir */
-        .flex:nth-child(1) .group > div { animation: highlightFloor5-bg 20s infinite; }
-        .flex:nth-child(2) .group > div { animation: highlightFloor4-bg 20s infinite; }
-        .flex:nth-child(3) .group > div { animation: highlightFloor3-bg 20s infinite; }
-        .flex:nth-child(4) .group > div { animation: highlightFloor2-bg 20s infinite; }
-        .flex:nth-child(5) .group > div { animation: highlightFloor1-bg 20s infinite; }
+        /* Animasyonları Uygula */
+        div[data-floor="5"] .indicator-circle { animation: floorLight5 20s infinite; }
+        div[data-floor="4"] .indicator-circle { animation: floorLight4 20s infinite; }
+        div[data-floor="3"] .indicator-circle { animation: floorLight3 20s infinite; }
+        div[data-floor="2"] .indicator-circle { animation: floorLight2 20s infinite; }
+        div[data-floor="1"] .indicator-circle { animation: floorLight1 20s infinite; }
+        
+        /* Metin Renk Değişimi için (Opsiyonel) */
+        @keyframes textLight5 { 80%, 95% { color: #2563EB; } 0%, 79%, 96%, 100% { color: #94A3B8; } }
+        @keyframes textLight4 { 60%, 75% { color: #2563EB; } 0%, 59%, 76%, 100% { color: #94A3B8; } }
+        @keyframes textLight3 { 40%, 55% { color: #2563EB; } 0%, 39%, 56%, 100% { color: #94A3B8; } }
+        @keyframes textLight2 { 20%, 35% { color: #2563EB; } 0%, 19%, 36%, 100% { color: #94A3B8; } }
+        @keyframes textLight1 { 0%, 15% { color: #2563EB; } 16%, 100% { color: #94A3B8; } }
+
+        div[data-floor="5"] .indicator-text { animation: textLight5 20s infinite; }
+        div[data-floor="4"] .indicator-text { animation: textLight4 20s infinite; }
+        div[data-floor="3"] .indicator-text { animation: textLight3 20s infinite; }
+        div[data-floor="2"] .indicator-text { animation: textLight2 20s infinite; }
+        div[data-floor="1"] .indicator-text { animation: textLight1 20s infinite; }
       `}</style>
     </div>
   );
