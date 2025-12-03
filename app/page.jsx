@@ -213,17 +213,13 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // GALERİ İÇİN STATE - DÜZELTİLDİ (Yerel Dosya Yolları)
-  const [galleryImages, setGalleryImages] = useState([
-    "/images/gallery/galeri-1.jpg",
-    "/images/gallery/galeri-2.jpg",
-    "/images/gallery/galeri-3.jpg",
-    "/images/gallery/galeri-4.jpg",
-    "/images/gallery/galeri-5.jpg",
-    "/images/gallery/galeri-6.jpg",
-    "/images/gallery/galeri-7.jpg",
-    "/images/gallery/galeri-8.jpg"
-  ]);
+  // GALERİ İÇİN STATE - DÜZELTİLDİ (19 Adet Resim)
+  const [galleryImages, setGalleryImages] = useState(
+    Array.from({ length: 19 }, (_, i) => `/images/gallery/galeri-${i + 1}.jpg`)
+  );
+
+  // YENİ STATE: Görünecek Galeri Resmi Sayısı
+  const [visibleGalleryCount, setVisibleGalleryCount] = useState(8);
 
   const [aboutTabs, setAboutTabs] = useState({
     "biz-kimiz": {
@@ -975,10 +971,11 @@ export default function App() {
                         />
                         <Icons.User className="w-16 h-16 text-slate-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">Aygün Yılmaz</h3>
-                    <p className="text-sm font-bold text-slate-500 mb-6">Proje Müdürü</p>
+                    <h3 className="text-xl font-bold text-slate-900">İsim Soyisim</h3>
+                    <p className="text-sm font-bold text-slate-500 mb-6">Unvan</p>
                     <p className="text-slate-600 text-sm italic relative px-4">
                        <span className="text-4xl text-slate-200 absolute -top-4 left-0">"</span>
+                       Buraya yönetici veya ilgili kişi için bir alıntı veya mesaj eklenebilir.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
                     
@@ -1308,8 +1305,8 @@ export default function App() {
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {galleryImages.map((img, i) => (
-                    <div key={i} className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300">
+                 {galleryImages.slice(0, visibleGalleryCount).map((img, i) => (
+                    <div key={i} className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 animate-in fade-in zoom-in">
                        {img ? (
                           <>
                              <img src={img} alt={`Galeri ${i+1}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onError={handleImageError} />
@@ -1333,6 +1330,18 @@ export default function App() {
                     </div>
                  ))}
               </div>
+
+              {/* DAHA FAZLA GÖR BUTONU */}
+              {visibleGalleryCount < galleryImages.length && (
+                 <div className="mt-10 text-center">
+                    <button 
+                       onClick={() => setVisibleGalleryCount(prev => prev + 8)}
+                       className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+                    >
+                       Daha Fazla Gör <Icons.ChevronDown size={16} />
+                    </button>
+                 </div>
+              )}
            </div>
         </section>
 
