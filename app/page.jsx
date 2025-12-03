@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-// --- İKON TANIMLAMALARI (SVG) ---
+// --- ICONS (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
   Phone: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>),
@@ -27,7 +27,7 @@ const Icons = {
   Globe: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>),
 };
 
-// --- ÇEVİRİ VERİLERİ ---
+// --- TRANSLATION DATA ---
 const TRANSLATIONS = {
   tr: {
     menu: { about: "Kurumsal", services: "Hizmetler", projects: "Projeler", references: "Referanslar", contact: "İletişim" },
@@ -443,6 +443,18 @@ const TRANSLATIONS = {
   }
 };
 
+// --- DEFAULT COMPANY INFO ---
+const INITIAL_COMPANY_INFO = {
+  name: "Withmor Teknika Lift",
+  about: "Withmor Teknika Lift, ulusal ve uluslararası standartlara (EN-81) uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu mühendislik hassasiyetiyle birleştiriyoruz.",
+  phone: "+90 530 280 55 26",
+  email: "info@withmor.com",
+  address: "Kervanci ticaret merkezi, Velimeşe OSB, 59850 Çorlu/Tekirdağ",
+  facebook: "https://www.facebook.com/TEKNIKALIFT",
+  instagram: "https://www.instagram.com/withmorlift/",
+  whatsapp: "https://wa.me/905302805526"
+};
+
 function ElevatorAnimation({ floorText, groundText }) {
   return (
     <div className="relative w-full max-w-sm ltr:ml-0 rtl:mr-0">
@@ -452,7 +464,6 @@ function ElevatorAnimation({ floorText, groundText }) {
 
         <div className="relative z-10 flex flex-col items-start w-full">
           <div className="flex justify-start items-center gap-6 w-full ltr:flex-row rtl:flex-row-reverse">
-            {/* Asansör Kuyusu */}
             <div className="relative h-96 w-40 shrink-0 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
               <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-slate-300 bg-slate-200/30" />
               <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-slate-400/50" />
@@ -470,7 +481,6 @@ function ElevatorAnimation({ floorText, groundText }) {
               </div>
             </div>
 
-            {/* Kat Göstergeleri */}
             <div className="flex flex-col justify-between h-[18rem] py-2 w-full">
               {[5, 4, 3, 2, 1].map((floor) => (
                 <div key={floor} data-floor={floor} className="floor-indicator flex items-center gap-3 group w-full ltr:flex-row rtl:flex-row-reverse">
@@ -513,7 +523,7 @@ function ElevatorAnimation({ floorText, groundText }) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState("tr"); // Default Language
+  const [lang, setLang] = useState("tr");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -528,19 +538,31 @@ export default function App() {
   const [quoteForm, setQuoteForm] = useState({ name: "", phone: "", projectType: "Konut Asansörü", floorCount: "", location: "", note: "" });
   const [fastContactForm, setFastContactForm] = useState({ name: "", phone: "", message: "" });
 
-  // Mevcut dilin içeriğini al
   const t = TRANSLATIONS[lang];
   const isRTL = lang === 'ar';
 
-  // İçerikler (Data) - Dil değiştikçe güncellenir (Statik Veri İçin)
   const services = t.services.items.map((item, i) => ({ id: `service-${i}`, ...item }));
   const projects = t.projects.items;
   const references = t.references.items;
   const googleReviews = t.reviews.items;
 
-  // Admin Edit Modal State (Sadece basit düzenleme için)
+  // Initialize companyInfo using the external constant to prevent ReferenceError
+  const [companyInfo, setCompanyInfo] = useState(INITIAL_COMPANY_INFO);
+
   const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
   const [tempValue, setTempValue] = useState({});
+
+  // State for about content - separate from TRANSLATIONS to allow editing
+  const [aboutContent, setAboutContent] = useState({
+    title: t.about.title,
+    slogan: t.about.slogan
+  });
+
+  // Update local state when language changes
+  useEffect(() => {
+    setAboutContent({ title: t.about.title, slogan: t.about.slogan });
+  }, [lang, t.about.title, t.about.slogan]);
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -552,7 +574,7 @@ export default function App() {
 
   const openEdit = (type, index = null) => {
     setEditModal({ open: true, type, index });
-    // Not: Gerçek uygulamada burada dil bazlı veri çekilmeli, bu demo için boş
+    // Placeholder: In a real app, populate tempValue based on type/index
   };
   const openAdd = (type) => {
     if (!isLoggedIn && type !== "reference") { setShowLogin(true); return; }
@@ -598,7 +620,6 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Language Switcher - 4 Icons */}
             <div className="flex items-center gap-1.5 mr-2 rtl:ml-2 rtl:mr-0">
               {['tr', 'en', 'ru', 'ar'].map((l) => (
                 <button 
@@ -626,7 +647,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Nav Overlay */}
         {mobileMenuOpen && (
           <div className="fixed inset-0 z-[100] bg-white h-[100dvh] flex flex-col animate-in slide-in-from-right duration-200 md:hidden">
              <div className="p-4 flex justify-between items-center border-b border-slate-100">
@@ -694,7 +714,6 @@ export default function App() {
           </div>
 
           <div className="flex flex-col items-start justify-start w-full">
-             {/* Animasyon Metni de dile göre güncelleniyor */}
              <div className="mb-8 text-left w-full rtl:text-right">
                 <h3 className="text-lg font-bold text-slate-800 mb-2">{t.hero.animTitle}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">{t.hero.animDesc}</p>
@@ -710,33 +729,33 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-3">
-               <span className="text-xs font-bold uppercase tracking-wider text-blue-200">{t.about.title}</span>
+               <span className="text-xs font-bold uppercase tracking-wider text-blue-200">{aboutContent.title}</span>
                {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-100 hover:underline flex items-center gap-1"><Icons.Settings size={10}/> {t.admin.edit}</button>}
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">{t.about.title}</h2>
-            <p className="text-xl text-blue-200 font-semibold mb-6 font-serif italic">"{t.about.slogan}"</p>
+            <h2 className="text-3xl font-bold text-white mb-4">{aboutContent.title}</h2>
+            <p className="text-xl text-blue-200 font-semibold mb-6 font-serif italic">"{aboutContent.slogan}"</p>
             <p className="text-slate-200 leading-relaxed mb-8 text-sm md:text-base">{t.about.desc}</p>
             
             <div className="flex items-center gap-4">
-               <a href="https://www.facebook.com/TEKNIKALIFT" target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm"><Icons.Facebook size={20} /></a>
-               <a href="https://www.instagram.com/withmorlift/" target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-pink-600 transition-all shadow-sm"><Icons.Instagram size={20} /></a>
-               <a href="https://wa.me/905302805526" target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-sm"><Icons.Phone size={20} /></a>
+               <a href={companyInfo.facebook} target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm"><Icons.Facebook size={20} /></a>
+               <a href={companyInfo.instagram} target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-pink-600 transition-all shadow-sm"><Icons.Instagram size={20} /></a>
+               <a href={companyInfo.whatsapp} target="_blank" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-sm"><Icons.Phone size={20} /></a>
             </div>
           </div>
 
           <div className="grid gap-4">
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0"><Icons.MapPin size={20} /></div>
-                <div><h4 className="font-bold text-white mb-1">{t.about.office}</h4><p className="text-sm text-slate-300">Kervanci ticaret merkezi, Velimeşe OSB, Çorlu</p></div>
+                <div><h4 className="font-bold text-white mb-1">{t.about.office}</h4><p className="text-sm text-slate-300">{companyInfo.address}</p></div>
              </div>
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0"><Icons.Mail size={20} /></div>
-                <div><h4 className="font-bold text-white mb-1">{t.about.email}</h4><p className="text-sm text-slate-300">info@withmor.com</p></div>
+                <div><h4 className="font-bold text-white mb-1">{t.about.email}</h4><p className="text-sm text-slate-300">{companyInfo.email}</p></div>
              </div>
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow relative">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0"><Icons.Phone size={20} /></div>
-                <div><h4 className="font-bold text-white mb-1">{t.about.phone}</h4><a href="tel:+905302805526" className="text-sm text-slate-300 hover:text-white transition-colors block">+90 530 280 55 26</a></div>
-                <a href="https://wa.me/905302805526" target="_blank" className={`absolute ${isRTL ? 'left-4' : 'right-4'} top-1/2 -translate-y-1/2 bg-green-500/20 text-green-400 p-2 rounded-full hover:bg-green-500 hover:text-white transition-all shadow-lg border border-green-500/30`}><Icons.MessageCircle size={20} /></a>
+                <div><h4 className="font-bold text-white mb-1">{t.about.phone}</h4><a href={`tel:${companyInfo.phone}`} className="text-sm text-slate-300 hover:text-white transition-colors block">{companyInfo.phone}</a></div>
+                <a href={companyInfo.whatsapp} target="_blank" className={`absolute ${isRTL ? 'left-4' : 'right-4'} top-1/2 -translate-y-1/2 bg-green-500/20 text-green-400 p-2 rounded-full hover:bg-green-500 hover:text-white transition-all shadow-lg border border-green-500/30`}><Icons.MessageCircle size={20} /></a>
              </div>
           </div>
         </div>
