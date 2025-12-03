@@ -137,7 +137,7 @@ export default function App() {
       name: "Çelik Konstrüksiyonlar",
       desc:
         "Makine dairesi, taşıyıcı konstrüksiyonlar ve çelik yapılar için projeye özel statik hesaplamalı imalat.",
-      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800",
+      image: "celik-konstruksiyonlar.webp?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "hidrolik-sistemler",
