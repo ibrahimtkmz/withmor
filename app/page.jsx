@@ -22,6 +22,9 @@ const Icons = {
   ArrowRight: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   ),
+  ArrowRightCircle: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m8 12 4 4 4-4"/></svg>
+  ),
   CheckCircle2: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
   ),
@@ -57,6 +60,12 @@ const Icons = {
   ),
   MessageCircle: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+  ),
+  Quote: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" {...props}><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+  ),
+  ChevronsRight: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
   ),
 };
 
@@ -722,29 +731,39 @@ export default function App() {
 
           <div className="grid lg:grid-cols-12 gap-8">
             {/* Sol Liste - MOBİLDE YATAY SCROLL */}
-            <div className="lg:col-span-4 flex lg:flex-col gap-3 lg:gap-1 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide snap-x w-full">
-              {services.map((service, index) => (
-                <button
-                  key={service.id}
-                  onClick={() => setActiveService(index)}
-                  className={`
-                    flex-none min-w-fit lg:w-full text-left px-5 py-3 lg:py-4 rounded-full lg:rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between group snap-start whitespace-nowrap lg:whitespace-normal border
-                    ${index === activeService
-                      ? "bg-slate-900 text-white shadow-lg lg:transform lg:scale-105 border-slate-900"
-                      : "bg-white text-slate-600 hover:bg-slate-50 border-slate-200 lg:border-transparent hover:border-slate-300"
-                    }
-                  `}
-                >
-                  {service.name}
-                  {index === activeService && <Icons.ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
-                </button>
-              ))}
+            <div className="lg:col-span-4 flex flex-col gap-2 w-full">
+              {/* Mobil İçin Kaydırma İpucu Butonu */}
+              <div className="lg:hidden w-full flex justify-end mb-2 animate-pulse">
+                 <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-full flex items-center gap-1">
+                    Yana Kaydır <Icons.ChevronsRight size={10} />
+                 </span>
+              </div>
+
+              <div className="flex lg:flex-col gap-3 lg:gap-1 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide snap-x w-full">
+                {services.map((service, index) => (
+                  <button
+                    key={service.id}
+                    onClick={() => setActiveService(index)}
+                    className={`
+                      flex-none min-w-fit lg:w-full text-left px-5 py-3 lg:py-4 rounded-full lg:rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between group snap-start whitespace-nowrap lg:whitespace-normal border
+                      ${index === activeService
+                        ? "bg-slate-900 text-white shadow-lg lg:transform lg:scale-105 border-slate-900"
+                        : "bg-white text-slate-600 hover:bg-slate-50 border-slate-200 lg:border-transparent hover:border-slate-300"
+                      }
+                    `}
+                  >
+                    {service.name}
+                    {index === activeService && <Icons.ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Sağ Detay */}
             <div className="lg:col-span-8">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-2 h-full flex flex-col">
-                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-center">
+                {/* Resim mobilde sola yaslandı (justify-start), masaüstünde ortalandı (lg:justify-center) */}
+                <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl bg-slate-50 flex items-center justify-start lg:justify-center">
                    <img
                       src={services[activeService]?.image}
                       alt={services[activeService]?.name}
@@ -848,9 +867,16 @@ export default function App() {
           )}
         </section>
 
-        {/* Referanslar */}
-        <section id="references" className="bg-blue-900 -mx-6 px-6 py-20 text-white">
-           <div className="max-w-6xl mx-auto">
+        {/* Referanslar - ARKAPLAN DESENİ VE TAM EKRAN */}
+        <section id="references" className="bg-blue-900 w-full py-20 text-white relative overflow-hidden">
+           {/* SOLUK DESEN KATMANI - TIRNAK İŞARETLERİ */}
+           <div className="absolute inset-0 pointer-events-none select-none opacity-5">
+              <Icons.Quote className="absolute -top-10 -left-10 w-64 h-64 text-white transform rotate-12" />
+              <Icons.Quote className="absolute top-1/3 right-10 w-32 h-32 text-white transform -rotate-12" />
+              <Icons.Quote className="absolute bottom-10 left-1/4 w-48 h-48 text-white transform rotate-6" />
+           </div>
+
+           <div className="max-w-6xl mx-auto px-6 relative z-10">
               <div className="grid md:grid-cols-2 gap-16">
                  {/* Kurumsal Referanslar */}
                  <div>
