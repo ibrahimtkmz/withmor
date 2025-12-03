@@ -1,143 +1,149 @@
 "use client";
 
 import { useState } from "react";
+import { 
+  MapPin, 
+  Phone, 
+  Mail, 
+  Facebook, 
+  Instagram, 
+  ArrowRight, 
+  CheckCircle2, 
+  Menu, 
+  X,
+  ChevronRight,
+  Star,
+  Settings,
+  LogOut,
+  User,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  Quote,
+  ChevronsRight
+} from "lucide-react";
 
-// --- İKON TANIMLAMALARI (Harici kütüphane bağımlılığı kaldırıldı) ---
+// --- İKON TANIMLAMALARI (Lucide React Bağımlılığı Olmadan) ---
 const Icons = {
-  MapPin: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-  ),
-  Phone: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-  ),
-  Mail: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-  ),
-  Facebook: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-  ),
-  Instagram: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-  ),
-  ArrowRight: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  ),
-  CheckCircle2: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-  ),
-  Menu: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-  ),
-  X: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 18 12"/></svg>
-  ),
-  ChevronRight: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m9 18 6-6-6-6"/></svg>
-  ),
-  Star: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-  ),
-  Settings: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-  ),
-  LogOut: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-  ),
-  User: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  ),
-  Plus: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-  ),
-  ChevronDown: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 9 6 6 6-6"/></svg>
-  ),
-  ChevronUp: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m18 15-6-6-6 6"/></svg>
-  ),
-  MessageCircle: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-  ),
-  Quote: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" {...props}><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
-  ),
-  ChevronsRight: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
-  ),
-  // Yeni eklenen ikonlar
-  ShieldCheck: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
-  ),
-  Zap: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-  ),
-  Award: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-  ),
-  Cpu: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 15h3"/><path d="M1 9h3"/><path d="M1 15h3"/></svg>
-  ),
-  Smile: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
-  ),
+  MapPin, Phone, Mail, Facebook, Instagram, ArrowRight, CheckCircle2, Menu, X, ChevronRight, Star, Settings, LogOut, User, Plus, ChevronDown, ChevronUp, MessageCircle, Quote, ChevronsRight
 };
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
-  const floorData = [
-    { num: 5, label: "İnovasyon", icon: Icons.Cpu },
-    { num: 4, label: "Konfor", icon: Icons.Smile },
-    { num: 3, label: "Hız", icon: Icons.Zap },
-    { num: 2, label: "Güvenlik", icon: Icons.ShieldCheck },
-    { num: 1, label: "Kalite", icon: Icons.Award },
-  ];
-
   return (
-    <div className="mt-6 flex justify-center">
-      {/* Ana konteyner büyütüldü: h-96 w-64 */}
-      <div className="relative h-96 w-64 overflow-hidden rounded-md border border-slate-300 bg-slate-100 shadow-inner">
-        <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-300" />
-        {/* Kat çizgileri */}
+    <div className="mt-6 flex justify-center items-center gap-8">
+      {/* SOL: Asansör Kuyusu */}
+      <div className="relative h-96 w-48 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
+        {/* Kuyu Duvarları */}
+        <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-slate-300 bg-slate-200/30" />
+        
+        {/* Raylar */}
+        <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-slate-400/50" />
+        <div className="absolute left-1/2 top-2 bottom-2 w-1 ml-3 bg-slate-400/50" />
+
+        {/* Kat Çizgileri */}
         {Array.from({ length: 5 }).map((_, index) => (
           <div
             key={index}
-            className="absolute left-2 right-2 border-t border-slate-300"
-            style={{ top: `${(index + 1) * 19}%` }}
+            className="absolute left-4 right-4 border-t border-slate-400/40"
+            style={{ top: `${(index + 1) * 18}%` }} // Hizalama ayarı
           />
         ))}
-        {/* Kat numaraları ve Metinler */}
-        <div className="absolute right-2 top-4 flex flex-col items-end gap-6 text-sm text-slate-500 font-mono w-full px-2">
-          {floorData.map((item, index) => (
-            <div key={index} className="flex items-center gap-2 justify-end w-full pr-1">
-              <span className="text-[10px] font-bold uppercase tracking-tighter text-blue-800">{item.label}</span>
-              <item.icon size={14} className="text-blue-600" />
-              <span className="font-bold">{item.num}</span>
-            </div>
-          ))}
-        </div>
-        {/* Kabin */}
+
+        {/* Asansör Kabini */}
         <div
-          className="absolute left-4 right-32 h-14 rounded border border-blue-600 bg-blue-500 shadow-md z-10"
-          style={{ top: '8%', animation: "elevatorMove 8s ease-in-out infinite" }}
+          className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center"
+          style={{ top: '6%', animation: "elevatorMove 8s ease-in-out infinite" }}
         >
-          <div className="flex h-full items-center justify-center gap-1 text-xs font-bold text-white tracking-wider uppercase">
+          {/* Kabin Kapısı Efekti */}
+          <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
+          <div className="text-xs font-bold text-white tracking-widest bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
             WL
           </div>
         </div>
-        {/* Oklar */}
-        <div className="absolute left-3 top-3 flex items-center gap-1 text-sm text-blue-600 font-bold">
-          <span>▲▼</span>
-        </div>
 
-        <style>{`
-          @keyframes elevatorMove {
-            0%, 15% { transform: translateY(0%); }
-            50%, 65% { transform: translateY(520%); }
-            100% { transform: translateY(0%); }
-          }
-        `}</style>
+        {/* Yön Okları */}
+        <div className="absolute top-2 left-0 right-0 flex justify-center gap-4 px-4">
+           <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
+           <div className="h-2 w-2 rounded-full bg-red-500 opacity-30" />
+        </div>
       </div>
+
+      {/* SAĞ: Dışarı Alınan Kat Göstergeleri */}
+      <div className="flex flex-col justify-between h-[18rem] py-2">
+        {[5, 4, 3, 2, 1].map((floor) => (
+          <div 
+            key={floor} 
+            className="flex items-center gap-3 group"
+            style={{ 
+              animation: `highlightFloor${floor} 8s infinite` 
+            }}
+          >
+            {/* Yuvarlak Kat İkonu */}
+            <div className="w-10 h-10 rounded-full border-2 border-slate-300 flex items-center justify-center text-sm font-bold text-slate-400 transition-all duration-300 group-data-[active=true]:border-blue-600 group-data-[active=true]:bg-blue-600 group-data-[active=true]:text-white group-data-[active=true]:shadow-lg group-data-[active=true]:scale-110">
+              {floor}
+            </div>
+            {/* Kat Yazısı */}
+            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide group-data-[active=true]:text-blue-600 transition-colors">
+              {floor === 1 ? 'Zemin' : `${floor}. Kat`}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <style>{`
+        /* Asansör Hareketi */
+        @keyframes elevatorMove {
+          0%, 15% { transform: translateY(0%); } /* 5. Kat */
+          50%, 65% { transform: translateY(390%); } /* 1. Kat */
+          100% { transform: translateY(0%); } /* 5. Kat */
+        }
+
+        /* Kat İkonlarını Boyama Animasyonları (Zamanlama asansöre göre ayarlandı) */
+        
+        /* 5. Kat */
+        @keyframes highlightFloor5 {
+          0%, 15% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          20%, 90% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); box-shadow: none; }
+          95%, 100% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+        }
+
+        /* 4. Kat */
+        @keyframes highlightFloor4 {
+          0%, 15% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+          18%, 25% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          28%, 88% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); }
+          90%, 95% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          98%, 100% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+        }
+
+        /* 3. Kat */
+        @keyframes highlightFloor3 {
+          0%, 25% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+          28%, 35% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          38%, 78% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); }
+          80%, 87% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          90%, 100% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+        }
+
+        /* 2. Kat */
+        @keyframes highlightFloor2 {
+          0%, 35% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+          38%, 45% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          48%, 68% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); }
+          70%, 77% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          80%, 100% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+        }
+
+        /* 1. Kat */
+        @keyframes highlightFloor1 {
+          0%, 45% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; }
+          50%, 65% { background-color: #2563EB; border-color: #2563EB; color: white; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          70%, 100% { background-color: transparent; border-color: #CBD5E1; color: #94A3B8; transform: scale(1); box-shadow: none; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -150,7 +156,7 @@ export default function App() {
 
   // Göster/Gizle State'leri
   const [showAllReferences, setShowAllReferences] = useState(false);
-  const [showAllProjects, setShowAllProjects] = useState(false); // Projeler için yeni state
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
 
   const [showQuoteModal, setShowQuoteModal] = useState(false);
@@ -178,7 +184,6 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // DEĞİŞİKLİK: Slogan Güncellendi
   const [aboutContent, setAboutContent] = useState({
     title: "Kurumsal",
     slogan: "İstiyorsan herşey gerçek olur",
@@ -231,7 +236,6 @@ export default function App() {
 
   const [activeService, setActiveService] = useState(0);
 
-  // DEĞİŞİKLİK: Daha Fazla Proje Eklendi
   const [projects, setProjects] = useState([
     {
       name: "Skyline Residence Tower",
@@ -396,7 +400,6 @@ export default function App() {
   };
 
   const openAdd = (type) => {
-    // DEĞİŞİKLİK: Sadece referans eklemek için giriş zorunluluğu kaldırıldı
     if (!isLoggedIn && type !== "reference") {
       setShowLogin(true);
       return;
@@ -654,11 +657,8 @@ export default function App() {
              <p className="mb-6 max-w-xs text-center text-sm font-medium leading-relaxed text-slate-500">
                 Yük asansörleri, Yük platformları, Hidrolik sistemler ve Villa asansörleri ile özel çözümler.
               </p>
-            <div className="relative rounded-2xl bg-white p-2 shadow-2xl shadow-slate-200 border border-slate-100">
-              <div className="rounded-xl bg-slate-50 px-8 py-8 border border-slate-200">
-                <ElevatorAnimation />
-              </div>
-            </div>
+            {/* ASANSÖR ANİMASYONU BİLEŞENİ */}
+            <ElevatorAnimation />
           </div>
         </div>
       </section>
@@ -1068,129 +1068,3 @@ export default function App() {
         </section>
 
       </main>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
-         <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-2">
-               <div className="flex items-center gap-2 mb-4 text-white">
-                  <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center font-bold text-xs">WL</div>
-                  <span className="font-bold text-lg">{companyInfo.name}</span>
-               </div>
-               <p className="text-xs leading-relaxed text-slate-400 max-w-xs">
-                  Güvenli, konforlu ve verimli dikey ulaşım çözümleri için mühendislik odaklı yaklaşım.
-               </p>
-            </div>
-            <div>
-               <h4 className="text-white font-bold text-sm mb-4">Hızlı Erişim</h4>
-               <ul className="space-y-2 text-xs">
-                  <li><a href="#services" className="hover:text-white transition-colors">Hizmetler</a></li>
-                  <li><a href="#projects" className="hover:text-white transition-colors">Projeler</a></li>
-                  <li><a href="#contact" className="hover:text-white transition-colors">İletişim</a></li>
-               </ul>
-            </div>
-            <div>
-               <h4 className="text-white font-bold text-sm mb-4">Sosyal Medya</h4>
-               <div className="flex gap-2">
-                  <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition-colors text-white">
-                    <Icons.Facebook size={16} />
-                  </a>
-                  <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-pink-600 transition-colors text-white">
-                    <Icons.Instagram size={16} />
-                  </a>
-                  <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-green-600 transition-colors text-white">
-                    <Icons.Phone size={16} />
-                  </a>
-               </div>
-            </div>
-         </div>
-         <div className="mx-auto max-w-6xl px-6 border-t border-slate-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500">
-            <span>© {new Date().getFullYear()} {companyInfo.name}. Tüm hakları saklıdır.</span>
-            <span>Mühendislik ve Tasarım: Withmor Teknika</span>
-         </div>
-      </footer>
-
-      {/* Modallar */}
-      
-      {/* Login Modal */}
-      {showLogin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-            <h3 className="mb-2 text-lg font-bold text-slate-900">Yönetici Girişi</h3>
-            <p className="mb-4 text-xs text-slate-500">Panel erişimi için yetkili bilgilerinizi giriniz.</p>
-            {loginError && <div className="mb-3 rounded bg-red-50 p-2 text-center text-xs text-red-600">{loginError}</div>}
-            <form onSubmit={handleLogin} className="space-y-3 text-xs">
-              <input type="text" name="username" placeholder="Kullanıcı adı" className="w-full rounded border border-slate-200 p-2.5 outline-none focus:border-blue-600" />
-              <input type="password" name="password" placeholder="Şifre" className="w-full rounded border border-slate-200 p-2.5 outline-none focus:border-blue-600" />
-              <button type="submit" className="w-full rounded bg-blue-900 py-2.5 font-bold text-white hover:bg-blue-800">Giriş Yap</button>
-            </form>
-            <button onClick={() => setShowLogin(false)} className="mt-3 w-full text-xs text-slate-400 hover:text-slate-600">İptal</button>
-          </div>
-        </div>
-      )}
-
-      {/* Quote Modal */}
-      {showQuoteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
-            <h3 className="mb-1 text-lg font-bold text-slate-900">Proje Teklifi Al</h3>
-            <p className="mb-5 text-xs text-slate-500">Bilgileri doldurun, WhatsApp üzerinden uzmanlarımız size ulaşsın.</p>
-            <form onSubmit={handleQuoteSubmit} className="space-y-3">
-               <div className="grid grid-cols-2 gap-3">
-                  <input required type="text" placeholder="Ad Soyad" value={quoteForm.name} onChange={(e) => setQuoteForm({...quoteForm, name: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                  <input required type="tel" placeholder="Telefon" value={quoteForm.phone} onChange={(e) => setQuoteForm({...quoteForm, phone: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-               </div>
-               <select value={quoteForm.projectType} onChange={(e) => setQuoteForm({...quoteForm, projectType: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600 bg-white">
-                  <option>Konut Asansörü</option>
-                  <option>Yük Asansörü</option>
-                  <option>Hidrolik Sistem</option>
-                  <option>Panoramik Asansör</option>
-                  <option>Araç Platformu</option>
-               </select>
-               <div className="grid grid-cols-2 gap-3">
-                  <input type="number" placeholder="Durak Sayısı" value={quoteForm.floorCount} onChange={(e) => setQuoteForm({...quoteForm, floorCount: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                  <input type="text" placeholder="Konum / Şehir" value={quoteForm.location} onChange={(e) => setQuoteForm({...quoteForm, location: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-               </div>
-               <textarea rows={3} placeholder="Ek Notlar..." value={quoteForm.note} onChange={(e) => setQuoteForm({...quoteForm, note: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600 resize-none" />
-               <button type="submit" className="flex w-full items-center justify-center gap-2 rounded bg-[#25D366] py-2.5 text-sm font-bold text-white hover:bg-[#128C7E]">
-                  <Icons.Phone size={16} /> WhatsApp ile Gönder
-               </button>
-            </form>
-            <button onClick={() => setShowQuoteModal(false)} className="mt-4 w-full text-xs text-slate-400 hover:text-slate-600">Kapat</button>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {editModal.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl max-h-[80vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
-            <h3 className="mb-4 text-lg font-bold text-slate-900">{editModal.index === null ? "Yeni Ekle" : "İçeriği Düzenle"}</h3>
-            <div className="space-y-3">
-               {Object.keys(tempValue).map((key) => (
-                  <div key={key}>
-                     <label className="mb-1 block text-[10px] font-bold text-slate-500 uppercase">{key}</label>
-                     {key === "desc" || key === "quote" || key === "about" ? (
-                        <textarea rows={3} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                     ) : (
-                        <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
-                     )}
-                  </div>
-               ))}
-            </div>
-            <div className="mt-6 flex justify-between gap-3">
-               {editModal.index !== null && ["service", "project", "reference"].includes(editModal.type) ? (
-                  <button onClick={handleDelete} className="rounded border border-red-200 text-red-600 px-4 py-2 text-xs font-bold hover:bg-red-50">Sil</button>
-               ) : <div/>}
-               <div className="flex gap-2">
-                  <button onClick={() => setEditModal({open: false, type: null, index: null})} className="rounded border border-slate-200 text-slate-600 px-4 py-2 text-xs font-bold hover:bg-slate-50">Vazgeç</button>
-                  <button onClick={saveEdit} className="rounded bg-blue-900 text-white px-6 py-2 text-xs font-bold hover:bg-blue-800">{editModal.index === null ? "Ekle" : "Kaydet"}</button>
-               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-}
