@@ -144,35 +144,35 @@ export default function App() {
       name: "Hidrolik Sistemler",
       desc:
         "Villa, yük ve makine dairesiz çözümler için sessiz, güvenli ve enerji verimli hidrolik üniteler.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+      image: "hidrolik-sistemler.jpg?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "kabinler",
       name: "Kabin Tasarımları",
       desc:
         "Standart ve panoramik kabin tasarımları, paslanmaz ve cam seçenekleri ile modern iç dekorasyon.",
-      image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800",
+      image: "kabinler.webp?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-asansorleri-platformlar",
       name: "Yük Asansörleri & Platformlar",
       desc:
         "Sanayi tesisleri ve depolar için yüksek kapasiteli ağır yük taşıma çözümleri ve makaslı platformlar.",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+      image: "kabinler.webp?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "makine-sasesi-mrl",
       name: "Makine Şasesi MRL / MR",
       desc:
         "MRL ve geleneksel sistemler için titreşimi minimize eden, uzun ömürlü sertifikalı makine şaseleri.",
-      image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&q=80&w=800",
+      image: "makine-sasesi-mrl-mr.png?auto=format&fit=crop&q=80&w=800",
     },
     {
       id: "yuk-kabinleri",
       name: "Endüstriyel Yük Kabinleri",
       desc:
         "Ağır ve hassas yükler için darbe dayanımlı, kaymaz zeminli, güçlendirilmiş çelik yük kabinleri.",
-      image: "https://images.unsplash.com/photo-1535557597501-0febd41569f1?auto=format&fit=crop&q=80&w=800",
+      image: "yuk-asansorleri-platformlar.jpg?auto=format&fit=crop&q=80&w=800",
     },
   ]);
 
