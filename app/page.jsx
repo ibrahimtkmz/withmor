@@ -125,10 +125,10 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // Yeni Hakkımızda Bölümü State'i
+  // Yeni Hakkımızda Bölümü State'i - Slogan GÜNCELLENDİ
   const [aboutContent, setAboutContent] = useState({
     title: "Kurumsal",
-    slogan: "Geleceğe Güvenle Yükselin",
+    slogan: "İstiyorsan her şey gerçek olur",
   });
 
   const [services, setServices] = useState([
@@ -275,7 +275,7 @@ export default function App() {
 
     if (type === "hero") setTempValue(hero);
     if (type === "company") setCompanyInfo(companyInfo);
-    if (type === "aboutSection") setTempValue(aboutContent); // Yeni edit handler
+    if (type === "aboutSection") setTempValue(aboutContent); 
     if (type === "service" && index !== null) setTempValue(services[index]);
     if (type === "project" && index !== null) setTempValue(projects[index]);
     if (type === "reference" && index !== null) setTempValue(references[index]);
@@ -548,7 +548,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* --- YENİ HAKKIMIZDA BÖLÜMÜ --- */}
+      {/* --- KURUMSAL BÖLÜMÜ --- */}
       <section id="about" className="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
         <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-2 gap-12 items-center">
           <div>
@@ -557,7 +557,13 @@ export default function App() {
                {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-500 hover:underline flex items-center gap-1"><Icons.Settings size={10}/> Düzenle</button>}
             </div>
             <h2 className="text-3xl font-bold text-slate-900 mb-4">{aboutContent.title}</h2>
-            <p className="text-xl text-blue-900 font-semibold mb-6 font-serif italic">"{aboutContent.slogan}"</p>
+            <p className="text-xl text-blue-900 font-semibold mb-4 font-serif italic">"{aboutContent.slogan}"</p>
+            
+            {/* Yeni Eklenen Hizmet Kalemleri Metni */}
+            <p className="mb-6 text-sm font-semibold text-slate-700">
+               Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve sınırsız özel uygulamalar ile hizmetinizdeyiz.
+            </p>
+
             <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">
               {companyInfo.about}
             </p>
@@ -600,7 +606,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ANA İÇERİK */}
+      {/* ANA İÇERİK - Hizmetler ve Projeler Kapsayıcısı */}
       <main className="mx-auto max-w-6xl px-6 py-20 space-y-24">
         
         {/* Hizmetler */}
@@ -730,72 +736,74 @@ export default function App() {
             ))}
           </div>
         </section>
+      </main>
 
-        {/* Referanslar */}
-        <section id="references" className="bg-blue-900 -mx-6 px-6 py-20 text-white">
-           <div className="max-w-6xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-16">
-                 {/* Kurumsal Referanslar */}
-                 <div>
-                    <div className="flex items-center gap-2 mb-6">
-                       <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
-                       {isLoggedIn && <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>}
-                    </div>
-                    <div className="space-y-4">
-                      {references.map((ref, index) => (
-                        <div key={index} className="bg-blue-800 p-5 rounded-xl border border-blue-700 shadow-lg relative transition hover:border-blue-600">
-                           <span className="text-4xl text-blue-600 absolute top-2 right-4 font-serif">"</span>
-                           <p className="text-sm text-blue-50 italic mb-4 relative z-10">{ref.quote}</p>
-                           <div className="flex items-center justify-between border-t border-blue-700 pt-3">
-                              <div>
-                                 <p className="text-sm font-bold text-white">{ref.company}</p>
-                                 <p className="text-xs text-blue-300">{ref.name} - {ref.title}</p>
-                              </div>
-                              {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Icons.Settings size={12}/> Düzenle</button>}
-                           </div>
+      {/* Referanslar - TAM EKRAN ARKAPLAN (Main'in dışına alındı) */}
+      <section id="references" className="w-full bg-blue-900 py-20 text-white">
+         <div className="max-w-6xl mx-auto px-6">
+            <div className="grid md:grid-cols-2 gap-16">
+               {/* Kurumsal Referanslar */}
+               <div>
+                  <div className="flex items-center gap-2 mb-6">
+                     <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
+                     {isLoggedIn && <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>}
+                  </div>
+                  <div className="space-y-4">
+                    {references.map((ref, index) => (
+                      <div key={index} className="bg-blue-800 p-5 rounded-xl border border-blue-700 shadow-lg relative transition hover:border-blue-600">
+                         <span className="text-4xl text-blue-600 absolute top-2 right-4 font-serif">"</span>
+                         <p className="text-sm text-blue-50 italic mb-4 relative z-10">{ref.quote}</p>
+                         <div className="flex items-center justify-between border-t border-blue-700 pt-3">
+                            <div>
+                               <p className="text-sm font-bold text-white">{ref.company}</p>
+                               <p className="text-xs text-blue-300">{ref.name} - {ref.title}</p>
+                            </div>
+                            {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Icons.Settings size={12}/> Düzenle</button>}
+                         </div>
+                      </div>
+                    ))}
+                  </div>
+               </div>
+
+               {/* Google Yorumları */}
+               <div>
+                  <div className="flex items-center justify-between mb-6">
+                     <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
+                     <a href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6" target="_blank" rel="noreferrer" className="text-xs font-semibold text-blue-200 hover:text-white hover:underline">Google'da Görüntüle →</a>
+                  </div>
+                  <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg">
+                     <div className="flex items-center gap-4 mb-6">
+                        <div className="text-4xl font-bold text-white">4.9</div>
+                        <div>
+                           <div className="flex text-amber-400 text-sm"><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/></div>
+                           <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
                         </div>
-                      ))}
-                    </div>
-                 </div>
+                     </div>
+                     <div className="space-y-4">
+                        {googleReviews.map((review) => (
+                           <div key={review.id} className="border-b border-blue-700 last:border-0 pb-4 last:pb-0">
+                              <div className="flex items-center justify-between mb-1">
+                                 <span className="text-sm font-bold text-white">{review.name}</span>
+                                 <span className="text-[10px] text-blue-300">{review.date}</span>
+                              </div>
+                              <div className="flex text-[10px] text-amber-400 mb-1">
+                                {Array.from({length: review.rating}).map((_, i) => (
+                                  <Icons.Star key={i} size={12} fill="currentColor" />
+                                ))}
+                              </div>
+                              <p className="text-xs text-blue-100 line-clamp-2">{review.text}</p>
+                           </div>
+                        ))}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
 
-                 {/* Google Yorumları */}
-                 <div>
-                    <div className="flex items-center justify-between mb-6">
-                       <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
-                       <a href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6" target="_blank" rel="noreferrer" className="text-xs font-semibold text-blue-200 hover:text-white hover:underline">Google'da Görüntüle →</a>
-                    </div>
-                    <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg">
-                       <div className="flex items-center gap-4 mb-6">
-                          <div className="text-4xl font-bold text-white">4.9</div>
-                          <div>
-                             <div className="flex text-amber-400 text-sm"><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/></div>
-                             <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
-                          </div>
-                       </div>
-                       <div className="space-y-4">
-                          {googleReviews.map((review) => (
-                             <div key={review.id} className="border-b border-blue-700 last:border-0 pb-4 last:pb-0">
-                                <div className="flex items-center justify-between mb-1">
-                                   <span className="text-sm font-bold text-white">{review.name}</span>
-                                   <span className="text-[10px] text-blue-300">{review.date}</span>
-                                </div>
-                                <div className="flex text-[10px] text-amber-400 mb-1">
-                                  {Array.from({length: review.rating}).map((_, i) => (
-                                    <Icons.Star key={i} size={12} fill="currentColor" />
-                                  ))}
-                                </div>
-                                <p className="text-xs text-blue-100 line-clamp-2">{review.text}</p>
-                             </div>
-                          ))}
-                       </div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </section>
-
-        {/* İletişim */}
-        <section id="contact" className="grid lg:grid-cols-2 gap-12">
+      {/* İletişim (Yeni Kapsayıcıda) */}
+      <section id="contact" className="py-20 bg-white">
+         <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
            <div>
               <span className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2 block">Bize Ulaşın</span>
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Projenizi Birlikte Planlayalım</h2>
@@ -871,9 +879,8 @@ export default function App() {
                  ></iframe>
               </div>
            </div>
-        </section>
-
-      </main>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
