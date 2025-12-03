@@ -1,91 +1,68 @@
 "use client";
 
 import { useState } from "react";
-
-// --- İKON SETİ (Bağımlılık gerektirmeyen Inline SVG'ler) ---
-const Icons = {
-  MapPin: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-  ),
-  Phone: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-  ),
-  Mail: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-  ),
-  Facebook: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-  ),
-  Instagram: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-  ),
-  ArrowRight: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  ),
-  CheckCircle2: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-  ),
-  Menu: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-  ),
-  X: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-  ),
-  ChevronRight: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m9 18 6-6-6-6"/></svg>
-  ),
-  Star: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-  ),
-  Settings: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-  ),
-  LogOut: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-  ),
-  User: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  ),
-  Plus: (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-  )
-};
+import { 
+  MapPin, 
+  Phone, 
+  Mail, 
+  Facebook, 
+  Instagram, 
+  ArrowRight, 
+  CheckCircle2, 
+  Menu, 
+  X,
+  ChevronRight,
+  Star,
+  Settings,
+  LogOut,
+  User,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle
+} from "lucide-react";
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
   return (
     <div className="mt-6 flex justify-center">
-      <div className="relative h-44 w-24 overflow-hidden rounded-md border border-slate-300 bg-slate-100 shadow-inner">
+      {/* Ana konteyner 1.5x büyütüldü: h-96 w-48 (önceki h-64 w-32) */}
+      <div className="relative h-96 w-48 overflow-hidden rounded-md border border-slate-300 bg-slate-100 shadow-inner">
         <div className="absolute inset-x-2 top-2 bottom-2 border-x border-slate-300" />
+        {/* Kat çizgileri */}
         {Array.from({ length: 5 }).map((_, index) => (
           <div
             key={index}
             className="absolute left-2 right-2 border-t border-slate-300"
-            style={{ top: `${(index + 1) * 16}%` }}
+            style={{ top: `${(index + 1) * 19}%` }}
           />
         ))}
-        <div className="absolute right-1 top-2 flex flex-col items-end gap-2 text-[9px] text-slate-400 font-mono">
+        {/* Kat numaraları - text ve gap büyütüldü */}
+        <div className="absolute right-2 top-4 flex flex-col items-end gap-6 text-sm text-slate-400 font-mono">
           {[5, 4, 3, 2, 1].map((floor) => (
             <span key={floor}>{floor}</span>
           ))}
         </div>
+        {/* Kabin - h-14 yapıldı, yatay konum ayarlandı */}
         <div
-          className="absolute left-2.5 right-6 h-7 rounded border border-blue-600 bg-blue-500 shadow-md"
-          style={{ top: '16%', animation: "elevatorMove 8s ease-in-out infinite" }}
+          className="absolute left-4 right-8 h-14 rounded border border-blue-600 bg-blue-500 shadow-md"
+          style={{ top: '8%', animation: "elevatorMove 8s ease-in-out infinite" }}
         >
-          <div className="flex h-full items-center justify-center gap-1 text-[8px] font-bold text-white tracking-wider uppercase">
+          {/* Kabin içi yazı büyütüldü */}
+          <div className="flex h-full items-center justify-center gap-1 text-xs font-bold text-white tracking-wider uppercase">
             WL
           </div>
         </div>
-        <div className="absolute left-2 top-2 flex items-center gap-1 text-[9px] text-blue-600 font-bold">
+        {/* Oklar büyütüldü */}
+        <div className="absolute left-3 top-3 flex items-center gap-1 text-sm text-blue-600 font-bold">
           <span>▲▼</span>
         </div>
 
         <style>{`
           @keyframes elevatorMove {
             0%, 15% { transform: translateY(0%); }
-            50%, 65% { transform: translateY(400%); }
+            50%, 65% { transform: translateY(520%); } /* Mesafe ayarlandı */
             100% { transform: translateY(0%); }
           }
         `}</style>
@@ -99,6 +76,11 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Göster/Gizle State'leri
+  const [showAllReferences, setShowAllReferences] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(false); // Projeler için yeni state
+  const [visibleReviewCount, setVisibleReviewCount] = useState(3);
 
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [quoteForm, setQuoteForm] = useState({
@@ -125,10 +107,10 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // Yeni Hakkımızda Bölümü State'i - Slogan GÜNCELLENDİ
+  // DEĞİŞİKLİK: Slogan Güncellendi
   const [aboutContent, setAboutContent] = useState({
     title: "Kurumsal",
-    slogan: "İstiyorsan her şey gerçek olur",
+    slogan: "İstiyorsan herşey gerçek olur",
   });
 
   const [services, setServices] = useState([
@@ -178,6 +160,7 @@ export default function App() {
 
   const [activeService, setActiveService] = useState(0);
 
+  // DEĞİŞİKLİK: Daha Fazla Proje Eklendi
   const [projects, setProjects] = useState([
     {
       name: "Skyline Residence Tower",
@@ -193,6 +176,21 @@ export default function App() {
       name: "City Hospital Complex",
       type: "Sedye ve Servis Asansörleri",
       desc: "Hastane standartlarında hijyen, kesintisiz güç kaynağı ve sarsıntısız kalkış-duruş teknolojisi.",
+    },
+    {
+      name: "Vadi Park Plaza",
+      type: "Yüksek Hızlı Asansörler",
+      desc: "35 katlı iş merkezi için 4 m/s hızında, grup kumandalı 6 adet yolcu asansörü montajı.",
+    },
+    {
+      name: "Metro Transfer Merkezi",
+      type: "Yürüyen Merdiven",
+      desc: "Günde 50.000 yolcu kapasiteli, ağır hizmet tipi 12 adet yürüyen merdiven sistemi.",
+    },
+    {
+      name: "Lojistik Üssü",
+      type: "Makaslı Platformlar",
+      desc: "Tır yükleme ve boşaltma operasyonları için özel üretim 10 ton kapasiteli hidrolik platformlar.",
     },
   ]);
 
@@ -211,6 +209,30 @@ export default function App() {
       name: "Selin Karaca",
       title: "Site Müdürü",
     },
+    {
+      company: "Mega AVM Yatırım A.Ş.",
+      quote: "AVM içi yoğun trafiği yönetecek yürüyen merdiven ve panoramik asansör çözümlerinde Withmor'un performansı etkileyiciydi.",
+      name: "Caner Erkin",
+      title: "Teknik İşler Müdürü"
+    },
+    {
+      company: "Şehir Hastanesi",
+      quote: "Sedye asansörlerinde aradığımız hassasiyet ve kesintisiz çalışma garantisini fazlasıyla sağladılar.",
+      name: "Dr. Kenan Işık",
+      title: "Başhekim Yrd."
+    },
+    {
+      company: "Vadi İstanbul Konutları",
+      quote: "Yüksek katlı bloklarımızda yüksek hızlı asansörlerin montajı rekor sürede tamamlandı. Teşekkürler.",
+      name: "Ayşe Yılmaz",
+      title: "Yönetim Kurulu Bşk."
+    },
+    {
+      company: "Trakya OSB Yönetimi",
+      quote: "Sanayi tipi ağır yük asansörlerinde dayanıklılık bizim için öncelikti. 5 yıldır sorunsuz kullanıyoruz.",
+      name: "Mehmet Öz",
+      title: "Bölge Müdürü"
+    }
   ]);
 
   const [companyInfo, setCompanyInfo] = useState({
@@ -225,7 +247,7 @@ export default function App() {
     whatsapp: "https://wa.me/905302805526"
   });
 
-  const googleReviews = [
+  const [googleReviews, setGoogleReviews] = useState([
     {
       id: 1,
       name: "Ahmet Yılmaz",
@@ -247,7 +269,28 @@ export default function App() {
       text: "Villa asansörü projemizde harika bir iş çıkardılar. Hem estetik hem de çok sessiz çalışıyor.",
       date: "3 ay önce",
     },
-  ];
+    {
+      id: 4,
+      name: "Canan Erkin",
+      rating: 4,
+      text: "Proje yönetimi gayet başarılıydı, ufak tefek aksaklıklar olsa da teknik ekip hızlı çözümler üretti.",
+      date: "4 ay önce",
+    },
+    {
+      id: 5,
+      name: "Burak Yılmaz",
+      rating: 5,
+      text: "Fiyat performans açısından piyasadaki en iyi firma. Malzeme kalitesi beklediğimizden iyi.",
+      date: "5 ay önce",
+    },
+    {
+      id: 6,
+      name: "Zeynep Çelik",
+      rating: 5,
+      text: "Periyodik bakım konusunda çok hassaslar. Asansörümüz hiç yarı yolda bırakmadı.",
+      date: "6 ay önce",
+    }
+  ]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -275,14 +318,15 @@ export default function App() {
 
     if (type === "hero") setTempValue(hero);
     if (type === "company") setCompanyInfo(companyInfo);
-    if (type === "aboutSection") setTempValue(aboutContent); 
+    if (type === "aboutSection") setTempValue(aboutContent);
     if (type === "service" && index !== null) setTempValue(services[index]);
     if (type === "project" && index !== null) setTempValue(projects[index]);
     if (type === "reference" && index !== null) setTempValue(references[index]);
   };
 
   const openAdd = (type) => {
-    if (!isLoggedIn) {
+    // DEĞİŞİKLİK: Sadece referans eklemek için giriş zorunluluğu kaldırıldı
+    if (!isLoggedIn && type !== "reference") {
       setShowLogin(true);
       return;
     }
@@ -412,7 +456,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             {isLoggedIn && (
               <span className="hidden text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 sm:inline-flex items-center gap-1">
-                 <Icons.CheckCircle2 size={12} /> Yönetici
+                 <CheckCircle2 size={12} /> Yönetici
               </span>
             )}
             <button
@@ -426,14 +470,14 @@ export default function App() {
               className="hidden md:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:border-slate-300"
             >
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-slate-600">
-                {isLoggedIn ? <Icons.LogOut size={12}/> : <Icons.User size={12}/>}
+                {isLoggedIn ? <LogOut size={12}/> : <User size={12}/>}
               </span>
               {isLoggedIn ? "Çıkış" : "Giriş"}
             </button>
 
             {/* Mobile Menu Button */}
             <button className="md:hidden p-2 text-slate-600" onClick={() => setMobileMenuOpen(true)}>
-              <Icons.Menu size={24} />
+              <Menu size={24} />
             </button>
           </div>
         </div>
@@ -444,7 +488,7 @@ export default function App() {
              <div className="p-4 flex justify-between items-center border-b border-slate-100">
                 <span className="font-bold text-slate-900">Menü</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-600">
-                  <Icons.X size={24} />
+                  <X size={24} />
                 </button>
              </div>
              <nav className="flex flex-col p-6 gap-6 text-lg font-medium text-slate-700">
@@ -504,7 +548,7 @@ export default function App() {
                 href="#projects"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-700 group"
               >
-                {hero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                {hero.secondaryCta} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
             
@@ -529,7 +573,7 @@ export default function App() {
                 onClick={() => openEdit("hero")}
                 className="mt-6 flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:underline"
               >
-                <Icons.Settings size={12} /> İçeriği Düzenle
+                <Settings size={12} /> İçeriği Düzenle
               </button>
             )}
           </div>
@@ -548,65 +592,77 @@ export default function App() {
         </div>
       </section>
 
-      {/* --- KURUMSAL BÖLÜMÜ --- */}
-      <section id="about" className="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20">
-        <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-2 gap-12 items-center">
+      {/* KURUMSAL */}
+      <section id="about" className="py-20 bg-slate-50 border-b border-slate-200 scroll-mt-20 relative bg-[url('https://images.unsplash.com/photo-1519642918688-7e43b19245d8?auto=format&fit=crop&q=80&w=1600')] bg-cover bg-center bg-no-repeat bg-fixed overflow-hidden">
+        {/* Koyu Bulanık Katman */}
+        <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
+        
+        <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
           <div>
             <div className="flex items-center gap-2 mb-3">
-               <span className="text-xs font-bold uppercase tracking-wider text-blue-700">Kurumsal</span>
-               {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-500 hover:underline flex items-center gap-1"><Icons.Settings size={10}/> Düzenle</button>}
+               <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Kurumsal</span>
+               {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-100 hover:underline flex items-center gap-1"><Settings size={10}/> Düzenle</button>}
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">{aboutContent.title}</h2>
-            <p className="text-xl text-blue-900 font-semibold mb-4 font-serif italic">"{aboutContent.slogan}"</p>
-            
-            {/* Yeni Eklenen Hizmet Kalemleri Metni */}
-            <p className="mb-6 text-sm font-semibold text-slate-700">
-               Yük asansörleri, Yük platformları, Hidrolik asansörler, Villa asansörleri ve sınırsız özel uygulamalar ile hizmetinizdeyiz.
-            </p>
-
-            <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">
+            <h2 className="text-3xl font-bold text-white mb-4">{aboutContent.title}</h2>
+            <p className="text-xl text-blue-200 font-semibold mb-6 font-serif italic">"{aboutContent.slogan}"</p>
+            <p className="text-slate-200 leading-relaxed mb-8 text-sm md:text-base">
               {companyInfo.about}
             </p>
             
             {/* Sosyal Medya İkonları */}
             <div className="flex items-center gap-4">
-               <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-                  <Icons.Facebook size={20} />
+               <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm">
+                  <Facebook size={20} />
                </a>
-               <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition-all shadow-sm">
-                  <Icons.Instagram size={20} />
+               <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-pink-600 transition-all shadow-sm">
+                  <Instagram size={20} />
                </a>
-               <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-green-600 hover:bg-green-600 hover:text-white transition-all shadow-sm">
-                  <Icons.Phone size={20} />
+               <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-sm">
+                  <Phone size={20} />
                </a>
             </div>
           </div>
 
-          {/* Adres ve Mail Kartları */}
           <div className="grid gap-4">
-             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                   <Icons.MapPin size={20} />
+             <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
+                   <MapPin size={20} />
                 </div>
                 <div>
-                   <h4 className="font-bold text-slate-900 mb-1">Merkez Ofis & Fabrika</h4>
-                   <p className="text-sm text-slate-600">{companyInfo.address}</p>
+                   <h4 className="font-bold text-white mb-1">Merkez Ofis & Fabrika</h4>
+                   <p className="text-sm text-slate-300">{companyInfo.address}</p>
                 </div>
              </div>
-             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                   <Icons.Mail size={20} />
+             
+             <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
+                   <Mail size={20} />
                 </div>
                 <div>
-                   <h4 className="font-bold text-slate-900 mb-1">E-Posta İletişim</h4>
-                   <p className="text-sm text-slate-600">{companyInfo.email}</p>
+                   <h4 className="font-bold text-white mb-1">E-Posta İletişim</h4>
+                   <p className="text-sm text-slate-300">{companyInfo.email}</p>
                 </div>
+             </div>
+
+             {/* YENİ EKLENEN TELEFON KARTI */}
+             <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow relative">
+                <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
+                   <Phone size={20} />
+                </div>
+                <div>
+                   <h4 className="font-bold text-white mb-1">Telefon</h4>
+                   <a href={`tel:${companyInfo.phone}`} className="text-sm text-slate-300 hover:text-white transition-colors block">{companyInfo.phone}</a>
+                </div>
+                {/* WhatsApp Action */}
+                <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="absolute right-4 top-1/2 -translate-y-1/2 bg-green-500/20 text-green-400 p-2 rounded-full hover:bg-green-500 hover:text-white transition-all shadow-lg border border-green-500/30" aria-label="WhatsApp">
+                   <MessageCircle size={20} />
+                </a>
              </div>
           </div>
         </div>
       </section>
 
-      {/* ANA İÇERİK - Hizmetler ve Projeler Kapsayıcısı */}
+      {/* ANA İÇERİK */}
       <main className="mx-auto max-w-6xl px-6 py-20 space-y-24">
         
         {/* Hizmetler */}
@@ -616,7 +672,7 @@ export default function App() {
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-blue-700">Hizmetlerimiz</span>
                 {isLoggedIn && (
-                  <button onClick={() => openAdd("service")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold hover:bg-blue-100"><Icons.Plus size={10}/> Ekle</button>
+                  <button onClick={() => openAdd("service")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold hover:bg-blue-100"><Plus size={10}/> Ekle</button>
                 )}
               </div>
               <h2 className="text-3xl font-bold text-slate-900">Ürün ve Hizmet Grupları</h2>
@@ -642,7 +698,7 @@ export default function App() {
                   `}
                 >
                   {service.name}
-                  {index === activeService && <Icons.ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
+                  {index === activeService && <ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
                 </button>
               ))}
             </div>
@@ -672,17 +728,17 @@ export default function App() {
                         onClick={() => setShowQuoteModal(true)}
                         className="text-sm font-semibold text-blue-700 hover:text-blue-900 flex items-center gap-1 group"
                      >
-                       Detaylı Bilgi Al <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                       Detaylı Bilgi Al <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                      </button>
                      {isLoggedIn && (
                         <button onClick={() => openEdit("service", activeService)} className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 underline">
-                          <Icons.Settings size={12}/> Düzenle
+                          <Settings size={12}/> Düzenle
                         </button>
                       )}
                   </div>
                 </div>
                 
-                {/* Alt Carousel - Küçük Önizlemeler */}
+                {/* Alt Carousel */}
                 <div className="px-6 pb-6 mt-auto">
                    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide pt-2 justify-center">
                     {services.map((service, index) => (
@@ -703,21 +759,22 @@ export default function App() {
           </div>
         </section>
 
-        {/* Projeler */}
+        {/* Projeler - GÜNCELLENEN KISIM */}
         <section id="projects" className="scroll-mt-24">
           <div className="flex items-center justify-between mb-8">
              <div>
                <div className="flex items-center gap-2 mb-2">
                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700">Referans Projeler</span>
-                 {isLoggedIn && <button onClick={() => openAdd("project")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold"><Icons.Plus size={10}/> Ekle</button>}
+                 {isLoggedIn && <button onClick={() => openAdd("project")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold"><Plus size={10}/> Ekle</button>}
                </div>
                <h2 className="text-3xl font-bold text-slate-900">Seçilmiş Uygulamalar</h2>
              </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
-              <div key={index} className="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            {/* Slice mantığı ile sınırlama */}
+            {projects.slice(0, showAllProjects ? projects.length : 3).map((project, index) => (
+              <div key={index} className="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-in fade-in zoom-in duration-300">
                 <div className="flex flex-col h-full">
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-800 transition-colors">{project.name}</h3>
                   <span className="inline-block mt-2 text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded w-fit">
@@ -728,82 +785,132 @@ export default function App() {
                   </p>
                   {isLoggedIn && (
                     <button onClick={() => openEdit("project", index)} className="mt-4 flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 text-left underline">
-                      <Icons.Settings size={12}/> Projeyi Düzenle
+                      <Settings size={12}/> Projeyi Düzenle
                     </button>
                   )}
                 </div>
               </div>
             ))}
           </div>
-        </section>
-      </main>
 
-      {/* Referanslar - TAM EKRAN ARKAPLAN (Main'in dışına alındı) */}
-      <section id="references" className="w-full bg-blue-900 py-20 text-white">
-         <div className="max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 gap-16">
-               {/* Kurumsal Referanslar */}
-               <div>
-                  <div className="flex items-center gap-2 mb-6">
-                     <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
-                     {isLoggedIn && <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>}
-                  </div>
-                  <div className="space-y-4">
-                    {references.map((ref, index) => (
-                      <div key={index} className="bg-blue-800 p-5 rounded-xl border border-blue-700 shadow-lg relative transition hover:border-blue-600">
-                         <span className="text-4xl text-blue-600 absolute top-2 right-4 font-serif">"</span>
-                         <p className="text-sm text-blue-50 italic mb-4 relative z-10">{ref.quote}</p>
-                         <div className="flex items-center justify-between border-t border-blue-700 pt-3">
-                            <div>
-                               <p className="text-sm font-bold text-white">{ref.company}</p>
-                               <p className="text-xs text-blue-300">{ref.name} - {ref.title}</p>
-                            </div>
-                            {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Icons.Settings size={12}/> Düzenle</button>}
-                         </div>
-                      </div>
-                    ))}
-                  </div>
-               </div>
-
-               {/* Google Yorumları */}
-               <div>
-                  <div className="flex items-center justify-between mb-6">
-                     <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
-                     <a href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6" target="_blank" rel="noreferrer" className="text-xs font-semibold text-blue-200 hover:text-white hover:underline">Google'da Görüntüle →</a>
-                  </div>
-                  <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg">
-                     <div className="flex items-center gap-4 mb-6">
-                        <div className="text-4xl font-bold text-white">4.9</div>
-                        <div>
-                           <div className="flex text-amber-400 text-sm"><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/></div>
-                           <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
-                        </div>
-                     </div>
-                     <div className="space-y-4">
-                        {googleReviews.map((review) => (
-                           <div key={review.id} className="border-b border-blue-700 last:border-0 pb-4 last:pb-0">
-                              <div className="flex items-center justify-between mb-1">
-                                 <span className="text-sm font-bold text-white">{review.name}</span>
-                                 <span className="text-[10px] text-blue-300">{review.date}</span>
-                              </div>
-                              <div className="flex text-[10px] text-amber-400 mb-1">
-                                {Array.from({length: review.rating}).map((_, i) => (
-                                  <Icons.Star key={i} size={12} fill="currentColor" />
-                                ))}
-                              </div>
-                              <p className="text-xs text-blue-100 line-clamp-2">{review.text}</p>
-                           </div>
-                        ))}
-                     </div>
-                  </div>
-               </div>
+          {/* Projeler için Daha Fazla Göster Butonu */}
+          {projects.length > 3 && (
+            <div className="mt-8 text-center">
+              <button 
+                onClick={() => setShowAllProjects(!showAllProjects)} 
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all hover:border-blue-300 shadow-sm"
+              >
+                {showAllProjects ? (
+                  <>Daha Az Göster <ChevronUp size={16}/></>
+                ) : (
+                  <>Daha Fazla Proje Göster ({projects.length - 3}) <ChevronDown size={16}/></>
+                )}
+              </button>
             </div>
-         </div>
-      </section>
+          )}
+        </section>
 
-      {/* İletişim (Yeni Kapsayıcıda) */}
-      <section id="contact" className="py-20 bg-white">
-         <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
+        {/* Referanslar */}
+        <section id="references" className="bg-blue-900 -mx-6 px-6 py-20 text-white">
+           <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-16">
+                 {/* Kurumsal Referanslar */}
+                 <div>
+                    <div className="flex items-center gap-2 mb-6">
+                       <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
+                       {/* DEĞİŞİKLİK: Herkese Açık Ekleme */}
+                       <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Plus size={10}/> Ekle</button>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {references.slice(0, showAllReferences ? references.length : 3).map((ref, index) => (
+                        <div key={index} className="bg-blue-800 p-5 rounded-xl border border-blue-700 shadow-lg relative transition hover:border-blue-600 animate-in fade-in zoom-in duration-300">
+                           <span className="text-4xl text-blue-600 absolute top-2 right-4 font-serif">"</span>
+                           <p className="text-sm text-blue-50 italic mb-4 relative z-10">{ref.quote}</p>
+                           <div className="flex items-center justify-between border-t border-blue-700 pt-3">
+                              <div>
+                                 <p className="text-sm font-bold text-white">{ref.company}</p>
+                                 <p className="text-xs text-blue-300">{ref.name} - {ref.title}</p>
+                              </div>
+                              {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Settings size={12}/> Düzenle</button>}
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {references.length > 3 && (
+                      <div className="mt-6 text-center">
+                        <button 
+                          onClick={() => setShowAllReferences(!showAllReferences)} 
+                          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-500 bg-blue-800/50 text-sm font-semibold text-blue-100 hover:bg-blue-800 hover:text-white transition-all hover:border-blue-400"
+                        >
+                          {showAllReferences ? (
+                            <>Daha Az Göster <ChevronUp size={16}/></>
+                          ) : (
+                            <>Daha Fazla Göster ({references.length - 3}) <ChevronDown size={16}/></>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                 </div>
+
+                 {/* Google Yorumları */}
+                 <div>
+                    <div className="flex items-center justify-between mb-6">
+                       <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
+                       <a href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6" target="_blank" rel="noreferrer" className="text-xs font-semibold text-blue-200 hover:text-white hover:underline">Google'da Görüntüle →</a>
+                    </div>
+                    <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg">
+                       <div className="flex items-center gap-4 mb-6">
+                          <div className="text-4xl font-bold text-white">4.9</div>
+                          <div>
+                             <div className="flex text-amber-400 text-sm"><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/></div>
+                             <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
+                          </div>
+                       </div>
+                       <div className="space-y-4">
+                          {googleReviews.slice(0, visibleReviewCount).map((review) => (
+                             <div key={review.id} className="border-b border-blue-700 last:border-0 pb-4 last:pb-0 animate-in fade-in slide-in-from-top-4 duration-300">
+                                <div className="flex items-center justify-between mb-1">
+                                   <span className="text-sm font-bold text-white">{review.name}</span>
+                                   <span className="text-[10px] text-blue-300">{review.date}</span>
+                                </div>
+                                <div className="flex text-[10px] text-amber-400 mb-1">
+                                  {Array.from({length: review.rating}).map((_, i) => (
+                                    <Star key={i} size={12} fill="currentColor" />
+                                  ))}
+                                </div>
+                                <p className="text-xs text-blue-100 line-clamp-2">{review.text}</p>
+                             </div>
+                          ))}
+                       </div>
+                       
+                       <div className="mt-6 text-center border-t border-blue-700 pt-4">
+                          <button 
+                            onClick={() => {
+                              if (visibleReviewCount >= googleReviews.length) {
+                                setVisibleReviewCount(3);
+                              } else {
+                                setVisibleReviewCount(prev => prev + 3);
+                              }
+                            }}
+                            className="text-xs font-semibold text-blue-300 hover:text-white flex items-center justify-center gap-1 mx-auto transition-colors"
+                          >
+                            {visibleReviewCount >= googleReviews.length ? (
+                              <>Daha Az Göster <ChevronUp size={14}/></>
+                            ) : (
+                              <>Daha Fazla Yorum Yükle <ChevronDown size={14}/></>
+                            )}
+                          </button>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
+
+        {/* İletişim */}
+        <section id="contact" className="grid lg:grid-cols-2 gap-12">
            <div>
               <span className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-2 block">Bize Ulaşın</span>
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Projenizi Birlikte Planlayalım</h2>
@@ -814,7 +921,7 @@ export default function App() {
               <div className="space-y-6 mb-8">
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.MapPin className="w-5 h-5" />
+                       <MapPin className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">Adres</p>
@@ -823,7 +930,7 @@ export default function App() {
                  </div>
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.Phone className="w-5 h-5" />
+                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">Telefon</p>
@@ -832,7 +939,7 @@ export default function App() {
                  </div>
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Icons.Mail className="w-5 h-5" />
+                       <Mail className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">E-Posta</p>
@@ -841,13 +948,12 @@ export default function App() {
                  </div>
               </div>
 
-              {isLoggedIn && <button onClick={() => openEdit("company")} className="flex items-center gap-2 text-xs font-semibold text-blue-600 border border-blue-200 px-3 py-2 rounded hover:bg-blue-50"><Icons.Settings size={14}/> Firma Bilgilerini Düzenle</button>}
+              {isLoggedIn && <button onClick={() => openEdit("company")} className="flex items-center gap-2 text-xs font-semibold text-blue-600 border border-blue-200 px-3 py-2 rounded hover:bg-blue-50"><Settings size={14}/> Firma Bilgilerini Düzenle</button>}
            </div>
 
            {/* Sağ: Form ve Harita - RGB Border Eklendi */}
            <div className="space-y-8">
               <div className="relative overflow-hidden rounded-2xl p-[3px] shadow-lg group">
-                 {/* Dönen RGB Işık Efekti */}
                  <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                  
                  <div className="relative h-full w-full bg-slate-50 border border-slate-200 p-6 rounded-xl">
@@ -859,7 +965,7 @@ export default function App() {
                         </div>
                         <textarea required rows={3} placeholder="Mesajınız" value={fastContactForm.message} onChange={(e) => setFastContactForm({...fastContactForm, message: e.target.value})} className="w-full rounded-lg border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none" />
                         <button type="submit" className="w-full bg-blue-900 text-white rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-800 transition-colors flex items-center justify-center gap-2">
-                          <Icons.Phone size={16} /> WhatsApp ile Gönder
+                          <Phone size={16} /> WhatsApp ile Gönder
                         </button>
                     </form>
                  </div>
@@ -879,8 +985,9 @@ export default function App() {
                  ></iframe>
               </div>
            </div>
-        </div>
-      </section>
+        </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
@@ -906,13 +1013,13 @@ export default function App() {
                <h4 className="text-white font-bold text-sm mb-4">Sosyal Medya</h4>
                <div className="flex gap-2">
                   <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition-colors text-white">
-                    <Icons.Facebook size={16} />
+                    <Facebook size={16} />
                   </a>
                   <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-pink-600 transition-colors text-white">
-                    <Icons.Instagram size={16} />
+                    <Instagram size={16} />
                   </a>
                   <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-green-600 transition-colors text-white">
-                    <Icons.Phone size={16} />
+                    <Phone size={16} />
                   </a>
                </div>
             </div>
@@ -966,7 +1073,7 @@ export default function App() {
                </div>
                <textarea rows={3} placeholder="Ek Notlar..." value={quoteForm.note} onChange={(e) => setQuoteForm({...quoteForm, note: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600 resize-none" />
                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded bg-[#25D366] py-2.5 text-sm font-bold text-white hover:bg-[#128C7E]">
-                  <Icons.Phone size={16} /> WhatsApp ile Gönder
+                  <Phone size={16} /> WhatsApp ile Gönder
                </button>
             </form>
             <button onClick={() => setShowQuoteModal(false)} className="mt-4 w-full text-xs text-slate-400 hover:text-slate-600">Kapat</button>
