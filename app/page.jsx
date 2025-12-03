@@ -1,26 +1,64 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Facebook, 
-  Instagram, 
-  ArrowRight, 
-  CheckCircle2, 
-  Menu, 
-  X,
-  ChevronRight,
-  Star,
-  Settings,
-  LogOut,
-  User,
-  Plus,
-  ChevronDown,
-  ChevronUp,
-  MessageCircle
-} from "lucide-react";
+
+// --- İKON TANIMLAMALARI (Harici kütüphane bağımlılığı kaldırıldı) ---
+const Icons = {
+  MapPin: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+  ),
+  Phone: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  ),
+  Mail: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+  ),
+  Facebook: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+  ),
+  Instagram: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+  ),
+  ArrowRight: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  ),
+  CheckCircle2: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+  ),
+  Menu: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+  ),
+  X: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 18 12"/></svg>
+  ),
+  ChevronRight: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m9 18 6-6-6-6"/></svg>
+  ),
+  Star: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+  ),
+  Settings: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+  ),
+  LogOut: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+  ),
+  User: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  ),
+  Plus: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+  ),
+  ChevronDown: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m6 9 6 6 6-6"/></svg>
+  ),
+  ChevronUp: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m18 15-6-6-6 6"/></svg>
+  ),
+  MessageCircle: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+  ),
+};
 
 // Withmor Teknika Lift - KURUMSAL WEB SİTESİ
 
@@ -456,7 +494,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             {isLoggedIn && (
               <span className="hidden text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 sm:inline-flex items-center gap-1">
-                 <CheckCircle2 size={12} /> Yönetici
+                 <Icons.CheckCircle2 size={12} /> Yönetici
               </span>
             )}
             <button
@@ -470,14 +508,14 @@ export default function App() {
               className="hidden md:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 hover:border-slate-300"
             >
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-slate-600">
-                {isLoggedIn ? <LogOut size={12}/> : <User size={12}/>}
+                {isLoggedIn ? <Icons.LogOut size={12}/> : <Icons.User size={12}/>}
               </span>
               {isLoggedIn ? "Çıkış" : "Giriş"}
             </button>
 
             {/* Mobile Menu Button */}
             <button className="md:hidden p-2 text-slate-600" onClick={() => setMobileMenuOpen(true)}>
-              <Menu size={24} />
+              <Icons.Menu size={24} />
             </button>
           </div>
         </div>
@@ -488,7 +526,7 @@ export default function App() {
              <div className="p-4 flex justify-between items-center border-b border-slate-100">
                 <span className="font-bold text-slate-900">Menü</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-600">
-                  <X size={24} />
+                  <Icons.X size={24} />
                 </button>
              </div>
              <nav className="flex flex-col p-6 gap-6 text-lg font-medium text-slate-700">
@@ -548,7 +586,7 @@ export default function App() {
                 href="#projects"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-700 group"
               >
-                {hero.secondaryCta} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                {hero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
             
@@ -573,7 +611,7 @@ export default function App() {
                 onClick={() => openEdit("hero")}
                 className="mt-6 flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:underline"
               >
-                <Settings size={12} /> İçeriği Düzenle
+                <Icons.Settings size={12} /> İçeriği Düzenle
               </button>
             )}
           </div>
@@ -601,7 +639,7 @@ export default function App() {
           <div>
             <div className="flex items-center gap-2 mb-3">
                <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Kurumsal</span>
-               {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-100 hover:underline flex items-center gap-1"><Settings size={10}/> Düzenle</button>}
+               {isLoggedIn && <button onClick={() => openEdit("aboutSection")} className="text-[10px] text-blue-100 hover:underline flex items-center gap-1"><Icons.Settings size={10}/> Düzenle</button>}
             </div>
             <h2 className="text-3xl font-bold text-white mb-4">{aboutContent.title}</h2>
             <p className="text-xl text-blue-200 font-semibold mb-6 font-serif italic">"{aboutContent.slogan}"</p>
@@ -612,13 +650,13 @@ export default function App() {
             {/* Sosyal Medya İkonları */}
             <div className="flex items-center gap-4">
                <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-blue-600 transition-all shadow-sm">
-                  <Facebook size={20} />
+                  <Icons.Facebook size={20} />
                </a>
                <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-pink-600 transition-all shadow-sm">
-                  <Instagram size={20} />
+                  <Icons.Instagram size={20} />
                </a>
                <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-green-600 transition-all shadow-sm">
-                  <Phone size={20} />
+                  <Icons.Phone size={20} />
                </a>
             </div>
           </div>
@@ -626,7 +664,7 @@ export default function App() {
           <div className="grid gap-4">
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
-                   <MapPin size={20} />
+                   <Icons.MapPin size={20} />
                 </div>
                 <div>
                    <h4 className="font-bold text-white mb-1">Merkez Ofis & Fabrika</h4>
@@ -636,7 +674,7 @@ export default function App() {
              
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
-                   <Mail size={20} />
+                   <Icons.Mail size={20} />
                 </div>
                 <div>
                    <h4 className="font-bold text-white mb-1">E-Posta İletişim</h4>
@@ -647,7 +685,7 @@ export default function App() {
              {/* YENİ EKLENEN TELEFON KARTI */}
              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-slate-200/20 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow relative">
                 <div className="w-10 h-10 rounded-full bg-blue-200/20 text-blue-200 flex items-center justify-center flex-shrink-0">
-                   <Phone size={20} />
+                   <Icons.Phone size={20} />
                 </div>
                 <div>
                    <h4 className="font-bold text-white mb-1">Telefon</h4>
@@ -655,7 +693,7 @@ export default function App() {
                 </div>
                 {/* WhatsApp Action */}
                 <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="absolute right-4 top-1/2 -translate-y-1/2 bg-green-500/20 text-green-400 p-2 rounded-full hover:bg-green-500 hover:text-white transition-all shadow-lg border border-green-500/30" aria-label="WhatsApp">
-                   <MessageCircle size={20} />
+                   <Icons.MessageCircle size={20} />
                 </a>
              </div>
           </div>
@@ -672,7 +710,7 @@ export default function App() {
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-blue-700">Hizmetlerimiz</span>
                 {isLoggedIn && (
-                  <button onClick={() => openAdd("service")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold hover:bg-blue-100"><Plus size={10}/> Ekle</button>
+                  <button onClick={() => openAdd("service")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold hover:bg-blue-100"><Icons.Plus size={10}/> Ekle</button>
                 )}
               </div>
               <h2 className="text-3xl font-bold text-slate-900">Ürün ve Hizmet Grupları</h2>
@@ -698,7 +736,7 @@ export default function App() {
                   `}
                 >
                   {service.name}
-                  {index === activeService && <ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
+                  {index === activeService && <Icons.ChevronRight className="h-4 w-4 text-blue-400 hidden lg:block" />}
                 </button>
               ))}
             </div>
@@ -728,11 +766,11 @@ export default function App() {
                         onClick={() => setShowQuoteModal(true)}
                         className="text-sm font-semibold text-blue-700 hover:text-blue-900 flex items-center gap-1 group"
                      >
-                       Detaylı Bilgi Al <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                       Detaylı Bilgi Al <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                      </button>
                      {isLoggedIn && (
                         <button onClick={() => openEdit("service", activeService)} className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 underline">
-                          <Settings size={12}/> Düzenle
+                          <Icons.Settings size={12}/> Düzenle
                         </button>
                       )}
                   </div>
@@ -765,7 +803,7 @@ export default function App() {
              <div>
                <div className="flex items-center gap-2 mb-2">
                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700">Referans Projeler</span>
-                 {isLoggedIn && <button onClick={() => openAdd("project")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold"><Plus size={10}/> Ekle</button>}
+                 {isLoggedIn && <button onClick={() => openAdd("project")} className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold"><Icons.Plus size={10}/> Ekle</button>}
                </div>
                <h2 className="text-3xl font-bold text-slate-900">Seçilmiş Uygulamalar</h2>
              </div>
@@ -785,7 +823,7 @@ export default function App() {
                   </p>
                   {isLoggedIn && (
                     <button onClick={() => openEdit("project", index)} className="mt-4 flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 text-left underline">
-                      <Settings size={12}/> Projeyi Düzenle
+                      <Icons.Settings size={12}/> Projeyi Düzenle
                     </button>
                   )}
                 </div>
@@ -801,9 +839,9 @@ export default function App() {
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all hover:border-blue-300 shadow-sm"
               >
                 {showAllProjects ? (
-                  <>Daha Az Göster <ChevronUp size={16}/></>
+                  <>Daha Az Göster <Icons.ChevronUp size={16}/></>
                 ) : (
-                  <>Daha Fazla Proje Göster ({projects.length - 3}) <ChevronDown size={16}/></>
+                  <>Daha Fazla Proje Göster ({projects.length - 3}) <Icons.ChevronDown size={16}/></>
                 )}
               </button>
             </div>
@@ -819,7 +857,7 @@ export default function App() {
                     <div className="flex items-center gap-2 mb-6">
                        <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
                        {/* DEĞİŞİKLİK: Herkese Açık Ekleme */}
-                       <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Plus size={10}/> Ekle</button>
+                       <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>
                     </div>
                     
                     <div className="space-y-4">
@@ -832,7 +870,7 @@ export default function App() {
                                  <p className="text-sm font-bold text-white">{ref.company}</p>
                                  <p className="text-xs text-blue-300">{ref.name} - {ref.title}</p>
                               </div>
-                              {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Settings size={12}/> Düzenle</button>}
+                              {isLoggedIn && <button onClick={() => openEdit("reference", index)} className="flex items-center gap-1 text-xs text-blue-300 hover:text-white"><Icons.Settings size={12}/> Düzenle</button>}
                            </div>
                         </div>
                       ))}
@@ -845,9 +883,9 @@ export default function App() {
                           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-blue-500 bg-blue-800/50 text-sm font-semibold text-blue-100 hover:bg-blue-800 hover:text-white transition-all hover:border-blue-400"
                         >
                           {showAllReferences ? (
-                            <>Daha Az Göster <ChevronUp size={16}/></>
+                            <>Daha Az Göster <Icons.ChevronUp size={16}/></>
                           ) : (
-                            <>Daha Fazla Göster ({references.length - 3}) <ChevronDown size={16}/></>
+                            <>Daha Fazla Göster ({references.length - 3}) <Icons.ChevronDown size={16}/></>
                           )}
                         </button>
                       </div>
@@ -864,7 +902,7 @@ export default function App() {
                        <div className="flex items-center gap-4 mb-6">
                           <div className="text-4xl font-bold text-white">4.9</div>
                           <div>
-                             <div className="flex text-amber-400 text-sm"><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/><Star fill="currentColor" size={16}/></div>
+                             <div className="flex text-amber-400 text-sm"><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/></div>
                              <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
                           </div>
                        </div>
@@ -877,7 +915,7 @@ export default function App() {
                                 </div>
                                 <div className="flex text-[10px] text-amber-400 mb-1">
                                   {Array.from({length: review.rating}).map((_, i) => (
-                                    <Star key={i} size={12} fill="currentColor" />
+                                    <Icons.Star key={i} size={12} fill="currentColor" />
                                   ))}
                                 </div>
                                 <p className="text-xs text-blue-100 line-clamp-2">{review.text}</p>
@@ -897,9 +935,9 @@ export default function App() {
                             className="text-xs font-semibold text-blue-300 hover:text-white flex items-center justify-center gap-1 mx-auto transition-colors"
                           >
                             {visibleReviewCount >= googleReviews.length ? (
-                              <>Daha Az Göster <ChevronUp size={14}/></>
+                              <>Daha Az Göster <Icons.ChevronUp size={14}/></>
                             ) : (
-                              <>Daha Fazla Yorum Yükle <ChevronDown size={14}/></>
+                              <>Daha Fazla Yorum Yükle <Icons.ChevronDown size={14}/></>
                             )}
                           </button>
                        </div>
@@ -921,7 +959,7 @@ export default function App() {
               <div className="space-y-6 mb-8">
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <MapPin className="w-5 h-5" />
+                       <Icons.MapPin className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">Adres</p>
@@ -930,7 +968,7 @@ export default function App() {
                  </div>
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Phone className="w-5 h-5" />
+                       <Icons.Phone className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">Telefon</p>
@@ -939,7 +977,7 @@ export default function App() {
                  </div>
                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
-                       <Mail className="w-5 h-5" />
+                       <Icons.Mail className="w-5 h-5" />
                     </div>
                     <div>
                        <p className="text-sm font-bold text-slate-900">E-Posta</p>
@@ -948,7 +986,7 @@ export default function App() {
                  </div>
               </div>
 
-              {isLoggedIn && <button onClick={() => openEdit("company")} className="flex items-center gap-2 text-xs font-semibold text-blue-600 border border-blue-200 px-3 py-2 rounded hover:bg-blue-50"><Settings size={14}/> Firma Bilgilerini Düzenle</button>}
+              {isLoggedIn && <button onClick={() => openEdit("company")} className="flex items-center gap-2 text-xs font-semibold text-blue-600 border border-blue-200 px-3 py-2 rounded hover:bg-blue-50"><Icons.Settings size={14}/> Firma Bilgilerini Düzenle</button>}
            </div>
 
            {/* Sağ: Form ve Harita - RGB Border Eklendi */}
@@ -965,7 +1003,7 @@ export default function App() {
                         </div>
                         <textarea required rows={3} placeholder="Mesajınız" value={fastContactForm.message} onChange={(e) => setFastContactForm({...fastContactForm, message: e.target.value})} className="w-full rounded-lg border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none" />
                         <button type="submit" className="w-full bg-blue-900 text-white rounded-lg py-2.5 text-sm font-semibold hover:bg-blue-800 transition-colors flex items-center justify-center gap-2">
-                          <Phone size={16} /> WhatsApp ile Gönder
+                          <Icons.Phone size={16} /> WhatsApp ile Gönder
                         </button>
                     </form>
                  </div>
@@ -1013,13 +1051,13 @@ export default function App() {
                <h4 className="text-white font-bold text-sm mb-4">Sosyal Medya</h4>
                <div className="flex gap-2">
                   <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition-colors text-white">
-                    <Facebook size={16} />
+                    <Icons.Facebook size={16} />
                   </a>
                   <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-pink-600 transition-colors text-white">
-                    <Instagram size={16} />
+                    <Icons.Instagram size={16} />
                   </a>
                   <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center hover:bg-green-600 transition-colors text-white">
-                    <Phone size={16} />
+                    <Icons.Phone size={16} />
                   </a>
                </div>
             </div>
@@ -1073,7 +1111,7 @@ export default function App() {
                </div>
                <textarea rows={3} placeholder="Ek Notlar..." value={quoteForm.note} onChange={(e) => setQuoteForm({...quoteForm, note: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600 resize-none" />
                <button type="submit" className="flex w-full items-center justify-center gap-2 rounded bg-[#25D366] py-2.5 text-sm font-bold text-white hover:bg-[#128C7E]">
-                  <Phone size={16} /> WhatsApp ile Gönder
+                  <Icons.Phone size={16} /> WhatsApp ile Gönder
                </button>
             </form>
             <button onClick={() => setShowQuoteModal(false)} className="mt-4 w-full text-xs text-slate-400 hover:text-slate-600">Kapat</button>
