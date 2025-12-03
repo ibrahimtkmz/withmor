@@ -975,11 +975,10 @@ export default function App() {
                         />
                         <Icons.User className="w-16 h-16 text-slate-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">İsim Soyisim</h3>
-                    <p className="text-sm font-bold text-slate-500 mb-6">Unvan</p>
+                    <h3 className="text-xl font-bold text-slate-900">Aygün Yılmaz</h3>
+                    <p className="text-sm font-bold text-slate-500 mb-6">Proje Müdürü</p>
                     <p className="text-slate-600 text-sm italic relative px-4">
                        <span className="text-4xl text-slate-200 absolute -top-4 left-0">"</span>
-                       Buraya yönetici veya ilgili kişi için bir alıntı veya mesaj eklenebilir.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
                     
