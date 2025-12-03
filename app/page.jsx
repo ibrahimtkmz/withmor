@@ -37,7 +37,7 @@ function ElevatorAnimation() {
     <div className="relative w-full max-w-sm">
       {/* Dış Kutu (Card Container) */}
       <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-xl p-6 md:p-8">
-        
+
         {/* Arkaplan Efektleri (Blur Circles) */}
         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-50 pointer-events-none" />
         <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-slate-50 rounded-full blur-3xl opacity-50 pointer-events-none" />
@@ -56,7 +56,7 @@ function ElevatorAnimation() {
             <div className="relative h-96 w-40 shrink-0 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
               {/* Kuyu Duvarları */}
               <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-slate-300 bg-slate-200/30" />
-              
+
               {/* Raylar */}
               <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-slate-400/50" />
               <div className="absolute left-1/2 top-2 bottom-2 w-1 ml-3 bg-slate-400/50" />
@@ -178,7 +178,7 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   // Tab State
   const [activeAboutTab, setActiveAboutTab] = useState("biz-kimiz");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -441,6 +441,25 @@ export default function App() {
     }
   ]);
 
+  // --- YENİ EKLENEN STATE VE HANDLER ---
+  const [mainContactForm, setMainContactForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleMainContactSubmit = (e) => {
+    e.preventDefault();
+    const { name, phone, email, subject, message } = mainContactForm;
+    // WhatsApp Mesaj Formatı
+    const text = `*Web Sitesi İletişim Formu*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*E-Posta:* ${email}\n*Konu:* ${subject}\n*Mesaj:* ${message}`;
+    const url = `https://wa.me/905302805526?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  };
+  // ----------------------------------------
+
   // Yeni Fonksiyon: Bölüm Kaydırma ve Tab Değiştirme
   const scrollToAbout = (tabKey) => {
     setActiveAboutTab(tabKey);
@@ -451,7 +470,7 @@ export default function App() {
       const headerOffset = 80;
       const elementPosition = section.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-  
+
       window.scrollTo({
         top: offsetPosition,
         behavior: "smooth"
@@ -463,7 +482,7 @@ export default function App() {
   // YENİ FONKSİYON: Hizmet/Ürün Kaydırma
   const scrollToService = (serviceId) => {
     setMobileMenuOpen(false);
-    
+
     // Önce hizmet kartına scroll etmeyi dene
     const element = document.getElementById(serviceId);
     if (element) {
@@ -513,7 +532,7 @@ export default function App() {
     if (type === "service" && index !== null) setTempValue(services[index]);
     if (type === "project" && index !== null) setTempValue(projects[index]);
     if (type === "reference" && index !== null) setTempValue(references[index]);
-    
+
     if (type === "aboutTab") {
         setTempValue({ ...aboutTabs[index] });
     }
@@ -651,7 +670,7 @@ export default function App() {
     // KURUMSAL TEMA: Beyaz zemin, Koyu gri metinler, Klasik font
     // overflow-x-hidden eklendi: Mobilde sağa sola kaymayı engeller
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
-      
+
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -781,7 +800,7 @@ export default function App() {
                 <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Projeler</a>
                 <a href="#references" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Referanslar</a>
                 <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">İletişim</a>
-                
+
                 <div className="h-px bg-slate-100 my-2" />
                 <button
                   onClick={() => {
@@ -829,7 +848,7 @@ export default function App() {
               {hero.subtitle}
             </p>
             <div className="mb-8 flex flex-wrap items-center gap-4">
-              
+
               <button
                 onClick={() => setShowQuoteModal(true)}
                 className="relative overflow-hidden rounded-lg p-[4px] shadow-lg shadow-blue-900/20 transition hover:shadow-xl hover:-translate-y-0.5 group"
@@ -847,7 +866,7 @@ export default function App() {
                 {hero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10">
               <div>
                 <p className="text-2xl font-bold text-white">15+</p>
@@ -933,7 +952,7 @@ export default function App() {
                  )}
                  <h3 className="text-xl font-bold text-slate-800 mb-2">{aboutTabs[activeAboutTab].heading}</h3>
                  <h4 className="text-lg font-bold text-blue-700 mb-6">{aboutTabs[activeAboutTab].subHeading}</h4>
-                 
+
                  <p className="text-slate-600 text-sm leading-relaxed mb-6">
                     {aboutTabs[activeAboutTab].text1}
                  </p>
@@ -978,7 +997,7 @@ export default function App() {
                        Her projemizde müşteri memnuniyetini ve mühendislik kalitesini en üst düzeyde tutmayı hedefliyoruz. Yenilikçi çözümlerimizle binalarınıza değer katmak için buradayız.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
-                    
+
                     {/* WhatsApp Action Button */}
                     <button 
                        onClick={() => window.open(companyInfo.whatsapp, "_blank")}
@@ -1017,7 +1036,7 @@ export default function App() {
                         </p>
                      </div>
                   </div>
-                  
+
                   <div className="flex gap-6 group">
                      <span className="text-6xl font-extralight text-slate-300 group-hover:text-blue-900 transition-colors">2</span>
                      <div>
@@ -1068,7 +1087,7 @@ export default function App() {
 
       {/* HİZMETLER (SERVICES) - GRID YAPISI */}
       <main className="w-full bg-white">
-        
+
         <section id="services" className="scroll-mt-24 max-w-6xl mx-auto px-6 py-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div>
@@ -1114,7 +1133,7 @@ export default function App() {
                      <p className="text-sm text-slate-500 leading-relaxed mb-6 line-clamp-4">
                         {service.desc}
                      </p>
-                     
+
                      <div className="mt-auto pt-4 border-t border-slate-100">
                         <button 
                            onClick={() => setShowQuoteModal(true)}
@@ -1200,7 +1219,7 @@ export default function App() {
                        <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
                        <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>
                     </div>
-                    
+
                     <div className="space-y-4">
                       {references.slice(0, showAllReferences ? references.length : 3).map((ref, index) => (
                         <div key={index} className="bg-blue-800 p-5 rounded-xl border border-blue-700 shadow-lg relative transition hover:border-blue-600 animate-in fade-in zoom-in duration-300">
@@ -1262,7 +1281,7 @@ export default function App() {
                              </div>
                           ))}
                        </div>
-                       
+
                        <div className="mt-6 text-center border-t border-blue-700 pt-4">
                           <button 
                             onClick={() => {
@@ -1287,13 +1306,175 @@ export default function App() {
            </div>
         </section>
 
+        {/* YENİ İLETİŞİM VE FORM BÖLÜMÜ (GÜNCELLENDİ) */}
+        <section id="contact" className="py-20 bg-white scroll-mt-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              
+              {/* SOL TARAF: İletişim Bilgileri ve Sosyal Medya */}
+              <div className="space-y-8 sticky top-24">
+                <div>
+                  <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Bize Ulaşın</span>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+                    Projelerinizi Birlikte <br/> Hayata Geçirelim
+                  </h2>
+                  <p className="text-slate-600 text-lg leading-relaxed">
+                    Sorularınız, proje talepleriniz veya teknik destek ihtiyaçlarınız için dilediğiniz kanaldan bize ulaşabilirsiniz.
+                  </p>
+                </div>
+
+                {/* İletişim Listesi */}
+                <div className="space-y-6">
+                  
+                  {/* 1. Adres Alanı (YENİ EKLENDİ) */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
+                      <Icons.MapPin size={24} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-400 uppercase">Adres</p>
+                      <p className="text-base font-medium text-slate-900 leading-snug">
+                        {companyInfo.address}
+                      </p>
+                      <a href="#map-view" onClick={(e) => {e.preventDefault(); document.getElementById('google-map').scrollIntoView({behavior: 'smooth'})}} className="text-xs text-blue-600 font-bold hover:underline mt-1 block">
+                        Haritada Göster ↓
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* 2. Telefon */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
+                      <Icons.Phone size={24} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-400 uppercase">Telefon & WhatsApp</p>
+                      <a href={`tel:${companyInfo.phone}`} className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors">
+                        {companyInfo.phone}
+                      </a>
+                      <p className="text-xs text-green-600 font-medium mt-1 flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 7/24 Ulaşılabilir
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 3. E-Posta */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
+                      <Icons.Mail size={24} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-400 uppercase">E-Posta</p>
+                      <a href={`mailto:${companyInfo.email}`} className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors">
+                        {companyInfo.email}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sosyal Medya Butonları */}
+                <div>
+                  <p className="text-sm font-bold text-slate-900 mb-4">Sosyal Medyada Biz</p>
+                  <div className="flex flex-wrap gap-3">
+                    {/* WhatsApp */}
+                    <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#25D366] text-white hover:bg-[#128C7E] transition-all transform hover:-translate-y-1 shadow-md shadow-green-100">
+                      <Icons.MessageCircle size={20} /> <span className="font-bold text-sm">WhatsApp</span>
+                    </a>
+                    {/* Facebook */}
+                    <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#1877F2] text-white hover:bg-[#166FE5] transition-all transform hover:-translate-y-1 shadow-md shadow-blue-100">
+                      <Icons.Facebook size={20} /> <span className="font-bold text-sm">Facebook</span>
+                    </a>
+                    {/* Instagram */}
+                    <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white hover:opacity-90 transition-all transform hover:-translate-y-1 shadow-md shadow-pink-100">
+                      <Icons.Instagram size={20} /> <span className="font-bold text-sm">Instagram</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* SAĞ TARAF: Form ve Harita */}
+              <div className="flex flex-col gap-8">
+                
+                {/* 1. RGB Animasyonlu İletişim Formu */}
+                <div className="relative group z-10">
+                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200 animate-tilt"></div>
+                    <div className="relative overflow-hidden rounded-2xl p-[3px]">
+                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+                      <div className="relative bg-white h-full rounded-xl p-6 md:p-8 shadow-2xl">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-6">Hızlı İletişim Formu</h3>
+                        <form onSubmit={handleMainContactSubmit} className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <label className="text-xs font-bold text-slate-500 uppercase">Ad Soyad</label>
+                              <input required type="text" placeholder="Adınız Soyadınız" className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors" value={mainContactForm.name} onChange={(e) => setMainContactForm({...mainContactForm, name: e.target.value})} />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-xs font-bold text-slate-500 uppercase">Telefon</label>
+                              <input required type="tel" placeholder="05XX..." className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors" value={mainContactForm.phone} onChange={(e) => setMainContactForm({...mainContactForm, phone: e.target.value})} />
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                              <label className="text-xs font-bold text-slate-500 uppercase">E-Posta</label>
+                              <input type="email" placeholder="ornek@mail.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors" value={mainContactForm.email} onChange={(e) => setMainContactForm({...mainContactForm, email: e.target.value})} />
+                          </div>
+                          <div className="space-y-1">
+                              <label className="text-xs font-bold text-slate-500 uppercase">Konu</label>
+                              <select className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors" value={mainContactForm.subject} onChange={(e) => setMainContactForm({...mainContactForm, subject: e.target.value})}>
+                                <option value="">Konu Seçiniz...</option>
+                                <option value="Proje Teklifi">Proje Teklifi İstiyorum</option>
+                                <option value="Teknik Servis">Teknik Servis / Arıza</option>
+                                <option value="Genel Bilgi">Genel Bilgi</option>
+                              </select>
+                          </div>
+                          <div className="space-y-1">
+                              <label className="text-xs font-bold text-slate-500 uppercase">Mesajınız</label>
+                              <textarea required rows={3} placeholder="Mesajınızı buraya yazınız..." className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors resize-none" value={mainContactForm.message} onChange={(e) => setMainContactForm({...mainContactForm, message: e.target.value})}></textarea>
+                          </div>
+                          <button type="submit" className="w-full bg-slate-900 text-white font-bold py-4 rounded-lg hover:bg-blue-900 transition-colors flex items-center justify-center gap-2 mt-2 shadow-lg shadow-slate-300/50">
+                            <Icons.ArrowRight className="w-5 h-5" /> WhatsApp ile Gönder
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+
+                {/* 2. Google Maps (YENİ EKLENDİ) */}
+                <div id="google-map" className="w-full h-64 bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-lg relative group">
+                    {/* Harita Yükleniyor Efekti */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-100 z-0">
+                      <Icons.MapPin className="text-slate-300 w-10 h-10 animate-bounce" />
+                    </div>
+                    
+                    {/* Iframe */}
+                    <iframe 
+                      width="100%" 
+                      height="100%" 
+                      className="relative z-10 w-full h-full grayscale group-hover:grayscale-0 transition-all duration-500"
+                      title="Google Maps"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.384567228394!2d27.97343637651066!3d41.2268767986063!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b4df9d3f1b0a5b%3A0x6b4f7e5d8b8b8b8b!2sVelime%C5%9Fe%20OSB!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str"
+                      loading="lazy"
+                    ></iframe>
+
+                    {/* Üstüne Yazı (Opsiyonel) */}
+                    <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-slate-200 pointer-events-none">
+                      <p className="text-[10px] font-bold text-slate-700 flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-blue-600"></span> Withmor Genel Merkez
+                      </p>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* GALERİ BÖLÜMÜ */}
         <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
            <div className="mx-auto max-w-6xl px-6">
               <div className="text-center mb-12 relative">
                  <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
                  <p className="text-slate-500 text-sm">Üretim tesisimiz ve tamamlanan projelerimizden kareler.</p>
-                 
+
                  {isLoggedIn && (
                     <button 
                        onClick={() => openAdd("gallery")} 
@@ -1303,7 +1484,7 @@ export default function App() {
                     </button>
                  )}
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                  {galleryImages.slice(0, visibleGalleryCount).map((img, i) => (
                     <div key={i} className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 animate-in fade-in zoom-in">
@@ -1320,7 +1501,7 @@ export default function App() {
                              <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Resim Alanı {i+1}</span>
                           </div>
                        )}
-                       
+
                        {isLoggedIn && (
                           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                              <button onClick={() => openEdit("gallery", i)} className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"><Icons.Edit size={12}/></button>
@@ -1346,7 +1527,7 @@ export default function App() {
         </section>
 
       </main>
-      
+
       {/* Footer - GÜNCELLENDİ (Bizi Takip Edin) */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
          <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-4 gap-8 mb-8">
