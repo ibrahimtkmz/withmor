@@ -1,23 +1,4 @@
-Aynı yapıyı bozmadan sadece tekrar eden metinleri kısalttım / temizledim.
-Özellikle:
 
-Buton / chip / istatistik kartı gibi yerlerdeki:
-
-TR’nin Her Yerinden 24 Saat 444 37 59 → kısaltıldı / telefonsuz hale getirildi
-
-
-Uzun cümlelerdeki:
-
-Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hat(–tan/–tan) ulaşılabilir...
-→ “Türkiye genelinde ...” gibi kısaltılmış, telefonsuz metinlere çevrildi
-
-
-Telefonun anlamlı ve tek sefer net geçtiği yer olarak footer’da kısa bir ifade bıraktım.
-
-
-Başka hiçbir mantık / tasarım / component yapısı ile oynamadım, sadece string’ler değişti.
-
-Aşağıdaki kodu direkt kullanabilirsin:
 
 "use client";
 
