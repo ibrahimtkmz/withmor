@@ -101,7 +101,7 @@ function ElevatorAnimation() {
 
             {/* SAĞ: Asansör Modelleri Göstergeleri */}
             <div className="flex flex-col justify-between h-[18rem] py-2 w-full">
-              {elevatorModels.map((item) => (
+              {elevatorModels.slice().reverse().map((item) => (
                 <div 
                   key={item.id} 
                   data-floor={item.id}
@@ -410,104 +410,77 @@ export default function App() {
     },
   ]);
 
+  // REFERANSLAR: Eski referanslar silindi, sadece belirtilen firmalar uygun metinlerle eklendi
   const [references, setReferences] = useState([
     {
-      company: "ABC İnşaat Grubu",
-      quote:
-        "Projelendirme, montaj ve satış sonrası teknik destek süreçlerinin tamamı profesyonelce yönetildi. Mühendislik kalitesi üst düzey.",
-      name: "Murat Yılmaz",
-      title: "Proje Yöneticisi",
-    },
-    {
-      company: "Blue Residence Yönetimi",
-      quote:
-        "Modernizasyon sonrasında hem güvenlik hem de konfor anlamında ciddi bir iyileşme sağlandı. Enerji tasarrufu beklentimizin üzerinde.",
-      name: "Selin Karaca",
-      title: "Site Müdürü",
-    },
-    {
-      company: "Mega AVM Yatırım A.Ş.",
-      quote: "AVM içi yoğun trafiği yönetecek yürüyen merdiven ve panoramik asansör çözümlerinde Withmor'un performansı etkileyiciydi.",
-      name: "Caner Erkin",
-      title: "Teknik İşler Müdürü"
-    },
-    {
-      company: "Şehir Hastanesi",
-      quote: "Sedye asansörlerinde aradığımız hassasiyet ve kesintisiz çalışma garantisini fazlasıyla sağladılar.",
-      name: "Dr. Kenan Işık",
-      title: "Başhekim Yrd."
-    },
-    {
-      company: "Vadi İstanbul Konutları",
-      quote: "Yüksek katlı bloklarımızda yüksek hızlı asansörlerin montajı rekor sürede tamamlandı. Teşekkürler.",
-      name: "Ayşe Yılmaz",
-      title: "Yönetim Kurulu Bşk."
-    },
-    {
-      company: "Trakya OSB Yönetimi",
-      quote: "Sanayi tipi ağır yük asansörlerinde dayanıklılık bizim için öncelikti. 5 yıldır sorunsuz kullanıyoruz.",
-      name: "Mehmet Öz",
-      title: "Bölge Müdürü"
-    },
-    {
       company: "Csm Metalurji",
-      quote: "Withmor ile yürütülen asansör projelerinde beklentilerimizi karşılayan çözümler sunuldu.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Ağır sanayi koşullarında çalışan tesislerimizde, yük asansörleri ve platform çözümlerinde yüksek dayanım ve süreklilik sağlandı.",
+      name: "Tesis Yönetimi",
+      title: "Kurumsal Müşteri",
     },
     {
       company: "Como Cotton",
-      quote: "Üretim tesisimizde kullanılan asansör çözümlerinden memnunuz.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Tekstil üretim hattımızda yoğun sevkiyatı güvenle taşıyan sistemler kuruldu, lojistik akışımız gözle görülür şekilde hızlandı.",
+      name: "Üretim Koordinatörü",
+      title: "Kurumsal Müşteri",
     },
     {
       company: "3K Tekstil",
-      quote: "Tekstil üretim hattımızda yük taşıma ihtiyaçlarımızı güvenle karşılıyor.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Katlar arası hammadde ve mamul taşımasında yük asansörleri ile hatlarımız daha düzenli ve güvenli hale geldi.",
+      name: "Fabrika Sorumlusu",
+      title: "Referans Proje",
     },
     {
       company: "Özşan Lojistik",
-      quote: "Lojistik operasyonlarımızda yük asansörleriyle verimlilik artışı sağlandı.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Depo ve yükleme alanlarımızda kurulan çözümler sayesinde operasyon sürelerimiz kısaldı, kapasitemiz arttı.",
+      name: "Operasyon Müdürü",
+      title: "Referans Proje",
     },
     {
       company: "Azgur Gıda",
-      quote: "Gıda depolarımızda güvenilir asansör çözümleri sunuldu.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Gıda güvenliği ve hijyen kriterlerine uygun, güvenilir yük taşıma sistemleriyle depolama süreçlerimiz güçlendi.",
+      name: "Lojistik ve Depo Yönetimi",
+      title: "Kurumsal Müşteri",
     },
     {
       company: "Akkardeşler Hafriyat",
-      quote: "Saha operasyonlarımızda kullanılan sistemlerden memnunuz.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Zorlu şantiye koşullarında kullanılan sistemler sağlamlığıyla öne çıkıyor, bakım ihtiyacı minimum seviyede.",
+      name: "Şantiye Koordinatörü",
+      title: "Referans Proje",
     },
     {
       company: "Color Metal",
-      quote: "Endüstriyel tesisimiz için kurulan asansörler beklentilerimizi karşıladı.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Metal işleme tesisimizde, ağır ve hacimli yüklerde dahi titreşimsiz ve güvenli taşıma imkânı sağlandı.",
+      name: "Üretim Müdürü",
+      title: "Kurumsal Müşteri",
     },
     {
       company: "Murem Tekstil",
-      quote: "Tekstil tesisimizde güvenli ve konforlu dikey taşıma sağlandı.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Tekstil tesisimizdeki dikey lojistik çözümleri sayesinde hem iş güvenliği arttı hem de günlük sevkiyat kapasitemiz yükseldi.",
+      name: "Genel Müdürlük",
+      title: "Kurumsal Müşteri",
     },
     {
       company: "Perge Tekstil Lüleburgaz",
-      quote: "Lüleburgaz tesisimizdeki asansör projelerinden memnunuz.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Lüleburgaz tesisimizde kurulan sistemler, yüksek hacimli üretim tempomuzla tam uyumlu çalışıyor.",
+      name: "Tesis Yönetimi",
+      title: "Referans Proje",
     },
     {
       company: "THY Tekstil Lüleburgaz",
-      quote: "Lüleburgaz’daki üretim tesislerimizde kullanılan çözümler güven veriyor.",
-      name: "Kurumsal Müşteri",
-      title: "Referans Proje"
+      quote:
+        "Lüleburgaz’daki üretim tesislerimizde, yük asansörleri ve platform çözümleri ile süreçlerimiz çok daha kontrollü ve verimli hale geldi.",
+      name: "Operasyon Yönetimi",
+      title: "Kurumsal Müşteri",
     },
   ]);
 
@@ -982,7 +955,7 @@ export default function App() {
               </a>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10">
+            <div className="mb-8 grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10">
               <div>
                 <p className="text-2xl font-bold text-white">30+</p>
                 <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
@@ -1311,7 +1284,7 @@ export default function App() {
           )}
         </section>
 
-        {/* Referanslar - MEVCUT KOD */}
+        {/* Referanslar - MEVCUT YAPI, GÜNCEL İÇERİK */}
         <section id="references" className="bg-blue-900 w-full py-20 text-white relative overflow-hidden">
            <div className="absolute inset-0 pointer-events-none select-none opacity-5">
              <Icons.Quote className="absolute -top-10 -left-10 w-64 h-64 text-white transform rotate-12" />
