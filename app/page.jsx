@@ -267,33 +267,18 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-  // GALERİ İÇİN STATE – RESİM + VİDEO DESTEKLİ
-  // type: "image" | "video" | "embed"
-  const [galleryImages, setGalleryImages] = useState(
+  // --- GALERİ STATE: Artık resim + video destekli ---
+  const [galleryItems, setGalleryItems] = useState(
     Array.from({ length: 19 }, (_, i) => ({
       type: "image",
-      src: `/images/gallery/galeri-${i + 1}.jpg`,
+      url: `/images/gallery/galeri-${i + 1}.jpg`,
+      title: `Galeri ${i + 1}`,
+      source: "local",
     }))
   );
 
-  // Görünecek Galeri Öğesi Sayısı
+  // YENİ STATE: Görünecek Galeri Ögesi Sayısı
   const [visibleGalleryCount, setVisibleGalleryCount] = useState(8);
-
-  // URL'den medya tipini otomatik tespit et
-  const detectMediaType = (url) => {
-    if (!url) return "image";
-    const lower = url.toLowerCase();
-
-    if (lower.includes("instagram.com") || lower.includes("facebook.com")) {
-      return "embed";
-    }
-
-    if (/\.(mp4|webm|ogg)(\?|$)/.test(lower)) {
-      return "video";
-    }
-
-    return "image";
-  };
 
   const [aboutTabs, setAboutTabs] = useState({
     "biz-kimiz": {
@@ -645,17 +630,8 @@ export default function App() {
         setTempValue({ ...aboutTabs[index] });
     }
 
-    // GALERİ DÜZENLEME – VİDEO DESTEKLİ
     if (type === "gallery" && index !== null) {
-      const item = galleryImages[index];
-      if (typeof item === "string") {
-        setTempValue({ src: item });
-      } else {
-        setTempValue({
-          src: item?.src || "",
-          type: item?.type || "image",
-        });
-      }
+        setTempValue(galleryItems[index]);
     }
   };
 
@@ -670,9 +646,7 @@ export default function App() {
       setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "" });
     if (type === "project") setTempValue({ name: "", type: "", desc: "" });
     if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
-
-    // YENİ: Galeriye medya ekleme (resim / video / embed)
-    if (type === "gallery") setTempValue({ src: "" });
+    if (type === "gallery") setTempValue({ type: "image", url: "", title: "", source: "local" });
   };
 
   const saveEdit = () => {
@@ -688,29 +662,14 @@ export default function App() {
         }));
     }
 
-    // GALERİ KAYDETME – MEDYA TİPİ OTOMATİK ALGILANIR
     if (type === "gallery") {
-      const rawSrc = tempValue.src || tempValue.image || "";
-      if (!rawSrc) {
-        alert("Lütfen bir medya URL'si girin.");
-        return;
-      }
-
-      const item = {
-        type: detectMediaType(rawSrc),
-        src: rawSrc,
-      };
-
-      if (index !== null) {
-        const copy = [...galleryImages];
-        copy[index] = item;
-        setGalleryImages(copy);
-      } else {
-        setGalleryImages([...galleryImages, item]);
-      }
-
-      setEditModal({ open: false, type: null, index: null });
-      return;
+        if (index !== null) {
+            const copy = [...galleryItems];
+            copy[index] = tempValue;
+            setGalleryItems(copy);
+        } else {
+            setGalleryItems([...galleryItems, tempValue]);
+        }
     }
 
     if (type === "service") {
@@ -761,8 +720,8 @@ export default function App() {
     }
 
     if (type === "gallery" && index !== null) {
-        const newGallery = galleryImages.filter((_, i) => i !== index);
-        setGalleryImages(newGallery);
+        const newGallery = galleryItems.filter((_, i) => i !== index);
+        setGalleryItems(newGallery);
     }
 
     if (type === "project" && index !== null) {
@@ -805,14 +764,12 @@ export default function App() {
     // overflow-x-hidden eklendi: Mobilde sağa sola kaymayı engeller
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
 
-      {/* Navbar - ... (BURADAN İTİBAREN ALT KISIMLARIN HEPSİ SENDE ZATEN VARDI, AYNEN KORUDUM) */}
-      {/* ... NAVBAR, HERO, ABOUT, WHY US, SERVICES, PROJECTS, REFERENCES, CONTACT ... */}
+      {/* Navbar - ... (BURADAN SONRASI SENDEKİYLE AYNI, SADECE GALERİ VE MODAL KISMI DEĞİŞTİ) */}
+      {/* --- NAVBAR, HERO, ABOUT, WHY US, SERVICES, PROJECTS, REFERENCES, CONTACT, FOOTER --- */}
+      {/* ... TÜM ARADAKİ KISIMLARI DEĞİŞTİRMEDİM, AYNEN BIRAKABİLİRSİN ... */}
 
-      {/* Kod uzun olduğu için burayı kesmeden devam ediyorum, sadece GALERİ ve EDIT MODAL içinde
-          gerekli değişiklikler zaten yukarıda yapıldı. Aşağıda da galeri render kısmını video
-          destekleyecek şekilde güncelledim. */}
+      {/* (Buraya kadar olan kod seninkiyle aynı olduğu için kısaltıyorum; galeri ve modal kısmı önemli senin için) */}
 
-      {/* ... (yukarıdaki uzun layout kodun seninkinin aynısı, sadece en alttaki GALERİ KISMI değişik) ... */}
 
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
@@ -822,73 +779,94 @@ export default function App() {
             <p className="text-slate-500 text-sm">Üretim tesisimiz ve tamamlanan projelerimizden kareler.</p>
 
             {isLoggedIn && (
-              <button
-                onClick={() => openAdd("gallery")}
+              <button 
+                onClick={() => openAdd("gallery")} 
                 className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
               >
-                <Icons.Plus size={12} /> Yeni Medya Ekle
+                <Icons.Plus size={12}/> Yeni Medya Ekle
               </button>
             )}
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {galleryImages.slice(0, visibleGalleryCount).map((item, i) => {
-              const media =
-                typeof item === "string"
-                  ? { type: "image", src: item }
-                  : item || { type: "image", src: "" };
+            {galleryItems.slice(0, visibleGalleryCount).map((item, i) => {
+              const isVideo = item.type === "video";
+              const url = item.url || "";
+              const isInstagram = isVideo && url.includes("instagram.com");
+              const isFacebook = isVideo && url.includes("facebook.com");
+              const isSocialVideo = isInstagram || isFacebook;
 
               return (
                 <div
                   key={i}
                   className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 animate-in fade-in zoom-in"
                 >
-                  {/* MEDYA GÖSTERİMİ */}
-                  {media.type === "image" && media.src && (
+                  {/* İÇERİK */}
+                  {!isVideo && (
                     <>
-                      <img
-                        src={media.src}
-                        alt={`Galeri ${i + 1}`}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={handleImageError}
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                        <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
-                      </div>
+                      {url ? (
+                        <>
+                          <img
+                            src={url}
+                            alt={item.title || `Galeri ${i + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            onError={handleImageError}
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-50">
+                          <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                            Resim Alanı {i + 1}
+                          </span>
+                        </div>
+                      )}
                     </>
                   )}
 
-                  {media.type === "video" && media.src && (
-                    <video
-                      className="w-full h-full object-cover"
-                      controls
-                      playsInline
-                    >
-                      <source src={media.src} />
-                      Tarayıcınız video etiketini desteklemiyor.
-                    </video>
+                  {isVideo && (
+                    <>
+                      {isSocialVideo ? (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white p-4 text-center"
+                        >
+                          <div className="mb-2">
+                            {isInstagram && <Icons.Instagram className="w-8 h-8" />}
+                            {isFacebook && <Icons.Facebook className="w-8 h-8" />}
+                          </div>
+                          <p className="text-xs font-bold mb-1">
+                            {isInstagram ? "Instagram Gönderisi" : "Facebook Gönderisi"}
+                          </p>
+                          <p className="text-[10px] text-slate-200 line-clamp-2">
+                            Tıklayarak gönderiyi izleyin
+                          </p>
+                        </a>
+                      ) : (
+                        <>
+                          {url ? (
+                            <video
+                              src={url}
+                              controls
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-400">
+                              <span className="text-sm font-bold">Video</span>
+                              <span className="text-[10px]">Video URL ekleyin</span>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </>
                   )}
 
-                  {media.type === "embed" && media.src && (
-                    <iframe
-                      src={media.src}
-                      className="w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      loading="lazy"
-                    />
-                  )}
-
-                  {/* Boş / Hatalı URL durumu */}
-                  {!media.src && (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-50">
-                      <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                        Medya Alanı {i + 1}
-                      </span>
-                    </div>
-                  )}
-
+                  {/* Admin Butonları */}
                   {isLoggedIn && (
                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <button
@@ -913,10 +891,10 @@ export default function App() {
           </div>
 
           {/* DAHA FAZLA GÖR BUTONU */}
-          {visibleGalleryCount < galleryImages.length && (
+          {visibleGalleryCount < galleryItems.length && (
             <div className="mt-10 text-center">
-              <button
-                onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
+              <button 
+                onClick={() => setVisibleGalleryCount(prev => prev + 8)}
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
               >
                 Daha Fazla Gör <Icons.ChevronDown size={16} />
@@ -926,11 +904,9 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer, Modallar vs – aynı şekilde devam ediyor */}
+      {/* ... Footer ve Modallar ... */}
 
-      {/* ... FOOTER ... */}
-
-      {/* Edit Modal - GÜNCELLENDİ (Galeri için src alanı, type gizleniyor) */}
+      {/* Edit Modal - GÜNCELLENDİ (Dinamik İçerik Yönetimi) */}
       {editModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl max-h-[80vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
@@ -939,43 +915,39 @@ export default function App() {
             </h3>
             <div className="space-y-3">
               {Object.keys(tempValue).map((key) => {
-                // Filtreleme: 'id' ve 'type' gibi alanlar gizlenebilir
-                if (key === "id") return null;
-                if (key === "type") return null;
+                // Filtreleme: 'id' gibi sistem alanlarını gizle
+                if (key === 'id' || key === 'title') return null;
+
+                let label = key;
+                if (key === 'desc') label = 'Açıklama';
+                else if (key === 'name') label = 'Başlık';
+                else if (key === 'image') label = 'Resim URL';
+                else if (key === 'heading') label = 'Ana Başlık';
+                else if (key === 'subHeading') label = 'Alt Başlık';
+                else if (key === 'text1') label = 'Paragraf 1';
+                else if (key === 'text2') label = 'Paragraf 2';
+                else if (key === 'quote') label = 'Yorum';
+                else if (key === 'company') label = 'Şirket';
+                else if (key === 'url') label = 'Medya URL (resim / video / sosyal medya linki)';
+                else if (key === 'type') label = 'Tür (image / video)';
+                else if (key === 'source') label = 'Kaynak (local / facebook / instagram)';
+
+                const isLongText =
+                  key === "desc" ||
+                  key === "quote" ||
+                  key === "about" ||
+                  key.startsWith("text") ||
+                  key === "longText";
 
                 return (
                   <div key={key}>
                     <label className="mb-1 block text-[10px] font-bold text-slate-500 uppercase">
-                      {key === "desc"
-                        ? "Açıklama"
-                        : key === "name"
-                        ? "Başlık"
-                        : key === "image"
-                        ? "Resim URL"
-                        : key === "src"
-                        ? "Medya URL (Resim / Video / Instagram / Facebook)"
-                        : key === "heading"
-                        ? "Ana Başlık"
-                        : key === "subHeading"
-                        ? "Alt Başlık"
-                        : key === "text1"
-                        ? "Paragraf 1"
-                        : key === "text2"
-                        ? "Paragraf 2"
-                        : key === "quote"
-                        ? "Yorum"
-                        : key === "company"
-                        ? "Şirket"
-                        : key}
+                      {label}
                     </label>
-                    {key === "desc" ||
-                    key === "quote" ||
-                    key === "about" ||
-                    key.startsWith("text") ||
-                    key === "longText" ? (
+                    {isLongText ? (
                       <textarea
                         rows={key === "longText" ? 8 : 4}
-                        value={tempValue[key]}
+                        value={tempValue[key] ?? ""}
                         onChange={(e) =>
                           setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
                         }
@@ -984,7 +956,7 @@ export default function App() {
                     ) : (
                       <input
                         type="text"
-                        value={tempValue[key]}
+                        value={tempValue[key] ?? ""}
                         onChange={(e) =>
                           setTempValue((prev) => ({ ...prev, [key]: e.target.value }))
                         }
@@ -1026,7 +998,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Login, Quote modalları vs senin kodundaki gibi burada... */}
+      {/* Diğer modallar (Login, Quote vs.) seninkiyle aynı kalabilir */}
     </div>
   );
 }
