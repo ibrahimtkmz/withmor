@@ -1,4 +1,4 @@
-kodu tamamen güncelleyip bana geri ver "use client";
+ "use client";
 
 import { useState } from "react";
 
