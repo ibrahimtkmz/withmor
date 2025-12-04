@@ -30,9 +30,16 @@ const Icons = {
   Trash: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>),
 };
 
-// Withmor Teknika Lift - KURUMSAL WEB SİTESİ
+// Withmor - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
+  const elevatorModels = [
+    { id: 4, label: "Yük Asansörleri" },
+    { id: 3, label: "Yük Platformları" },
+    { id: 2, label: "Villa Asansörleri" },
+    { id: 1, label: "Yatay Asansörler" },
+  ];
+
   return (
     <div className="relative w-full max-w-sm">
       {/* Dış Kutu (Card Container) */}
@@ -47,7 +54,9 @@ function ElevatorAnimation() {
           {/* Üst Metin - Sola Hizalı */}
           <div className="mb-8 text-left w-full">
             <h3 className="text-lg font-bold text-slate-800 mb-2">Akıllı Dikey Ulaşım Sistemleri</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">Geleceğin teknolojisi ile donatılmış, güvenli ve konforlu asansör çözümleri.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden güvenli ve konforlu çözümler.
+            </p>
           </div>
 
           {/* Animasyon Alanı */}
@@ -89,21 +98,19 @@ function ElevatorAnimation() {
               </div>
             </div>
 
-            {/* SAĞ: Dışarı Alınan Kat Göstergeleri */}
+            {/* SAĞ: Asansör Modelleri Göstergeleri */}
             <div className="flex flex-col justify-between h-[18rem] py-2 w-full">
-              {[5, 4, 3, 2, 1].map((floor) => (
+              {elevatorModels.map((item) => (
                 <div 
-                  key={floor} 
-                  data-floor={floor} // Veri etiketi eklendi
+                  key={item.id} 
+                  data-floor={item.id}
                   className="floor-indicator flex items-center gap-3 group w-full"
                 >
-                  {/* Yuvarlak Kat İkonu - Stiller CSS'ten gelecek */}
-                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center text-sm font-bold text-slate-400 transition-all duration-300">
-                    {floor}
+                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center text-[10px] font-bold text-slate-400 transition-all duration-300 text-center px-1">
+                    WL
                   </div>
-                  {/* Kat Yazısı */}
-                  <span className="indicator-text text-xs font-medium text-slate-400 uppercase tracking-wide whitespace-nowrap transition-colors">
-                    {floor === 1 ? 'Zemin' : `${floor}. Kat`}
+                  <span className="indicator-text text-xs font-medium text-slate-400 tracking-wide whitespace-nowrap transition-colors">
+                    {item.label}
                   </span>
                 </div>
               ))}
@@ -113,61 +120,37 @@ function ElevatorAnimation() {
       </div>
 
       <style>{`
-        /* Asansör Hareketi: 1. Kattan 5. Kata Doğru (Aşağıdan Yukarı) */
+        /* Asansör Hareketi */
         @keyframes elevatorMove {
-          0%, 15% { transform: translateY(390%); }    /* 1. Kat Bekle */
-          20%, 35% { transform: translateY(292%); }   /* 2. Kat Bekle */
-          40%, 55% { transform: translateY(195%); }   /* 3. Kat Bekle */
-          60%, 75% { transform: translateY(98%); }    /* 4. Kat Bekle */
-          80%, 95% { transform: translateY(0%); }     /* 5. Kat Bekle */
-          100% { transform: translateY(390%); }       /* Başa Dön */
+          0%, 20% { transform: translateY(390%); }
+          25%, 45% { transform: translateY(292%); }
+          50%, 70% { transform: translateY(195%); }
+          75%, 95% { transform: translateY(98%); }
+          100% { transform: translateY(390%); }
         }
 
-        /* Kat Işığı Animasyonları */
-        
-        /* 5. Kat */
-        @keyframes floorLight5 { 
-          80%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } 
-          0%, 79%, 96%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); box-shadow: none; }
-        }
-        
-        /* 4. Kat */
+        /* Kat Işığı Animasyonları (Artık 4 model için) */
         @keyframes floorLight4 { 
-          60%, 75% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          0%, 59%, 76%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+          75%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } 
+          0%, 74%, 96%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); box-shadow: none; }
         }
-        
-        /* 3. Kat */
         @keyframes floorLight3 { 
-          40%, 55% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          0%, 39%, 56%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+          50%, 70% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          0%, 49%, 71%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
-        
-        /* 2. Kat */
         @keyframes floorLight2 { 
-          20%, 35% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          0%, 19%, 36%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+          25%, 45% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          0%, 24%, 46%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
-        
-        /* 1. Kat */
         @keyframes floorLight1 { 
-          0%, 15% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          16%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+          0%, 20% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
+          21%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
         }
         
-        /* Animasyonları Uygula */
-        div[data-floor="5"] .indicator-circle { animation: floorLight5 20s infinite; }
         div[data-floor="4"] .indicator-circle { animation: floorLight4 20s infinite; }
         div[data-floor="3"] .indicator-circle { animation: floorLight3 20s infinite; }
         div[data-floor="2"] .indicator-circle { animation: floorLight2 20s infinite; }
         div[data-floor="1"] .indicator-circle { animation: floorLight1 20s infinite; }
-        
-        /* Metin Renk Değişimi için (Opsiyonel) */
-        @keyframes textLight5 { 80%, 95% { color: #2563EB; } 0%, 79%, 96%, 100% { color: #94A3B8; } }
-        @keyframes textLight4 { 60%, 75% { color: #2563EB; } 0%, 59%, 76%, 100% { color: #94A3B8; } }
-        @keyframes textLight3 { 40%, 55% { color: #2563EB; } 0%, 39%, 56%, 100% { color: #94A3B8; } }
-        @keyframes textLight2 { 20%, 35% { color: #2563EB; } 0%, 19%, 36%, 100% { color: #94A3B8; } }
-        @keyframes textLight1 { 0%, 15% { color: #2563EB; } 16%, 100% { color: #94A3B8; } }
       `}</style>
     </div>
   );
@@ -192,7 +175,7 @@ export default function App() {
   const [quoteForm, setQuoteForm] = useState({
     name: "",
     phone: "",
-    projectType: "Konut Asansörü",
+    projectType: "Malzeme teklifi iste",
     floorCount: "",
     location: "",
     note: "",
@@ -208,7 +191,7 @@ export default function App() {
     eyebrow: "Premium Asansör Çözümleri",
     title: "Güvenli ve Estetik Dikey Ulaşım Mühendisliği",
     subtitle:
-      "Konut binalarından iş merkezlerine kadar özel tasarım, montaj ve bakım hizmetlerinde yüksek mühendislik standartları.",
+      "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden mühendislik ve servis çözümleri.",
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
@@ -225,10 +208,10 @@ export default function App() {
     "biz-kimiz": {
         title: "Biz Kimiz",
         heading: "Mühendislik Temelli Çözüm Ortağınız",
-        subHeading: "15 Yıllık Tecrübeyle Dikey Ulaşımda Güven...",
-        text1: "İstanbul'un dinamik atmosferinde, asansör sektöründe 15 yıldır mühendislik odaklı çözümler üretiyoruz. Özveriyle, tutkuyla ve teknik uzmanlıkla şekillendirdiğimiz projelerimizde, sadece bir asansör değil, güvenli bir yolculuk deneyimi sunuyoruz.",
+        subHeading: "30 Yıllık Tecrübeyle Dikey Ulaşımda Güven...",
+        text1: "İstanbul'un dinamik atmosferinde, asansör sektöründe 30 yıldır mühendislik odaklı çözümler üretiyoruz. Özveriyle, tutkuyla ve teknik uzmanlıkla şekillendirdiğimiz projelerimizde, sadece bir asansör değil, güvenli bir yolculuk deneyimi sunuyoruz.",
         text2: "Montaj ve modernizasyonun ötesinde, EN-81 standartlarına tam uyumlu, enerji verimliliği yüksek sistemler tasarlıyoruz.",
-        longText: "Withmor Teknika Lift olarak, dikey ulaşım sektöründeki yolculuğumuza 15 yılı aşkın bir süre önce başladık. Kurulduğumuz günden bu yana, sadece bir asansör firması olmanın ötesine geçerek, binaların yaşam damarlarını inşa eden bir mühendislik partneri olmayı hedefledik. Globalleşen dünyada teknolojiyi yakından takip eden Ar-Ge ekibimiz, yerel üretim gücümüzü uluslararası standartlarla birleştiriyor. Müşteri memnuniyetini merkeze alan yaklaşımımızla, konutlardan gökdelenlere, hastanelerden alışveriş merkezlerine kadar geniş bir yelpazede güvenli, konforlu ve enerji verimliliği yüksek çözümler sunuyoruz. Geleceğin akıllı şehirlerine uyumlu, sürdürülebilir ve estetik asansör sistemlerimizle, Türkiye'den dünyaya açılan bir teknoloji köprüsü kurmanın gururunu yaşıyoruz."
+        longText: "Withmor olarak, dikey ulaşım sektöründeki yolculuğumuza 30 yılı aşkın bir süre önce başladık. Kurulduğumuz günden bu yana, sadece bir asansör firması olmanın ötesine geçerek, binaların yaşam damarlarını inşa eden bir mühendislik partneri olmayı hedefledik. Globalleşen dünyada teknolojiyi yakından takip eden Ar-Ge ekibimiz, yerel üretim gücümüzü uluslararası standartlarla birleştiriyor. Müşteri memnuniyetini merkeze alan yaklaşımımızla, konutlardan gökdelenlere, hastanelerden alışveriş merkezlerine kadar geniş bir yelpazede güvenli, konforlu ve enerji verimliliği yüksek çözümler sunuyoruz. Geleceğin akıllı şehirlerine uyumlu, sürdürülebilir ve estetik asansör sistemlerimizle, Türkiye'den dünyaya açılan bir teknoloji köprüsü kurmanın gururunu yaşıyoruz."
     },
     "imalat": {
         title: "İmalat",
@@ -236,7 +219,7 @@ export default function App() {
         subHeading: "Projeye Özel İmalat Çözümleri...",
         text1: "Kendi tesislerimizde, uluslararası kalite standartlarına uygun olarak kabin, karkas ve süspansiyon sistemleri imalatı gerçekleştiriyoruz.",
         text2: "Modern tezgahlarımız ve uzman üretim kadromuzla, her projenin teknik gereksinimlerine uygun, dayanıklı ve estetik imalatlar yapıyoruz.",
-        longText: "Velimeşe OSB'de yer alan modern üretim tesisimiz, endüstri 4.0 standartlarına uygun makine parkuru ile donatılmıştır. Yüksek hassasiyetli lazer kesim makineleri, CNC abkant büküm tezgahları ve robotik kaynak sistemlerimiz sayesinde, milimetrik hassasiyette üretim gerçekleştiriyoruz. Kullandığımız her hammadde, giriş kalite kontrol testlerinden geçirilerek üretim hattına alınır. Kabin karkaslarından süspansiyon sistemlerine, ağırlık şaselerinden kapı mekanizmalarına kadar tüm bileşenler, uzun yıllar sorunsuz çalışacak dayanıklılıkta tasarlanır ve üretilir. Sadece standart ürünler değil, mimari projenize özel, sıra dışı ölçü ve formlardaki asansör bileşenlerini de kendi bünyemizde, esnek üretim kabiliyetimizle hayata geçiriyoruz."
+        longText: "Ergene OSB'de yer alan modern üretim tesisimiz, endüstri 4.0 standartlarına uygun makine parkuru ile donatılmıştır. Yüksek hassasiyetli lazer kesim makineleri, CNC abkant büküm tezgahları ve robotik kaynak sistemlerimiz sayesinde, milimetrik hassasiyette üretim gerçekleştiriyoruz. Kullandığımız her hammadde, giriş kalite kontrol testlerinden geçirilerek üretim hattına alınır. Kabin karkaslarından süspansiyon sistemlerine, ağırlık şaselerinden kapı mekanizmalarına kadar tüm bileşenler, uzun yıllar sorunsuz çalışacak dayanıklılıkta tasarlanır ve üretilir. Sadece standart ürünler değil, mimari projenize özel, sıra dışı ölçü ve formlardaki asansör bileşenlerini de kendi bünyemizde, esnek üretim kabiliyetimizle hayata geçiriyoruz."
     },
     "montaj": {
         title: "Montaj",
@@ -257,15 +240,16 @@ export default function App() {
   });
 
   const [companyInfo, setCompanyInfo] = useState({
-    name: "Withmor Teknika Lift",
+    name: "Withmor",
     about:
-      "Withmor Teknika Lift, ulusal ve uluslararası standartlara (EN-81) uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu mühendislik hassasiyetiyle birleştiriyoruz.",
-    phone: "+90 530 280 55 26",
+      "Withmor, ulusal ve uluslararası standartlara (EN-81) uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu mühendislik hassasiyetiyle birleştiriyoruz.",
+    phone: "444 37 59",
+    gsm: "0 555 888 33 59",
     email: "info@withmor.com",
-    address: "Kervanci ticaret merkezi, Velimeşe OSB, 59850 Çorlu/Tekirdağ",
+    address: "Ergene OSB, Çorlu / Tekirdağ",
     facebook: "https://www.facebook.com/TEKNIKALIFT",
     instagram: "https://www.instagram.com/withmorlift/",
-    whatsapp: "https://wa.me/905302805526"
+    whatsapp: "https://wa.me/905558883359"
   });
 
   // HİZMETLER İÇİN YEREL GÖRSELLER (DÜZELTİLDİ)
@@ -408,7 +392,7 @@ export default function App() {
       id: 2,
       name: "Mehmet Demir",
       rating: 5,
-      text: "Bakım hizmetlerinden çok memnunuz. Teknik ekip çok bilgili ve 7/24 ulaşılabilir durumda.",
+      text: "Bakım hizmetlerinden çok memnunuz. Teknik ekip çok bilgili ve 24 saat Türkiye’nin her yerinden ulaşılabilir durumda.",
       date: "1 ay önce",
     },
     {
@@ -446,7 +430,7 @@ export default function App() {
     name: "",
     phone: "",
     email: "",
-    subject: "",
+    subject: "Malzeme teklifi iste",
     message: ""
   });
 
@@ -455,7 +439,7 @@ export default function App() {
     const { name, phone, email, subject, message } = mainContactForm;
     // WhatsApp Mesaj Formatı
     const text = `*Web Sitesi İletişim Formu*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*E-Posta:* ${email}\n*Konu:* ${subject}\n*Mesaj:* ${message}`;
-    const url = `https://wa.me/905302805526?text=${encodeURIComponent(text)}`;
+    const url = `https://wa.me/905558883359?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
   };
   // ----------------------------------------
@@ -647,8 +631,8 @@ export default function App() {
   const handleQuoteSubmit = (e) => {
     e.preventDefault();
     const { name, phone, projectType, floorCount, location, note } = quoteForm;
-    const message = `*Proje Teklifi Talebi*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Proje Tipi:* ${projectType}\n*Durak Sayısı:* ${floorCount}\n*Konum/Şehir:* ${location}\n*Ek Notlar:* ${note}`;
-    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(message)}`;
+    const message = `*Proje Teklifi Talebi*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Talep Konusu:* ${projectType}\n*Durak Sayısı:* ${floorCount}\n*Konum/Şehir:* ${location}\n*Ek Notlar:* ${note}`;
+    const whatsappUrl = `https://wa.me/905558883359?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
     setShowQuoteModal(false);
   };
@@ -657,7 +641,7 @@ export default function App() {
     e.preventDefault();
     const { name, phone, message } = fastContactForm;
     const whatsappMessage = `*Hızlı İletişim Formu*\n\n*Ad Soyad:* ${name}\n*Telefon:* ${phone}\n*Mesaj:* ${message}`;
-    const whatsappUrl = `https://wa.me/905302805526?text=${encodeURIComponent(whatsappMessage)}`;
+    const whatsappUrl = `https://wa.me/905558883359?text=${encodeURIComponent(whatsappMessage)}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -829,7 +813,7 @@ export default function App() {
             <div className="mb-6 flex flex-wrap gap-3">
               <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700 border border-blue-100 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                7/24 Profesyonel Teknik Servis
+                24 Saat Türkiye’nin Her Yerinden Servis
               </div>
               <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-[11px] font-bold text-green-700 border border-green-100 shadow-sm">
                 <Icons.CheckCircle2 size={12} />
@@ -869,16 +853,16 @@ export default function App() {
 
             <div className="grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10">
               <div>
-                <p className="text-2xl font-bold text-white">15+</p>
+                <p className="text-2xl font-bold text-white">30+</p>
                 <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
               </div>
               <div className="border-l border-blue-700 pl-6">
-                <p className="text-2xl font-bold text-white">250+</p>
+                <p className="text-2xl font-bold text-white">2000+</p>
                 <p className="text-xs text-blue-200 font-medium">Tamamlanan Proje</p>
               </div>
               <div className="border-l border-blue-700 pl-6">
-                <p className="text-2xl font-bold text-white">7/24</p>
-                <p className="text-xs text-blue-200 font-medium">Kesintisiz Destek</p>
+                <p className="text-2xl font-bold text-white">24/7</p>
+                <p className="text-xs text-blue-200 font-medium">Türkiye’nin Her Yerinden Destek</p>
               </div>
             </div>
 
@@ -979,23 +963,17 @@ export default function App() {
                  </button>
               </div>
 
-              {/* Sağ: Profil Kartı - GÜNCELLENDİ (Yerel Dosya Yolu ve Bilgiler) */}
+              {/* Sağ: Kurumsal Kart - Aygün Yılmaz KALDIRILDI */}
               <div className="lg:col-span-4">
                  <div className="bg-slate-50 p-8 rounded-2xl text-center border border-slate-100 h-full flex flex-col justify-center items-center">
-                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center relative">
-                        <img 
-                            src="/images/about/profil-resmi.jpg" 
-                            alt="Profil" 
-                            className="absolute inset-0 w-full h-full object-cover"
-                            onError={(e) => e.target.style.display = 'none'}
-                        />
+                    <div className="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-white shadow-md mx-auto bg-slate-200 flex items-center justify-center relative">
                         <Icons.User className="w-16 h-16 text-slate-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900">Aygün Yılmaz</h3>
-                    <p className="text-sm font-bold text-slate-500 mb-6">Proje Müdürü</p>
+                    <h3 className="text-xl font-bold text-slate-900">Withmor Kurumsal</h3>
+                    <p className="text-sm font-bold text-slate-500 mb-6">Türkiye Genelinde Mühendislik Çözümleri</p>
                     <p className="text-slate-600 text-sm italic relative px-4">
                        <span className="text-4xl text-slate-200 absolute -top-4 left-0">"</span>
-                       Her projemizde müşteri memnuniyetini ve mühendislik kalitesini en üst düzeyde tutmayı hedefliyoruz. Yenilikçi çözümlerimizle binalarınıza değer katmak için buradayız.
+                       Withmor, Türkiye genelinde endüstriyel ve özel mimari projelerde 30 yılı aşkın deneyimiyle hizmet vermektedir. Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörlerde güvenilir çözüm ortağınız.
                        <span className="text-4xl text-slate-200 absolute -bottom-8 right-0">"</span>
                     </p>
 
@@ -1005,7 +983,7 @@ export default function App() {
                        className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
                     >
                        <div className="text-left">
-                          <p className="text-[10px] font-medium text-white/90">Yardım Edebilir Miyim?</p>
+                          <p className="text-[10px] font-medium text-white/90">24 Saat Türkiye’nin Her Yerinden</p>
                           <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
                        </div>
                        <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
@@ -1033,7 +1011,7 @@ export default function App() {
                      <div>
                         <h3 className="text-xl font-bold text-slate-900 mb-3">Tecrübe ve Uzmanlık</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                           15 yılı aşkın süredir asansör sektöründe faaliyet gösteren firmamız, birikimli deneyimi ve uzman mühendis kadrosuyla projelerinizi en üst seviyede yönetir ve çözümler sunar.
+                           30 yılı aşkın süredir asansör sektöründe faaliyet gösteren firmamız, birikimli deneyimi ve uzman mühendis kadrosuyla projelerinizi en üst seviyede yönetir ve çözümler sunar.
                         </p>
                      </div>
                   </div>
@@ -1053,7 +1031,7 @@ export default function App() {
                      <div>
                         <h3 className="text-xl font-bold text-slate-900 mb-3">Kalite ve Güvenlik Standartları</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                           Ürünlerimiz uluslararası normlara ve yerel yönetmeliklere uygunluğuyla öne çıkar. Yüksek kalite ve güvenlik standartlarını korurken, müşterilerimize güvenilir çözümler sunarız.
+                           Ürünlerimiz uluslararası normlara ve yerel yönetmeliklere uygunluğuyla öne çıkar. Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için yüksek kalite ve güvenlik standartlarını korurken, müşterilerimize güvenilir çözümler sunarız.
                         </p>
                      </div>
                   </div>
@@ -1063,7 +1041,7 @@ export default function App() {
                      <div>
                         <h3 className="text-xl font-bold text-slate-900 mb-3">Müşteri Odaklı Hizmet</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                           Müşteri memnuniyetini en üst düzeyde tutmak için satış öncesi ve sonrası kesintisiz destek sağlıyoruz. İhtiyaçlarınıza özel çözümler üretiyoruz.
+                           Müşteri memnuniyetini en üst düzeyde tutmak için satış öncesi ve sonrası kesintisiz destek sağlıyoruz. 24 saat Türkiye’nin her yerinden ulaşılabilir teknik servisimizle ihtiyaçlarınıza özel çözümler üretiyoruz.
                         </p>
                      </div>
                   </div>
@@ -1258,14 +1236,28 @@ export default function App() {
                        <h2 className="text-2xl font-bold text-white">Müşteri Deneyimi</h2>
                        <a href="https://maps.app.goo.gl/mfxnQ3ngTwYtVyAN6" target="_blank" rel="noreferrer" className="text-xs font-semibold text-blue-200 hover:text-white hover:underline">Google'da Görüntüle →</a>
                     </div>
-                    <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg">
-                       <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-blue-800 rounded-2xl border border-blue-700 p-6 shadow-lg space-y-6">
+                       <div className="flex items-center gap-4">
                           <div className="text-4xl font-bold text-white">4.9</div>
                           <div>
                              <div className="flex text-amber-400 text-sm"><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/><Icons.Star fill="currentColor" size={16}/></div>
                              <p className="text-xs text-blue-300 mt-1">120+ Google Yorumu</p>
                           </div>
                        </div>
+
+                       {/* Facebook Odaklı Müşteri Deneyimi Bloğu */}
+                       <div className="bg-blue-900/60 rounded-xl p-4 border border-blue-600 flex items-start gap-3">
+                         <div className="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center">
+                           <Icons.Facebook size={18} />
+                         </div>
+                         <div className="text-xs">
+                           <p className="font-bold text-white mb-1">Facebook Topluluğu</p>
+                           <p className="text-blue-100 mb-1">Facebook üzerinden <span className="font-semibold">4.8 / 5 müşteri memnuniyeti</span>.</p>
+                           <p className="text-blue-100 mb-1">Gerçek kullanıcı yorumları ve projelere dair geri bildirimler.</p>
+                           <p className="text-blue-200">Topluluk güveni ile büyüyen bir marka: Withmor.</p>
+                         </div>
+                       </div>
+
                        <div className="space-y-4">
                           {googleReviews.slice(0, visibleReviewCount).map((review) => (
                              <div key={review.id} className="border-b border-blue-700 last:border-0 pb-4 last:pb-0 animate-in fade-in slide-in-from-top-4 duration-300">
@@ -1283,7 +1275,7 @@ export default function App() {
                           ))}
                        </div>
 
-                       <div className="mt-6 text-center border-t border-blue-700 pt-4">
+                       <div className="mt-2 text-center border-t border-blue-700 pt-4">
                           <button 
                             onClick={() => {
                               if (visibleReviewCount >= googleReviews.length) {
@@ -1320,7 +1312,7 @@ export default function App() {
                     Projelerinizi Birlikte <br/> Hayata Geçirelim
                   </h2>
                   <p className="text-slate-600 text-lg leading-relaxed">
-                    Sorularınız, proje talepleriniz veya teknik destek ihtiyaçlarınız için dilediğiniz kanaldan bize ulaşabilirsiniz.
+                    Sorularınız, proje talepleriniz veya teknik destek ihtiyaçlarınız için 24 saat Türkiye’nin her yerinden bize ulaşabilirsiniz.
                   </p>
                 </div>
 
@@ -1337,7 +1329,7 @@ export default function App() {
                       <p className="text-base font-medium text-slate-900 leading-snug">
                         {companyInfo.address}
                       </p>
-                      <a href="#map-view" onClick={(e) => {e.preventDefault(); document.getElementById('google-map').scrollIntoView({behavior: 'smooth'})}} className="text-xs text-blue-600 font-bold hover:underline mt-1 block">
+                      <a href="#map-view" onClick={(e) => {e.preventDefault(); document.getElementById('google-map')?.scrollIntoView({behavior: 'smooth'})}} className="text-xs text-blue-600 font-bold hover:underline mt-1 block">
                         Haritada Göster ↓
                       </a>
                     </div>
@@ -1350,11 +1342,22 @@ export default function App() {
                     </div>
                     <div>
                       <p className="text-sm font-bold text-slate-400 uppercase">Telefon & WhatsApp</p>
-                      <a href={`tel:${companyInfo.phone}`} className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors">
-                        {companyInfo.phone}
-                      </a>
-                      <p className="text-xs text-green-600 font-medium mt-1 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 7/24 Ulaşılabilir
+                      <div className="flex flex-col gap-1">
+                        <div>
+                          <span className="text-[11px] font-semibold text-slate-400 uppercase mr-2">Sabit Hat</span>
+                          <a href={`tel:${companyInfo.phone}`} className="text-base font-bold text-slate-900 hover:text-blue-700 transition-colors">
+                            {companyInfo.phone}
+                          </a>
+                        </div>
+                        <div>
+                          <span className="text-[11px] font-semibold text-slate-400 uppercase mr-2">GSM / WhatsApp</span>
+                          <a href={`tel:${companyInfo.gsm}`} className="text-base font-bold text-slate-900 hover:text-blue-700 transition-colors">
+                            {companyInfo.gsm}
+                          </a>
+                        </div>
+                      </div>
+                      <p className="text-xs text-green-600 font-medium mt-2 flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 24 Saat Türkiye’nin Her Yerinden Ulaşılabilir
                       </p>
                     </div>
                   </div>
@@ -1421,10 +1424,12 @@ export default function App() {
                           <div className="space-y-1">
                               <label className="text-xs font-bold text-slate-500 uppercase">Konu</label>
                               <select className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-600 transition-colors" value={mainContactForm.subject} onChange={(e) => setMainContactForm({...mainContactForm, subject: e.target.value})}>
-                                <option value="">Konu Seçiniz...</option>
-                                <option value="Proje Teklifi">Proje Teklifi İstiyorum</option>
-                                <option value="Teknik Servis">Teknik Servis / Arıza</option>
-                                <option value="Genel Bilgi">Genel Bilgi</option>
+                                <option value="Malzeme teklifi iste">Malzeme teklifi iste</option>
+                                <option value="İnsan asansörleri">İnsan asansörleri</option>
+                                <option value="Yük asansörleri">Yük asansörleri</option>
+                                <option value="Araç asansörleri">Araç asansörleri</option>
+                                <option value="Yamaç asansörleri">Yamaç asansörleri</option>
+                                <option value="Villa & engelli asansörü">Villa & engelli asansörü</option>
                               </select>
                           </div>
                           <div className="space-y-1">
@@ -1514,7 +1519,7 @@ export default function App() {
                   <span className="font-bold text-lg">{companyInfo.name}</span>
                </div>
                <p className="text-xs leading-relaxed text-slate-400 max-w-xs">
-                  Güvenli, konforlu ve verimli dikey ulaşım çözümleri için mühendislik odaklı yaklaşım.
+                  Güvenli, konforlu ve verimli dikey ulaşım çözümleri için mühendislik odaklı yaklaşım. Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden hizmet.
                </p>
             </div>
             <div>
@@ -1543,7 +1548,7 @@ export default function App() {
          </div>
          <div className="mx-auto max-w-6xl px-6 border-t border-slate-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500">
             <span>© {new Date().getFullYear()} {companyInfo.name}. Tüm hakları saklıdır.</span>
-            <span>Mühendislik ve Tasarım: Withmor Teknika</span>
+            <span>Mühendislik ve Tasarım: Withmor</span>
          </div>
       </footer>
 
@@ -1576,11 +1581,12 @@ export default function App() {
                   <input required type="tel" placeholder="Telefon" value={quoteForm.phone} onChange={(e) => setQuoteForm({...quoteForm, phone: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
                </div>
                <select value={quoteForm.projectType} onChange={(e) => setQuoteForm({...quoteForm, projectType: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600 bg-white">
-                  <option>Konut Asansörü</option>
-                  <option>Yük Asansörü</option>
-                  <option>Hidrolik Sistem</option>
-                  <option>Panoramik Asansör</option>
-                  <option>Araç Platformu</option>
+                  <option value="Malzeme teklifi iste">Malzeme teklifi iste</option>
+                  <option value="İnsan asansörleri">İnsan asansörleri</option>
+                  <option value="Yük asansörleri">Yük asansörleri</option>
+                  <option value="Araç asansörleri">Araç asansörleri</option>
+                  <option value="Yamaç asansörleri">Yamaç asansörleri</option>
+                  <option value="Villa & engelli asansörü">Villa & engelli asansörü</option>
                </select>
                <div className="grid grid-cols-2 gap-3">
                   <input type="number" placeholder="Durak Sayısı" value={quoteForm.floorCount} onChange={(e) => setQuoteForm({...quoteForm, floorCount: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
