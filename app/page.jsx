@@ -38,7 +38,7 @@ function ElevatorAnimation() {
     { id: 2, label: "Yük asansörleri" },
     { id: 3, label: "Araç asansörleri" },
     { id: 4, label: "Yamaç asansörleri" },
-    { id: 5, label: "Villa engelli asansörü" },
+    { id: 5, label: "Villa asansörleri" },
   ];
 
   return (
