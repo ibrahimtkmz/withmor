@@ -33,11 +33,13 @@ const Icons = {
 // Withmor - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
+  // GÜNCELLENEN METİNLER
   const elevatorModels = [
-    { id: 4, label: "Yük Asansörleri" },
-    { id: 3, label: "Yük Platformları" },
-    { id: 2, label: "Villa Asansörleri" },
-    { id: 1, label: "Yatay Asansörler" },
+    { id: 1, label: "İnsan Asansörleri" },
+    { id: 2, label: "Yük Asansörleri" },
+    { id: 3, label: "Araç Asansörleri" },
+    { id: 4, label: "Yamaç Asansörleri" },
+    { id: 5, label: "Villa Engelli Asansörü" },
   ];
 
   return (
@@ -245,7 +247,7 @@ export default function App() {
       "Withmor, ulusal ve uluslararası standartlara (EN-81) uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu mühendislik hassasiyetiyle birleştiriyoruz.",
     phone: "444 37 59",
     gsm: "0 555 888 33 59",
-    email: "info@withmor.com",
+    email: "info@withmor.com.tr", // GÜNCELLENDİ
     address: "Ergene OSB, Çorlu / Tekirdağ",
     facebook: "https://www.facebook.com/TEKNIKALIFT",
     instagram: "https://www.instagram.com/withmorlift/",
@@ -1362,16 +1364,33 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* 3. E-Posta */}
+                  {/* 3. E-Posta – GÜNCELLENDİ */}
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
                       <Icons.Mail size={24} />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-slate-400 uppercase">E-Posta</p>
-                      <a href={`mailto:${companyInfo.email}`} className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors">
-                        {companyInfo.email}
-                      </a>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href="mailto:teknik@withmor.com.tr"
+                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
+                        >
+                          teknik@withmor.com.tr
+                        </a>
+                        <a
+                          href="mailto:muhasebe@withmor.com.tr"
+                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
+                        >
+                          muhasebe@withmor.com.tr
+                        </a>
+                        <a
+                          href="mailto:info@withmor.com.tr"
+                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
+                        >
+                          info@withmor.com.tr
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
