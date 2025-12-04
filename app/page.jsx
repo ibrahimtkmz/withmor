@@ -33,13 +33,12 @@ const Icons = {
 // Withmor - KURUMSAL WEB SİTESİ
 
 function ElevatorAnimation() {
-  // GÜNCELLENEN METİNLER
   const elevatorModels = [
-    { id: 1, label: "İnsan Asansörleri" },
-    { id: 2, label: "Yük Asansörleri" },
-    { id: 3, label: "Araç Asansörleri" },
-    { id: 4, label: "Yamaç Asansörleri" },
-    { id: 5, label: "Villa Engelli Asansörü" },
+    { id: 1, label: "İnsan asansörleri" },
+    { id: 2, label: "Yük asansörleri" },
+    { id: 3, label: "Araç asansörleri" },
+    { id: 4, label: "Yamaç asansörleri" },
+    { id: 5, label: "Villa engelli asansörü" },
   ];
 
   return (
@@ -57,7 +56,7 @@ function ElevatorAnimation() {
           <div className="mb-8 text-left w-full">
             <h3 className="text-lg font-bold text-slate-800 mb-2">Akıllı Dikey Ulaşım Sistemleri</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden güvenli ve konforlu çözümler.
+              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hattan ulaşılabilir güvenli ve konforlu çözümler.
             </p>
           </div>
 
@@ -77,7 +76,7 @@ function ElevatorAnimation() {
                 <div
                   key={index}
                   className="absolute left-4 right-4 border-t border-slate-400/40"
-                  style={{ top: `${(index + 1) * 18}%` }}
+                  style={{ top: `${(index + 1) * 16}%` }}
                 />
               ))}
 
@@ -122,37 +121,107 @@ function ElevatorAnimation() {
       </div>
 
       <style>{`
-        /* Asansör Hareketi */
+        /* Asansör Hareketi – 5 kat, 1. kattan başlayıp sırayla yukarı çıkıyor */
         @keyframes elevatorMove {
-          0%, 20% { transform: translateY(390%); }
-          25%, 45% { transform: translateY(292%); }
-          50%, 70% { transform: translateY(195%); }
-          75%, 95% { transform: translateY(98%); }
-          100% { transform: translateY(390%); }
+          0%, 10%   { transform: translateY(400%); }  /* Kat 1 (en alt) */
+          15%, 25%  { transform: translateY(300%); }  /* Kat 2 */
+          30%, 40%  { transform: translateY(200%); }  /* Kat 3 */
+          45%, 55%  { transform: translateY(100%); }  /* Kat 4 */
+          60%, 70%  { transform: translateY(0%); }    /* Kat 5 (en üst) */
+          75%, 100% { transform: translateY(400%); }  /* Geri 1. kata */
         }
 
-        /* Kat Işığı Animasyonları (Artık 4 model için) */
-        @keyframes floorLight4 { 
-          75%, 95% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); } 
-          0%, 74%, 96%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); box-shadow: none; }
-        }
-        @keyframes floorLight3 { 
-          50%, 70% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          0%, 49%, 71%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
-        }
-        @keyframes floorLight2 { 
-          25%, 45% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          0%, 24%, 46%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
-        }
+        /* Kat Işığı Animasyonları (5 model için senkron) */
         @keyframes floorLight1 { 
-          0%, 20% { background-color: #2563EB; color: white; border-color: #2563EB; transform: scale(1.1); box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5); }
-          21%, 100% { background-color: transparent; color: #94A3B8; border-color: #CBD5E1; transform: scale(1); }
+          0%, 10%, 75%, 100% {
+            background-color: #2563EB;
+            color: #FFFFFF;
+            border-color: #2563EB;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
+          }
+          11%, 74% {
+            background-color: transparent;
+            color: #94A3B8;
+            border-color: #CBD5E1;
+            transform: scale(1);
+            box-shadow: none;
+          }
+        }
+
+        @keyframes floorLight2 { 
+          15%, 25% {
+            background-color: #2563EB;
+            color: #FFFFFF;
+            border-color: #2563EB;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
+          }
+          0%, 14%, 26%, 100% {
+            background-color: transparent;
+            color: #94A3B8;
+            border-color: #CBD5E1;
+            transform: scale(1);
+            box-shadow: none;
+          }
+        }
+
+        @keyframes floorLight3 { 
+          30%, 40% {
+            background-color: #2563EB;
+            color: #FFFFFF;
+            border-color: #2563EB;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
+          }
+          0%, 29%, 41%, 100% {
+            background-color: transparent;
+            color: #94A3B8;
+            border-color: #CBD5E1;
+            transform: scale(1);
+            box-shadow: none;
+          }
+        }
+
+        @keyframes floorLight4 { 
+          45%, 55% {
+            background-color: #2563EB;
+            color: #FFFFFF;
+            border-color: #2563EB;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
+          }
+          0%, 44%, 56%, 100% {
+            background-color: transparent;
+            color: #94A3B8;
+            border-color: #CBD5E1;
+            transform: scale(1);
+            box-shadow: none;
+          }
+        }
+
+        @keyframes floorLight5 { 
+          60%, 70% {
+            background-color: #2563EB;
+            color: #FFFFFF;
+            border-color: #2563EB;
+            transform: scale(1.1);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
+          }
+          0%, 59%, 71%, 100% {
+            background-color: transparent;
+            color: #94A3B8;
+            border-color: #CBD5E1;
+            transform: scale(1);
+            box-shadow: none;
+          }
         }
         
-        div[data-floor="4"] .indicator-circle { animation: floorLight4 20s infinite; }
-        div[data-floor="3"] .indicator-circle { animation: floorLight3 20s infinite; }
-        div[data-floor="2"] .indicator-circle { animation: floorLight2 20s infinite; }
         div[data-floor="1"] .indicator-circle { animation: floorLight1 20s infinite; }
+        div[data-floor="2"] .indicator-circle { animation: floorLight2 20s infinite; }
+        div[data-floor="3"] .indicator-circle { animation: floorLight3 20s infinite; }
+        div[data-floor="4"] .indicator-circle { animation: floorLight4 20s infinite; }
+        div[data-floor="5"] .indicator-circle { animation: floorLight5 20s infinite; }
       `}</style>
     </div>
   );
@@ -193,7 +262,7 @@ export default function App() {
     eyebrow: "Premium Asansör Çözümleri",
     title: "Güvenli ve Estetik Dikey Ulaşım Mühendisliği",
     subtitle:
-      "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden mühendislik ve servis çözümleri.",
+      "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hat üzerinden ulaşılabilen mühendislik ve servis çözümleri.",
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
@@ -247,7 +316,7 @@ export default function App() {
       "Withmor, ulusal ve uluslararası standartlara (EN-81) uygun asansör sistemleri tasarlar, üretir ve anahtar teslim kurulum gerçekleştirir. Güvenlik, dayanıklılık ve konforu mühendislik hassasiyetiyle birleştiriyoruz.",
     phone: "444 37 59",
     gsm: "0 555 888 33 59",
-    email: "info@withmor.com.tr", // GÜNCELLENDİ
+    email: "info@withmor.com.tr",
     address: "Ergene OSB, Çorlu / Tekirdağ",
     facebook: "https://www.facebook.com/TEKNIKALIFT",
     instagram: "https://www.instagram.com/withmorlift/",
@@ -379,7 +448,67 @@ export default function App() {
       quote: "Sanayi tipi ağır yük asansörlerinde dayanıklılık bizim için öncelikti. 5 yıldır sorunsuz kullanıyoruz.",
       name: "Mehmet Öz",
       title: "Bölge Müdürü"
-    }
+    },
+    {
+      company: "Csm Metalurji",
+      quote: "Withmor ile yürütülen asansör projelerinde beklentilerimizi karşılayan çözümler sunuldu.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Como Cotton",
+      quote: "Üretim tesisimizde kullanılan asansör çözümlerinden memnunuz.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "3K Tekstil",
+      quote: "Tekstil üretim hattımızda yük taşıma ihtiyaçlarımızı güvenle karşılıyor.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Özşan Lojistik",
+      quote: "Lojistik operasyonlarımızda yük asansörleriyle verimlilik artışı sağlandı.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Azgur Gıda",
+      quote: "Gıda depolarımızda güvenilir asansör çözümleri sunuldu.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Akkardeşler Hafriyat",
+      quote: "Saha operasyonlarımızda kullanılan sistemlerden memnunuz.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Color Metal",
+      quote: "Endüstriyel tesisimiz için kurulan asansörler beklentilerimizi karşıladı.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Murem Tekstil",
+      quote: "Tekstil tesisimizde güvenli ve konforlu dikey taşıma sağlandı.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "Perge Tekstil Lüleburgaz",
+      quote: "Lüleburgaz tesisimizdeki asansör projelerinden memnunuz.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
+    {
+      company: "THY Tekstil Lüleburgaz",
+      quote: "Lüleburgaz’daki üretim tesislerimizde kullanılan çözümler güven veriyor.",
+      name: "Kurumsal Müşteri",
+      title: "Referans Proje"
+    },
   ]);
 
   const [googleReviews, setGoogleReviews] = useState([
@@ -394,7 +523,7 @@ export default function App() {
       id: 2,
       name: "Mehmet Demir",
       rating: 5,
-      text: "Bakım hizmetlerinden çok memnunuz. Teknik ekip çok bilgili ve 24 saat Türkiye’nin her yerinden ulaşılabilir durumda.",
+      text: "Bakım hizmetlerinden çok memnunuz. Teknik ekip çok bilgili ve Türkiye’nin her yerinden 24 saat 444 37 59 numaralı telefondan ulaşılabilir durumda.",
       date: "1 ay önce",
     },
     {
@@ -815,7 +944,7 @@ export default function App() {
             <div className="mb-6 flex flex-wrap gap-3">
               <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700 border border-blue-100 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                24 Saat Türkiye’nin Her Yerinden Servis
+                TR’nin Her Yerinden 24 Saat 444 37 59
               </div>
               <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-[11px] font-bold text-green-700 border border-green-100 shadow-sm">
                 <Icons.CheckCircle2 size={12} />
@@ -845,7 +974,7 @@ export default function App() {
                 </span>
               </button>
 
-              <a
+            <a
                 href="#projects"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-700 group"
               >
@@ -864,7 +993,7 @@ export default function App() {
               </div>
               <div className="border-l border-blue-700 pl-6">
                 <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-xs text-blue-200 font-medium">Türkiye’nin Her Yerinden Destek</p>
+                <p className="text-xs text-blue-200 font-medium">TR’nin Her Yerinden 24 Saat 444 37 59</p>
               </div>
             </div>
 
@@ -985,7 +1114,7 @@ export default function App() {
                        className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
                     >
                        <div className="text-left">
-                          <p className="text-[10px] font-medium text-white/90">24 Saat Türkiye’nin Her Yerinden</p>
+                          <p className="text-[10px] font-medium text-white/90">Türkiye’nin her yerinden 24 saat 444 37 59</p>
                           <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
                        </div>
                        <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
@@ -1043,24 +1172,21 @@ export default function App() {
                      <div>
                         <h3 className="text-xl font-bold text-slate-900 mb-3">Müşteri Odaklı Hizmet</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                           Müşteri memnuniyetini en üst düzeyde tutmak için satış öncesi ve sonrası kesintisiz destek sağlıyoruz. 24 saat Türkiye’nin her yerinden ulaşılabilir teknik servisimizle ihtiyaçlarınıza özel çözümler üretiyoruz.
+                           Müşteri memnuniyetini en üst düzeyde tutmak için satış öncesi ve sonrası kesintisiz destek sağlıyoruz. Türkiye’nin her yerinden 24 saat 444 37 59 numaralı telefondan ulaşabileceğiniz teknik servisimizle ihtiyaçlarınıza özel çözümler üretiyoruz.
                         </p>
                      </div>
                   </div>
                </div>
 
-               {/* Sağ: İllüstrasyon - GÜNCELLENDİ (Yerel Dosya Yolu) */}
-               <div className="relative h-80 lg:h-96 w-full lg:w-4/5 mx-auto rounded-xl overflow-hidden shadow-xl group bg-white border border-slate-100 flex items-center justify-center">
-                  <img 
-                     src="/images/home/neden-biz.jpg" 
-                     alt="Neden Biz" 
-                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                     onError={(e) => e.target.style.display = 'none'}
+               {/* Sağ: Video Alanı (NEDEN BİZ VİDEOSU) */}
+               <div className="relative h-80 lg:h-96 w-full lg:w-4/5 mx-auto rounded-xl overflow-hidden shadow-xl group bg-black border border-slate-100 flex items-center justify-center">
+                  <video
+                    className="absolute inset-0 w-full h-full object-cover"
+                    src="/videos/neden-biz.mp4"
+                    controls
+                    muted
+                    playsInline
                   />
-                  <div className="text-center text-slate-400">
-                      <Icons.Image className="w-20 h-20 mx-auto mb-2 opacity-50" />
-                      <span className="text-sm font-bold uppercase tracking-wider">Görsel Alanı</span>
-                  </div>
                </div>
             </div>
          </div>
@@ -1314,7 +1440,7 @@ export default function App() {
                     Projelerinizi Birlikte <br/> Hayata Geçirelim
                   </h2>
                   <p className="text-slate-600 text-lg leading-relaxed">
-                    Sorularınız, proje talepleriniz veya teknik destek ihtiyaçlarınız için 24 saat Türkiye’nin her yerinden bize ulaşabilirsiniz.
+                    Sorularınız, proje talepleriniz veya teknik destek ihtiyaçlarınız için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı telefondan bize ulaşabilirsiniz.
                   </p>
                 </div>
 
@@ -1359,12 +1485,12 @@ export default function App() {
                         </div>
                       </div>
                       <p className="text-xs text-green-600 font-medium mt-2 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 24 Saat Türkiye’nin Her Yerinden Ulaşılabilir
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Türkiye’nin her yerinden 24 saat 444 37 59 numaralı telefondan ulaşılabilir.
                       </p>
                     </div>
                   </div>
 
-                  {/* 3. E-Posta – GÜNCELLENDİ */}
+                  {/* 3. E-Posta */}
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
                       <Icons.Mail size={24} />
@@ -1372,22 +1498,13 @@ export default function App() {
                     <div>
                       <p className="text-sm font-bold text-slate-400 uppercase">E-Posta</p>
                       <div className="flex flex-col gap-1">
-                        <a
-                          href="mailto:teknik@withmor.com.tr"
-                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
-                        >
+                        <a href="mailto:teknik@withmor.com.tr" className="text-base font-bold text-slate-900 hover:text-blue-700 transition-colors">
                           teknik@withmor.com.tr
                         </a>
-                        <a
-                          href="mailto:muhasebe@withmor.com.tr"
-                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
-                        >
+                        <a href="mailto:muhasebe@withmor.com.tr" className="text-base font-bold text-slate-900 hover:text-blue-700 transition-colors">
                           muhasebe@withmor.com.tr
                         </a>
-                        <a
-                          href="mailto:info@withmor.com.tr"
-                          className="text-xl font-bold text-slate-900 hover:text-blue-700 transition-colors"
-                        >
+                        <a href="mailto:info@withmor.com.tr" className="text-base font-bold text-slate-900 hover:text-blue-700 transition-colors">
                           info@withmor.com.tr
                         </a>
                       </div>
@@ -1538,7 +1655,7 @@ export default function App() {
                   <span className="font-bold text-lg">{companyInfo.name}</span>
                </div>
                <p className="text-xs leading-relaxed text-slate-400 max-w-xs">
-                  Güvenli, konforlu ve verimli dikey ulaşım çözümleri için mühendislik odaklı yaklaşım. Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat Türkiye’nin her yerinden hizmet.
+                  Güvenli, konforlu ve verimli dikey ulaşım çözümleri için mühendislik odaklı yaklaşım. Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hattımızla hizmet.
                </p>
             </div>
             <div>
