@@ -999,7 +999,7 @@ export default function App() {
               </a>
             </div>
             {/* Dış sarmalayıcı: hem üstten ayır, hem genişliği sınırla */}
-            <div className="mb-8 grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 pr-3 text-white shadow-xl shadow-blue-900/10">
+            <div className="mb-8 grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 mr-3 text-white shadow-xl shadow-blue-900/10">
   <div>
     <p className="text-2xl font-bold text-white">30+</p>
     <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
