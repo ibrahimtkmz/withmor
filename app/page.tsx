@@ -5,7 +5,7 @@ import Footer from "../components/layout/Footer";
 
 import HeroSection from "../components/sections/HeroSection";
 import AboutSection from "../components/sections/AboutSection";
-import ElevatorAnimation from "../components/sections/ElevatorAnimation";
+import ElevatorAnimation from "../components/ElevatorAnimation";
 import WhyUsSection from "../components/WhyUsSection";
 import ServicesSection from "../components/ServicesSection";
 import ProjectsSection from "../components/ProjectsSection";
