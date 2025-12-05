@@ -801,20 +801,30 @@ export default function App() {
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-28 items-center justify-center">
-              <img
-                src="/images/withmor-logo.png"
-                alt="Withmor Logo"
-                className="h-8 w-auto object-contain"
-              />
-            </div>
-            <div className="leading-tight">
-              <p className="text-base font-bold tracking-tight text-slate-900">{companyInfo.name}</p>
-              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Elevator Solutions</p>
-            </div>
-          </div>
+  <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+
+    {/* LOGO + METİN */}
+    <div className="flex items-center gap-1.5">  {/* gap-3 → gap-1.5 */}
+      
+      {/* LOGO KUTUSU BÜYÜTÜLDÜ */}
+      <div className="flex h-12 w-32 items-center justify-center"> {/* h-10→h-12, w-28→w-32 */}
+        <img
+          src="/images/withmor-logo.png"
+          alt="Withmor Logo"
+          className="h-10 w-auto object-contain"  {/* h-8→h-10 */}
+        />
+      </div>
+
+      {/* YAN METİN */}
+      <div className="leading-tight">
+        <p className="text-base font-bold tracking-tight text-slate-900">{companyInfo.name}</p>
+        <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Elevator Solutions</p>
+      </div>
+    </div>
+
+  </div>
+</header>
+
 
           <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex h-full">
             {/* Kurumsal Dropdown Menü */}
