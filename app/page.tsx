@@ -1,26 +1,25 @@
 "use client";
 
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
+import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 
-import HeroSection from "../components/sections/HeroSection";
-import AboutSection from "../components/sections/AboutSection";
-import ElevatorAnimation from "../components/ElevatorAnimation";
-import WhyUsSection from "../components/WhyUsSection";
-import ServicesSection from "../components/ServicesSection";
-import ProjectsSection from "../components/ProjectsSection";
-import ReferencesSection from "../components/ReferencesSection";
-import ContactSection from "../components/ContactSection";
-import GallerySection from "../components/GallerySection";
+import { HeroSection } from "../components/sections/HeroSection";
+import { AboutSection } from "../components/sections/AboutSection";
+import { ElevatorAnimation } from "../components/sections/ElevatorAnimation";
+import { WhyUsSection } from "../components/sections/WhyUsSection";
+import { ServicesSection } from "../components/sections/ServicesSection";
+import { ProjectsSection } from "../components/sections/ProjectsSection";
+import { ReferencesSection } from "../components/sections/ReferencesSection";
+import { ContactSection } from "../components/sections/ContactSection";
+import { GallerySection } from "../components/sections/GallerySection";
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-white text-slate-800 overflow-x-hidden">
-
-      {/* TOP NAVBAR */}
+      {/* NAVBAR */}
       <Navbar />
 
-      {/* MAIN CONTENT */}
+      {/* İÇERİK */}
       <main>
         <HeroSection />
         <AboutSection />
