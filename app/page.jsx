@@ -471,8 +471,6 @@ Sürecin bir diğer önemli kısmı da resmi izinler ve mevzuat uyumudur. Withmo
   ]);
 
   const [activeService, setActiveService] = useState(0);
-  const [activeServiceModal, setActiveServiceModal] = useState(null);
-
   const [projects, setProjects] = useState([
     {
       name: "Skyline Residence Tower",
@@ -1337,14 +1335,26 @@ Sürecin bir diğer önemli kısmı da resmi izinler ve mevzuat uyumudur. Withmo
                      </p>
 
                      <div className="mt-auto pt-4 border-t border-slate-100">
-                        <button 
-                           onClick={() => setActiveServiceModal(service)}
-                           className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider hover:text-blue-700 transition-colors group/btn"
-                        >
-                           <span className="w-1 h-3 bg-blue-600 block group-hover/btn:h-5 transition-all"></span>
-                           Daha Fazla
-                           <Icons.ChevronRight className="w-4 h-4 text-slate-400 group-hover/btn:translate-x-1 transition-transform" />
-                        </button>
+                        <button
+  type="button"
+  onClick={() => {
+    if (typeof window !== "undefined") {
+      const elem = document.getElementById(`${service.id}-detay`);
+      if (elem) {
+        const headerOffset = 80;
+        const elementPosition = elem.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
+    }
+  }}
+  className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider hover:text-blue-700 transition-colors group/btn"
+>
+  <span className="w-1 h-3 bg-blue-600 block group-hover/btn:h-5 transition-all"></span>
+  Daha Fazla
+  <Icons.ChevronRight className="w-4 h-4 text-slate-400 group-hover/btn:translate-x-1 transition-transform" />
+</button>
+
                         {isLoggedIn && (
                            <button onClick={() => openEdit("service", index)} className="mt-2 text-[10px] text-slate-400 hover:text-slate-600 underline block">
                               Düzenle
@@ -1356,6 +1366,73 @@ Sürecin bir diğer önemli kısmı da resmi izinler ve mevzuat uyumudur. Withmo
             ))}
           </div>
         </section>
+                {/* HİZMET DETAY SAYFALARI – POPUP YERİNE SAYFA GİBİ */}
+        <section className="max-w-6xl mx-auto px-6 pb-20">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-8">
+            Ürün ve Hizmet Grupları – Detaylı Açıklamalar
+          </h2>
+
+          {services.map((service, index) => (
+            <article
+              key={service.id}
+              id={`${service.id}-detay`}
+              className={`py-12 border-t border-slate-200 ${index === 0 ? "border-t-0" : ""}`}
+            >
+              <div className="grid lg:grid-cols-3 gap-8 items-start">
+                {/* Sol: Görsel ve kısa bilgi */}
+                <div>
+                  <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm">
+                    {service.image ? (
+                      <>
+                        <img
+                          src={service.image}
+                          alt={service.name}
+                          className="w-full h-full object-cover"
+                          onError={handleImageError}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/0 to-transparent pointer-events-none" />
+                      </>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                        <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                          Hizmet Görseli
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    <h3 className="text-xl font-bold text-slate-900">{service.name}</h3>
+                    <p className="text-sm text-slate-500 leading-relaxed">
+                      {service.desc}
+                    </p>
+
+                    {isLoggedIn && (
+                      <button
+                        onClick={() => openEdit("service", index)}
+                        className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 hover:underline"
+                      >
+                        <Icons.Edit size={12} /> Bu Hizmeti Düzenle
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Sağ: Uzun SEO metni */}
+                <div className="lg:col-span-2">
+                  <h4 className="text-lg font-bold text-slate-900 mb-4">
+                    {service.name} Hakkında Detaylı Bilgi
+                  </h4>
+                  <p className="text-sm leading-relaxed text-slate-700 whitespace-pre-line">
+                    {service.longDesc}
+                  </p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+
 
         {/* Projeler - MEVCUT KOD */}
         <section id="projects" className="scroll-mt-24 max-w-6xl mx-auto px-6 py-20 bg-slate-50">
@@ -1839,38 +1916,7 @@ Sürecin bir diğer önemli kısmı da resmi izinler ve mevzuat uyumudur. Withmo
         </div>
       )}
 
-      {/* Hizmet Detay Popup (SEO için uzun metin + görsel) */}
-      {activeServiceModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-              <h3 className="text-lg font-bold text-slate-900">
-                {activeServiceModal.name} – Detaylı Hizmet Bilgisi
-              </h3>
-              <button
-                onClick={() => setActiveServiceModal(null)}
-                className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-              >
-                <Icons.X size={18} />
-              </button>
-            </div>
-
-            {/* Görsel */}
-            <div className="relative w-full aspect-[16/6] bg-slate-100 overflow-hidden">
-              {activeServiceModal.image ? (
-                <img
-                  src={activeServiceModal.image}
-                  alt={activeServiceModal.name}
-                  className="w-full h-full object-cover"
-                  onError={handleImageError}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-400">
-                  <Icons.Image className="w-10 h-10 mr-2" />
-                  <span className="text-xs font-semibold uppercase tracking-wider">Hizmet Görseli</span>
-                </div>
-              )}
-            </div>
+     
 
             {/* Metin */}
             <div className="p-6 space-y-4">
