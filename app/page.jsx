@@ -811,7 +811,7 @@ export default function App() {
               />
             </div>
             <div className="leading-tight">
-              <p className="text-base font-bold tracking-tight text-slate-900">{companyInfo.name}</p>
+              
               <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Elevator Solutions</p>
             </div>
           </div>
