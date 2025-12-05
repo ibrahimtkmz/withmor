@@ -5,13 +5,13 @@ import { Footer } from "../components/layout/Footer";
 
 import { HeroSection } from "../components/sections/HeroSection";
 import { AboutSection } from "../components/sections/AboutSection";
-import { ElevatorAnimation } from "../components/sections/ElevatorAnimation";
-import { WhyUsSection } from "../components/sections/WhyUsSection";
 import { ServicesSection } from "../components/sections/ServicesSection";
-import { ProjectsSection } from "../components/sections/ProjectsSection";
-import { ReferencesSection } from "../components/sections/ReferencesSection";
-import { ContactSection } from "../components/sections/ContactSection";
+import { ProjectSection } from "../components/sections/ProjectSection";
+import { ReferenceSection } from "../components/sections/ReferenceSection";
+import { WhyUsSection } from "../components/sections/WhyUsSection";
 import { GallerySection } from "../components/sections/GallerySection";
+import { ContactSection } from "../components/sections/ContactSection";
+import { ElevatorAnimation } from "../components/ElevatorAnimation";
 
 export default function Page() {
   return (
