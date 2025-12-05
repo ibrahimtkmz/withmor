@@ -998,21 +998,21 @@ export default function App() {
                 {hero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
+<div className="mb-8 max-w-md sm:max-w-lg grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10 mx-auto md:mx-0">
+  <div>
+    <p className="text-2xl font-bold text-white">30+</p>
+    <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
+  </div>
+  <div className="border-l border-blue-700 pl-6">
+    <p className="text-2xl font-bold text-white">2000+</p>
+    <p className="text-xs text-blue-200 font-medium">Tamamlanan Proje</p>
+  </div>
+  <div className="border-l border-blue-700 pl-6">
+    <p className="text-2xl font-bold text-white">24/7</p>
+    <p className="text-xs text-blue-200 font-medium">444 37 59</p>
+  </div>
+</div>
 
-            <div className="mb-8 grid grid-cols-3 gap-6 border-t border-slate-200 pt-8 mt-8 bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10">
-              <div>
-                <p className="text-2xl font-bold text-white">30+</p>
-                <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
-              </div>
-              <div className="border-l border-blue-700 pl-6">
-                <p className="text-2xl font-bold text-white">2000+</p>
-                <p className="text-xs text-blue-200 font-medium">Tamamlanan Proje</p>
-              </div>
-              <div className="border-l border-blue-700 pl-6">
-                <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-xs text-blue-200 font-medium">444 37 59</p>
-              </div>
-            </div>
 
             {isLoggedIn && (
               <button
