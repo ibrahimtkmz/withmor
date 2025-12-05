@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
@@ -81,13 +81,17 @@ function ElevatorAnimation() {
 
               {/* Asansör Kabini */}
               <div
-                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center"
+                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
                 style={{ top: '6%', animation: "elevatorMove 20s ease-in-out infinite" }}
               >
                 {/* Kabin Kapısı Efekti */}
                 <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
-                <div className="text-xs font-bold text-white tracking-widest bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
-                  WL
+                <div className="relative w-full h-full flex items-center justify-center px-2">
+                  <img
+                    src="/images/withmor-logo.png"
+                    alt="Withmor Logo"
+                    className="w-full h-full object-contain opacity-95"
+                  />
                 </div>
               </div>
 
@@ -106,8 +110,12 @@ function ElevatorAnimation() {
                   data-floor={item.id}
                   className="floor-indicator flex items-center gap-3 group w-full"
                 >
-                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center text-[10px] font-bold text-slate-400 transition-all duration-300 text-center px-1">
-                    WL
+                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all duration-300 bg-white overflow-hidden">
+                    <img
+                      src="/images/withmor-logo.png"
+                      alt="Withmor Logo"
+                      className="w-6 h-6 object-contain"
+                    />
                   </div>
                   <span className="indicator-text text-xs font-medium text-slate-400 tracking-wide whitespace-nowrap transition-colors">
                     {item.label}
@@ -322,59 +330,76 @@ export default function App() {
     whatsapp: "https://wa.me/905558883359"
   });
 
-  // HİZMETLER İÇİN YEREL GÖRSELLER (DÜZELTİLDİ)
+  // HİZMETLER İÇİN YEREL GÖRSELLER + UZUN SEO METİNLERİ
   const [services, setServices] = useState([
     {
       id: "hidrolik-yuk",
       name: "Hidrolik Yük Asansörü",
-      desc: "Ağır sanayi ve depolar için yüksek taşıma kapasitesine sahip, dayanıklı ve güvenli hidrolik kaldırma çözümleri sunar. Zorlu çalışma koşullarında dahi performansını koruyan sistemlerimiz, uzun ömürlü bileşenler ve gelişmiş güvenlik donanımlarıyla bakım maliyetlerini azaltmaya yardımcı olur.",
+      desc: "Ağır sanayi ve depolar için yüksek taşıma kapasitesine sahip, dayanıklı ve güvenli hidrolik kaldırma çözümleri.",
       image: "/images/services/hidrolik-yuk.jpg",
+      longDesc:
+        "Hidrolik yük asansörleri, özellikle sanayi tesisleri, lojistik depoları ve üretim hatları gibi ağır hizmet gerektiren alanlarda maksimum güvenlik ve dayanıklılık sunmak için tercih edilir. Withmor hidrolik yük asansörleri, yüksek taşıma kapasiteleri, sessiz çalışma karakteristikleri ve titreşimsiz kalkış-duruş kabiliyeti ile operatörlerin işini kolaylaştırırken, ürünlerinizin hasarsız ve kontrollü bir şekilde taşınmasını sağlar. Güçlü hidrolik üniteler, aşırı yük koruma sistemleri ve EN-81 standartlarına uygun emniyet bileşenleri sayesinde, en yoğun çalışma koşullarında dahi güvenilir performans elde edilir. Mevcut bina altyapısına uyumlu, projeye özel kuyu ve platform tasarımlarıyla hem yeni yatırımlarda hem de modernizasyon projelerinde ideal çözümler sunuyoruz. Hidrolik yük asansörlerimiz, uzun ömürlü kullanım ve düşük bakım maliyeti hedeflenerek tasarlanmakta, ağır sanayi ortamlarının zorlu koşullarına dayanacak şekilde üretilmektedir."
     },
     {
       id: "mrl-yuk",
       name: "Makine Dairesiz Yük Asansörü",
-      desc: "Bina hacminden tasarruf sağlayan, dişlisiz motor teknolojisiyle enerji verimli ve sessiz çalışan yük asansörleri sağlar. Makine dairesi gerektirmeyen kompakt tasarımı sayesinde projelerde mimari esneklik sunarken, yoğun kullanımda dahi stabil ve konforlu bir taşıma deneyimi oluşturur.",
+      desc: "Bina hacminden tasarruf sağlayan, dişlisiz motor teknolojisiyle enerji verimli ve sessiz çalışan yük asansörleri.",
       image: "/images/services/mrl-yuk.jpg",
+      longDesc:
+        "Makine dairesiz yük asansörleri, modern mimarinin gerektirdiği alan verimliliğini sağlarken, işletmeler için enerji tasarrufu ve düşük işletme maliyeti avantajı sunar. Withmor MRL yük asansörleri, dişlisiz motor teknolojisi sayesinde daha az enerji tüketir, sessiz çalışma karakteri ile kullanıcı konforunu artırır ve bina içinde ekstra makine dairesi ihtiyacını ortadan kaldırır. Bu sayede hem yeni projelerde tasarım esnekliği kazanılır hem de mevcut binalarda yapılacak iyileştirme çalışmalarında minimum inşaat müdahalesiyle maksimum verim elde edilir. Gelişmiş kumanda sistemleri, hassas seviyeleme özelliği ve frekans kontrollü sürücüler ile yükleriniz her katta güvenle ve yumuşak bir şekilde taşınır. Yüksek yoğunluklu kullanım senaryoları için tasarlanan bu sistemler, lojistik merkezleri, otopark blokları, AVM servis alanları ve üretim tesisleri için ideal çözümdür. Makine dairesiz yük asansörü seçimi, hem mimari hem de işletme tarafında uzun vadede önemli avantajlar sağlar."
     },
     {
       id: "homelift",
       name: "Homelift",
-      desc: "Müstakil evler, villalar ve dubleks daireler için özel tasarlanmış, minimum kuyu dibi gerektiren konforlu ev asansörleri sunar. Sessiz çalışma karakteri ve zarif kabin tasarımlarıyla yaşam alanınıza değer katan homelift çözümleri, yaşlı ve engelli bireyler için erişilebilirliği önemli ölçüde artırır.",
+      desc: "Müstakil evler, villalar ve dubleks daireler için özel tasarlanmış, minimum kuyu dibi gerektiren konforlu ev asansörleri.",
       image: "/images/services/homelift.jpg",
+      longDesc:
+        "Homelift çözümlerimiz, müstakil evler, villalar, dubleks ve triplex konutlar için hem konfor hem de prestij sağlayan özel asansör sistemleridir. Geleneksel asansörlere kıyasla daha az kuyu dibi ve tepe boşluğu ihtiyacı duyan homelift sistemleri, mevcut yapınıza minimum müdahale ile entegre edilebilir. Şık kabin tasarımları, cam şaft seçenekleri ve farklı renk-malzeme kombinasyonları sayesinde iç mimari ile uyumlu, estetik bir görünüm sunar. Özellikle yaşlı bireyler veya hareket kısıtlılığı olan kullanıcılar için ev içi hareket özgürlüğünü artırır, katlar arasında güvenli ve zahmetsiz ulaşım sağlar. Düşük enerji tüketimi, sessiz çalışma karakteri ve kolay bakım avantajları ile homelift sistemleri, yaşam alanlarınızı bir üst seviyeye taşırken aynı zamanda mülk değerini de artırır. Withmor olarak, her projede kullanıcı ihtiyaçlarını dinliyor, evinizin mimarisine en uygun çözümü anahtar teslim olarak hayata geçiriyoruz."
     },
     {
       id: "insan-asansoru",
       name: "İnsan Asansörü",
-      desc: "Konutlar, iş merkezleri ve oteller için EN-81 standartlarına uygun, konforlu ve güvenli yolcu taşıma sistemleri sağlar. Trafik analizine göre optimize edilen hız ve kapasite değerleriyle, bina içi sirkülasyonu rahatlatırken titreşimsiz ve konforlu bir seyahat deneyimi sunar.",
+      desc: "Konutlar, iş merkezleri ve oteller için EN-81 standartlarına uygun, konforlu ve güvenli yolcu taşıma sistemleri.",
       image: "/images/services/insan-asansoru.jpg",
+      longDesc:
+        "İnsan asansörleri, konut blokları, iş merkezleri, oteller ve karma kullanımlı yapılarda kullanıcıların günlük hayatındaki en kritik dikey ulaşım elemanıdır. Withmor yolcu asansörleri, EN-81 standartlarına uygun güvenlik donanımları, konfor odaklı kabin tasarımları ve enerji verimli tahrik sistemleriyle öne çıkar. Kabin içi aydınlatmadan buton dizaynına, kapı geçiş hızından sürüş konforuna kadar her detay, kullanıcı memnuniyeti ve güvenliği göz önünde bulundurularak tasarlanır. Farklı hız ve taşıma kapasitesi seçenekleriyle binanın trafik yoğunluğuna uygun çözümler sunulur, grup kontrol sistemleriyle yoğun saatlerde bekleme süreleri minimuma indirilir. Sessiz ve titreşimsiz çalışma sağlayan teknolojilerimiz, özellikle konut ve otel uygulamalarında konforu üst seviyeye taşır. Düzenli bakım ve uzaktan izleme opsiyonlarıyla insan asansörleriniz, yapı ömrü boyunca güvenle hizmet vermeye devam eder."
     },
     {
       id: "konveyor",
       name: "Konveyör Asansörler",
-      desc: "Lojistik merkezleri ve fabrikalarda sürekli malzeme akışını sağlamak için tasarlanan dikey konveyör sistemleri sunar. Otomasyon altyapılarına entegre çalışabilen bu çözümler, üretim hatları arasında ürün transferini hızlandırarak verimliliği ve süreç takibini güçlendirir.",
+      desc: "Lojistik merkezleri ve fabrikalarda sürekli malzeme akışını sağlamak için tasarlanan dikey konveyör sistemleri.",
       image: "/images/services/konveyor.jpg",
+      longDesc:
+        "Konveyör asansörler, özellikle lojistik merkezleri, e-ticaret depoları ve üretim tesislerinde kutu, koli, kaset veya palet gibi malzemelerin katlar arasında kesintisiz ve otomatik olarak taşınması için tasarlanır. Withmor konveyör asansör çözümleri, hat içi otomasyon sistemleri ile entegre çalışarak malzeme akışını hızlandırır, insan gücüne bağımlılığı azaltır ve operasyonel verimliliği önemli ölçüde artırır. Sürekli döngüsel çalışmaya uygun mekanik tasarım, yüksek performanslı motor ve sürücü grupları, sensör destekli güvenlik sistemleri ile hem işletme güvenliği hem de proses sürekliliği güvence altına alınır. Farklı ürün boyutlarına ve depo düzenine göre projeye özel taşıyıcı platform ve konveyör kombinasyonları geliştirilebilir. Bu sayede, hat tasarımınız bozulmadan dikey taşımayı sistemin doğal bir parçası haline getirir, depo içi lojistikte rekabet avantajı sağlayan esnek ve ölçeklenebilir çözümler sunarız."
     },
     {
       id: "panoramik",
       name: "Panoramik Asansörler",
-      desc: "AVM ve plazalar için mimari estetiği tamamlayan, cam kabinli ve geniş görüş açılı prestij asansörleri sunar. Bina cephesine değer katan bu sistemler, kullanıcıya ferah bir manzara deneyimi sağlarken, güvenlik ve konfor unsurlarından ödün vermez.",
+      desc: "AVM ve plazalar için mimari estetiği tamamlayan, cam kabinli ve geniş görüş açılı prestij asansörleri.",
       image: "/images/services/panoramik.jpg",
+      longDesc:
+        "Panoramik asansörler, binaların mimari karakterini öne çıkaran, kullanıcıya sadece bir ulaşım aracı değil aynı zamanda deneyim sunan prestij çözümleridir. Cam kabinler, geniş görüş açıları ve özel aydınlatma senaryoları ile AVM’ler, oteller, iş merkezleri ve rezidans projeleri için önemli bir tasarım unsuru haline gelir. Withmor panoramik asansörleri, taşıyıcı konstrüksiyondan cam seçimlerine kadar tüm bileşenleriyle hem estetik hem de güvenlik kriterleri dikkate alınarak tasarlanır. Dairesel, yarım daire veya köşeli kabin formlarıyla mimarın tasarım diline uyum sağlanır; paslanmaz çelik, cam ve özel kaplama seçenekleriyle benzersiz görünümler elde edilir. Yüksek konforlu sürüş karakteri, sessiz motor teknolojisi ve hassas seviyeleme sistemi ile kullanıcılar katlar arası geçişi konforlu bir seyahat deneyimi olarak algılar. Gece ve gündüz farklı ambiyanslar oluşturmak için LED tabanlı kabin içi ve şaft aydınlatmaları da opsiyonel olarak projeye dahil edilebilir."
     },
     {
       id: "yatay-yamac",
       name: "Yatay Yamaç Asansörler",
-      desc: "Eğimli arazilerde, sahil tesislerinde veya peyzaj projelerinde ulaşımı kolaylaştıran özel raylı sistemler sunar. Arazi yapısına göre projelendirilen yamaç asansörleri, hem mimari projeye uyumlu hem de dış mekân koşullarına dayanıklı çözümlerle erişilebilirlik sağlar.",
+      desc: "Eğimli arazilerde, sahil tesislerinde veya peyzaj projelerinde ulaşımı kolaylaştıran özel raylı sistemler.",
       image: "/images/services/yatay-yamac.jpg",
+      longDesc:
+        "Yatay ve yamaç asansörleri, eğimli arazilerde konforlu ve güvenli ulaşım ihtiyacını karşılamak üzere geliştirilen özel raylı sistem çözümleridir. Sahil tesisleri, teraslı yerleşimler, peyzajı güçlü oteller ve topoğrafyası zor alanlarda, kullanıcıların merdivenle kat etmek zorunda kaldığı uzun ve yorucu güzergâhlar bu sistemlerle konforlu bir yolculuğa dönüşür. Withmor yatay-yamaç asansörleri, dış mekân koşullarına dayanıklı malzemeler, korozyon önleyici yüzey kaplamaları ve iklim koşullarına özel tasarım prensipleriyle üretilir. Kabin tasarımları, açık veya kapalı formda, proje konseptine uygun olarak şekillendirilebilir. Güçlü çekiş sistemi, gelişmiş frenleme mekanizmaları ve emniyet sensörleri ile hat boyunca güvenli hareket sağlanır. Hem kullanıcı deneyimini iyileştiren hem de proje alanlarının erişilebilirliğini artıran bu sistemler, özellikle turizm ve üst segmente hitap eden konut projelerinde önemli bir katma değer oluşturur."
     },
     {
       id: "ozel-projeler",
       name: "Özel Projeler",
-      desc: "Standart dışı kuyu ölçüleri veya özel taşıma ihtiyaçlarınız için terzi işi mühendislik ve tasarım çözümleri geliştirir. Projenizin mimari ve teknik gerekliliklerine göre tamamen size özgü çözümler üreterek, hem işlevselliği hem de estetiği tek bir yapıda buluşturmayı hedefler.",
+      desc: "Standart dışı kuyu ölçüleri veya özel taşıma ihtiyaçlarınız için terzi işi mühendislik ve tasarım çözümleri.",
       image: "/images/services/ozel-projeler.jpg",
+      longDesc:
+        "Özel projeler, standart katalog çözümlerinin yeterli olmadığı durumlarda, binanın mimari ve yapısal koşullarına tam uyum sağlayan, tamamen projeye özgü olarak geliştirilen asansör ve platform sistemlerini kapsar. Withmor mühendislik ekibi, sıra dışı kuyu ölçüleri, özel kabin ebatları, farklı taşıma senaryoları veya estetik beklentiler için kapsamlı bir fizibilite ve tasarım süreci yürütür. Bu süreçte, mimar, statik proje ekibi ve işveren temsilcileriyle birlikte çalışılarak hem teknik hem görsel gereksinimler aynı potada eritilir. Örneğin tarihi yapılar, sınırlı kuyu alanına sahip binalar veya çok amaçlı kullanım senaryoları için kompakt, hafif ve modüler çözümler geliştirilir. Proje bazlı üretilen bu sistemlerde güvenlik standartlarından taviz verilmez; tüm hesaplamalar ve komponent seçimleri ulusal ve uluslararası normlara uygun şekilde yapılır. Özel projeler için sunduğumuz terzi işi çözümler, binanıza özgü benzersiz ve yüksek katma değerli bir dikey ulaşım deneyimi oluşturur."
     },
   ]);
 
   const [activeService, setActiveService] = useState(0);
+  const [activeServiceModal, setActiveServiceModal] = useState(null);
 
   const [projects, setProjects] = useState([
     {
@@ -547,6 +572,16 @@ export default function App() {
   };
   // ----------------------------------------
 
+  // Admin login kalıcılığı (sayfa yenileyince çıkış yapmaması için)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = window.localStorage.getItem("withmor_admin");
+      if (stored === "true") {
+        setIsLoggedIn(true);
+      }
+    }
+  }, []);
+
   // Yeni Fonksiyon: Bölüm Kaydırma ve Tab Değiştirme
   const scrollToAbout = (tabKey) => {
     setActiveAboutTab(tabKey);
@@ -599,6 +634,9 @@ export default function App() {
       setIsLoggedIn(true);
       setShowLogin(false);
       setLoginError("");
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("withmor_admin", "true");
+      }
     } else {
       setLoginError("Kullanıcı adı veya şifre hatalı!");
     }
@@ -606,6 +644,9 @@ export default function App() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("withmor_admin");
+    }
   };
 
   const [editModal, setEditModal] = useState({ open: false, type: null, index: null });
@@ -630,14 +671,14 @@ export default function App() {
   };
 
   const openAdd = (type) => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && type !== "reference") {
       setShowLogin(true);
       return;
     }
     setEditModal({ open: true, type, index: null });
 
     if (type === "service")
-      setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "" });
+      setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "", longDesc: "" });
     if (type === "project") setTempValue({ name: "", type: "", desc: "" });
     if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
     if (type === "gallery") setTempValue({ image: "" });
@@ -761,9 +802,13 @@ export default function App() {
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-900 text-sm font-bold text-white shadow-md">
-              WL
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-28 items-center justify-center">
+              <img
+                src="/images/withmor-logo.png"
+                alt="Withmor Logo"
+                className="h-8 w-auto object-contain"
+              />
             </div>
             <div className="leading-tight">
               <p className="text-base font-bold tracking-tight text-slate-900">{companyInfo.name}</p>
@@ -1215,7 +1260,7 @@ export default function App() {
 
                      <div className="mt-auto pt-4 border-t border-slate-100">
                         <button 
-                           onClick={() => setShowQuoteModal(true)}
+                           onClick={() => setActiveServiceModal(service)}
                            className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider hover:text-blue-700 transition-colors group/btn"
                         >
                            <span className="w-1 h-3 bg-blue-600 block group-hover/btn:h-5 transition-all"></span>
@@ -1296,11 +1341,7 @@ export default function App() {
                  <div>
                     <div className="flex items-center gap-2 mb-6">
                        <h2 className="text-2xl font-bold text-white">Kurumsal Referanslar</h2>
-                       {isLoggedIn && (
-                         <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700">
-                           <Icons.Plus size={10}/> Ekle
-                         </button>
-                       )}
+                       <button onClick={() => openAdd("reference")} className="flex items-center gap-1 text-[10px] bg-blue-800 border border-blue-700 text-blue-200 px-2 py-0.5 rounded font-bold hover:bg-blue-700"><Icons.Plus size={10}/> Ekle</button>
                     </div>
 
                     <div className="space-y-4">
@@ -1493,15 +1534,15 @@ export default function App() {
                   <p className="text-sm font-bold text-slate-900 mb-4">Sosyal Medyada Biz</p>
                   <div className="flex flex-wrap gap-3">
                     {/* WhatsApp */}
-                    <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-1 px-5 py-3 rounded-lg bg-[#25D366] text-white hover:bg-[#128C7E] transition-all transform hover:-translate-y-1 shadow-md shadow-green-100">
+                    <a href={companyInfo.whatsapp} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#25D366] text-white hover:bg-[#128C7E] transition-all transform hover:-translate-y-1 shadow-md shadow-green-100">
                       <Icons.MessageCircle size={20} /> <span className="font-bold text-sm">WhatsApp</span>
                     </a>
                     {/* Facebook */}
-                    <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-1 px-5 py-3 rounded-lg bg-[#1877F2] text-white hover:bg-[#166FE5] transition-all transform hover:-translate-y-1 shadow-md shadow-blue-100">
+                    <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#1877F2] text-white hover:bg-[#166FE5] transition-all transform hover:-translate-y-1 shadow-md shadow-blue-100">
                       <Icons.Facebook size={20} /> <span className="font-bold text-sm">Facebook</span>
                     </a>
                     {/* Instagram */}
-                    <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-1 px-5 py-3 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white hover:opacity-90 transition-all transform hover:-translate-y-1 shadow-md shadow-pink-100">
+                    <a href={companyInfo.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white hover:opacity-90 transition-all transform hover:-translate-y-1 shadow-md shadow-pink-100">
                       <Icons.Instagram size={20} /> <span className="font-bold text-sm">Instagram</span>
                     </a>
                   </div>
@@ -1626,8 +1667,14 @@ export default function App() {
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
          <div className="mx-auto max-w-6xl px-6 grid md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-2">
-               <div className="flex items-center gap-1 mb-4 text-white">
-                  <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center font-bold text-xs">WL</div>
+               <div className="flex items-center gap-2 mb-4 text-white">
+                  <div className="h-8 w-24 flex items-center">
+                    <img
+                      src="/images/withmor-logo.png"
+                      alt="Withmor Logo"
+                      className="h-8 w-auto object-contain"
+                    />
+                  </div>
                   <span className="font-bold text-lg">{companyInfo.name}</span>
                </div>
                <p className="text-xs leading-relaxed text-slate-400 max-w-xs">
@@ -1686,9 +1733,7 @@ export default function App() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
             <h3 className="mb-1 text-lg font-bold text-slate-900">Proje Teklifi Al</h3>
-            <p className="mb-5 text-xs text-slate-500">
-              Ürün ve hizmet gruplarımızla ilgili detaylı fiyat, proje ve teknik bilgi talebiniz için formu doldurabilirsiniz. Uzman ekibimiz ihtiyaçlarınızı analiz ederek, en uygun asansör çözümü ve keşif süreci hakkında WhatsApp üzerinden size geri dönüş sağlayacaktır.
-            </p>
+            <p className="mb-5 text-xs text-slate-500">Bilgileri doldurun, WhatsApp üzerinden uzmanlarımız size ulaşsın.</p>
             <form onSubmit={handleQuoteSubmit} className="space-y-3">
                <div className="grid grid-cols-2 gap-3">
                   <input required type="text" placeholder="Ad Soyad" value={quoteForm.name} onChange={(e) => setQuoteForm({...quoteForm, name: e.target.value})} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
@@ -1715,6 +1760,76 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Hizmet Detay Popup (SEO için uzun metin + görsel) */}
+      {activeServiceModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900">
+                {activeServiceModal.name} – Detaylı Hizmet Bilgisi
+              </h3>
+              <button
+                onClick={() => setActiveServiceModal(null)}
+                className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+              >
+                <Icons.X size={18} />
+              </button>
+            </div>
+
+            {/* Görsel */}
+            <div className="relative w-full aspect-[16/6] bg-slate-100 overflow-hidden">
+              {activeServiceModal.image ? (
+                <img
+                  src={activeServiceModal.image}
+                  alt={activeServiceModal.name}
+                  className="w-full h-full object-cover"
+                  onError={handleImageError}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                  <Icons.Image className="w-10 h-10 mr-2" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Hizmet Görseli</span>
+                </div>
+              )}
+            </div>
+
+            {/* Metin */}
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-slate-600 leading-relaxed">
+                {activeServiceModal.longDesc || activeServiceModal.desc}
+              </p>
+
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4">
+                <div className="text-xs text-slate-500">
+                  Bu içerik SEO uyumlu olarak hazırlanmış olup, yönetici girişi ile panel üzerinden düzenlenebilir.
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveServiceModal(null)}
+                    className="px-4 py-2 rounded-lg text-xs font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50"
+                  >
+                    Kapat
+                  </button>
+                  <button
+                    onClick={() => {
+                      // İlgili hizmeti düzenleme modunda aç
+                      const index = services.findIndex(s => s.id === activeServiceModal.id);
+                      if (index !== -1) {
+                        openEdit("service", index);
+                      }
+                    }}
+                    className="px-4 py-2 rounded-lg text-xs font-semibold bg-blue-900 text-white hover:bg-blue-800 flex items-center gap-1"
+                  >
+                    <Icons.Edit size={12} /> İçeriği Düzenle
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit Modal - GÜNCELLENDİ (Dinamik İçerik Yönetimi) */}
       {editModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -1737,10 +1852,11 @@ export default function App() {
                            key === 'text2' ? 'Paragraf 2' :
                            key === 'quote' ? 'Yorum' :
                            key === 'company' ? 'Şirket' :
+                           key === 'longDesc' ? 'Uzun Açıklama (SEO)' :
                            key}
                        </label>
-                       {key === "desc" || key === "quote" || key === "about" || key.startsWith("text") || key === "longText" ? (
-                          <textarea rows={key === "longText" ? 8 : 4} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
+                       {key === "desc" || key === "quote" || key === "about" || key.startsWith("text") || key === "longText" || key === "longDesc" ? (
+                          <textarea rows={key === "longText" || key === "longDesc" ? 8 : 4} value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
                        ) : (
                           <input type="text" value={tempValue[key]} onChange={(e) => setTempValue(prev => ({...prev, [key]: e.target.value}))} className="w-full rounded border border-slate-200 p-2 text-xs outline-none focus:border-blue-600" />
                        )}
@@ -1748,11 +1864,11 @@ export default function App() {
                   );
                })}
             </div>
-            <div className="mt-6 flex justify_between gap-3">
+            <div className="mt-6 flex justify-between gap-3">
                {editModal.index !== null && ["service", "project", "reference", "gallery"].includes(editModal.type) ? (
                   <button onClick={handleDelete} className="rounded border border-red-200 text-red-600 px-4 py-2 text-xs font-bold hover:bg-red-50 flex items-center gap-1"><Icons.Trash size={12}/> Sil</button>
                ) : <div/>}
-               <div className="flex gap-2 ml-auto">
+               <div className="flex gap-2">
                   <button onClick={() => setEditModal({open: false, type: null, index: null})} className="rounded border border-slate-200 text-slate-600 px-4 py-2 text-xs font-bold hover:bg-slate-50">Vazgeç</button>
                   <button onClick={saveEdit} className="rounded bg-blue-900 text-white px-6 py-2 text-xs font-bold hover:bg-blue-800">{editModal.index === null ? "Ekle" : "Kaydet"}</button>
                </div>
