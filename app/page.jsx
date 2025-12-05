@@ -269,7 +269,7 @@ export default function App() {
     eyebrow: "Premium Asansör Çözümleri",
     title: "Güvenli ve Estetik Dikey Ulaşım Mühendisliği",
     subtitle:
-      "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hat üzerinden ulaşılabilen mühendislik ve servis çözümleri.",
+      "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler, mühendislik ve servis çözümleri.",
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
@@ -1134,9 +1134,9 @@ export default function App() {
                        className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
                     >
                        <div className="text-left">
-                          <p className="text-[10px] font-medium text-white/90">Türkiye’nin her yerinden 24 saat 444 37 59</p>
+                          <p className="text-[10px] font-medium text-white/90"></p>
                           <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
-                       </div>
+                       <div>
                        <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
                           <Icons.MessageCircle size={20} className="text-white" />
                        </div>
