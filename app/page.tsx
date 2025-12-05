@@ -1,63 +1,52 @@
 "use client";
 
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection";
-import AboutSection from "./components/AboutSection";
-import ElevatorAnimation from "./components/ElevatorAnimation";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import AboutSection from "../components/AboutSection";
+import ElevatorAnimation from "../components/ElevatorAnimation";
 
-import WhyUsSection from "./components/WhyUsSection";
-import ServicesSection from "./components/ServicesSection";
-import ProjectsSection from "./components/ProjectsSection";
-import ReferencesSection from "./components/ReferencesSection";
-import ContactSection from "./components/ContactSection";
-import GallerySection from "./components/GallerySection";
+import WhyUsSection from "../components/WhyUsSection";
+import ServicesSection from "../components/ServicesSection";
+import ProjectsSection from "../components/ProjectsSection";
+import ReferencesSection from "../components/ReferencesSection";
+import ContactSection from "../components/ContactSection";
+import GallerySection from "../components/GallerySection";
 
-// Modals (hepsi tek dosyada ya da ayrı ayrı olabilir, sen hangisini kullandıysan)
-import {
-  LoginModal,
-  QuoteModal,
-  ServiceDetailModal,
-  EditModal,
-} from "./components/Modals";
+import Footer from "../components/Footer";
+// Modallar ayrı bir dosyadaysa açabilirsin:
+// import Modals from "../components/Modals";
 
 export default function Page() {
   return (
-    <main className="w-full min-h-screen bg-white overflow-x-hidden">
-      {/* NAVBAR */}
+    <div className="min-h-screen bg-white text-slate-800 overflow-x-hidden">
+      {/* Üst Menü */}
       <Navbar />
 
-      {/* HERO */}
-      <HeroSection />
+      {/* İçerik */}
+      <main>
+        <HeroSection />
+        <AboutSection />
 
-      {/* ABOUT */}
-      <AboutSection />
+        {/* Asansör animasyonu ayrı component ise */}
+        <section className="py-12">
+          <div className="mx-auto max-w-6xl px-6">
+            <ElevatorAnimation />
+          </div>
+        </section>
 
-      {/* ELEVATOR ANIMATION */}
-      <ElevatorAnimation />
+        <WhyUsSection />
+        <ServicesSection />
+        <ProjectsSection />
+        <ReferencesSection />
+        <ContactSection />
+        <GallerySection />
+      </main>
 
-      {/* WHY US */}
-      <WhyUsSection />
+      {/* Alt Bilgi */}
+      <Footer />
 
-      {/* SERVICES */}
-      <ServicesSection />
-
-      {/* PROJECTS */}
-      <ProjectsSection />
-
-      {/* REFERENCES */}
-      <ReferencesSection />
-
-      {/* CONTACT */}
-      <ContactSection />
-
-      {/* GALLERY */}
-      <GallerySection />
-
-      {/* GLOBAL MODALS */}
-      <LoginModal />
-      <QuoteModal />
-      <ServiceDetailModal />
-      <EditModal />
-    </main>
+      {/* Eğer modalları ayrı component olarak böldüysek: */}
+      {/* <Modals /> */}
+    </div>
   );
 }
