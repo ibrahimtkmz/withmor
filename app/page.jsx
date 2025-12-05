@@ -1,5 +1,4 @@
-kodu eklediğimde sadece galeri alanı gözüktü kodu sana yeniden atıyorum bu kodun içerisinde sadece söyleyeceğim alanda değişiklik yap. Galleri alanında video da eklenebilir olmasını istiyorum şuanda sadece resim eklebiliyor ve instagram ve Facebook videolarını gömebilmek istiyorum link ile bu işlemi yapabileyim kodu güncelleyip gönder kod; "use client";
-
+"use client";
 import { useState } from "react";
 
 // --- İKON TANIMLAMALARI (SVG) ---
