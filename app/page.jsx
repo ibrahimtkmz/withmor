@@ -1010,7 +1010,7 @@ export default function App() {
               </div>
               <div className="border-l border-blue-700 pl-6">
                 <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-xs text-blue-200 font-medium">TR’nin Her Yerinden 24 Saat 444 37 59</p>
+                <p className="text-xs text-blue-200 font-medium">444 37 59</p>
               </div>
             </div>
 
