@@ -1130,18 +1130,20 @@ export default function App() {
                     </p>
 
                     {/* WhatsApp Action Button */}
-                    <button 
-                       onClick={() => window.open(companyInfo.whatsapp, "_blank")}
-                       className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
-                    >
-                       <div className="text-left">
-                          <p className="text-[10px] font-medium text-white/90"></p>
-                          <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
-                       <div>
-                       <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
-                          <Icons.MessageCircle size={20} className="text-white" />
-                       </div>
-                    </button>
+<button 
+  onClick={() => window.open(companyInfo.whatsapp, "_blank")}
+  className="mt-8 w-full max-w-xs flex items-center justify-between bg-[#25D366] hover:bg-[#128C7E] text-white px-5 py-3 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5 group"
+>
+  <div className="text-left">
+    <p className="text-[10px] font-medium text-white/90"></p>
+    <p className="text-sm font-bold">WhatsApp'tan Yaz</p>
+  </div>
+
+  <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-colors">
+    <Icons.MessageCircle size={20} className="text-white" />
+  </div>
+</button>
+
                  </div>
               </div>
            </div>
