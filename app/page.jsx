@@ -1000,24 +1000,30 @@ export default function App() {
             </div>
             {/* Dış sarmalayıcı: hem üstten ayır, hem genişliği sınırla */}
 <div className="mb-8 border-t border-slate-200 pt-8 mt-8">
-  <div className="bg-blue-900 rounded-xl p-6 text-white shadow-xl shadow-blue-900/10 max-w-md w-full mx-auto sm:mx-0">
-    {/* GRID: mobilde 1 sütun, sm ve üstünde 3 sütun */}
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+  <div className="bg-blue-900 rounded-xl p-3 sm:p-6 text-white shadow-xl shadow-blue-900/10 w-full">
+
+    <div className="grid grid-cols-3 gap-3 sm:gap-6">
+      
       <div>
-        <p className="text-2xl font-bold text-white">30+</p>
-        <p className="text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
+        <p className="text-lg sm:text-2xl font-bold text-white">30+</p>
+        <p className="text-[10px] sm:text-xs text-blue-200 font-medium">Yıllık Tecrübe</p>
       </div>
-      <div className="sm:border-l sm:pl-6">
-        <p className="text-2xl font-bold text-white">2000+</p>
-        <p className="text-xs text-blue-200 font-medium">Tamamlanan Proje</p>
+
+      <div className="border-l border-blue-700 pl-2 sm:pl-6">
+        <p className="text-lg sm:text-2xl font-bold text-white">2000+</p>
+        <p className="text-[10px] sm:text-xs text-blue-200 font-medium">Tamamlanan Proje</p>
       </div>
-      <div className="sm:border-l sm:pl-6">
-        <p className="text-2xl font-bold text-white">24/7</p>
-        <p className="text-xs text-blue-200 font-medium">444 37 59</p>
+
+      <div className="border-l border-blue-700 pl-2 sm:pl-6">
+        <p className="text-lg sm:text-2xl font-bold text-white">24/7</p>
+        <p className="text-[10px] sm:text-xs text-blue-200 font-medium">444 37 59</p>
       </div>
+
     </div>
+
   </div>
 </div>
+
 
 
 
