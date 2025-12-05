@@ -55,7 +55,7 @@ function ElevatorAnimation() {
           <div className="mb-8 text-left w-full">
             <h3 className="text-lg font-bold text-slate-800 mb-2">Akıllı Dikey Ulaşım Sistemleri</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hattan ulaşılabilir güvenli ve konforlu çözümler.
+              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için 24 saat 444 37 59 numaralı hattan ulaşılabilir.
             </p>
           </div>
 
