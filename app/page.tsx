@@ -1,25 +1,24 @@
 "use client";
 
-import Navbar from "../components/Navbar";
-import HeroSection from "../components/HeroSection";
-import AboutSection from "../components/AboutSection";
-import ElevatorAnimation from "../components/ElevatorAnimation";
-import WhyUsSection from "../components/WhyUsSection";
-import ServicesSection from "../components/ServicesSection";
-import ProjectsSection from "../components/ProjectsSection";
-import ReferencesSection from "../components/ReferencesSection";
-import ContactSection from "../components/ContactSection";
-import GallerySection from "../components/GallerySection";
+import Navbar from "../components/layout/Navbar";
+
+import HeroSection from "../components/sections/HeroSection";
+import AboutSection from "../components/sections/AboutSection";
+import ElevatorAnimation from "../components/sections/ElevatorAnimation";
+import WhyUsSection from "../components/sections/WhyUsSection";
+import ServicesSection from "../components/sections/ServicesSection";
+import ProjectsSection from "../components/sections/ProjectsSection";
+import ReferencesSection from "../components/sections/ReferencesSection";
+import ContactSection from "../components/sections/ContactSection";
+import GallerySection from "../components/sections/GallerySection";
+
 import Footer from "../components/Footer";
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-white text-slate-800 overflow-x-hidden">
-
-      {/* TOP MENU */}
       <Navbar />
 
-      {/* MAIN CONTENT */}
       <main>
         <HeroSection />
         <AboutSection />
@@ -38,7 +37,6 @@ export default function Page() {
         <GallerySection />
       </main>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );
