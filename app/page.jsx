@@ -803,11 +803,11 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-28 items-center justify-center">
+            <div className="flex h-14 w-28 items-center justify-center">
               <img
                 src="/images/withmor-logo.png"
                 alt="Withmor Logo"
-                className="h-8 w-auto object-contain"
+                className="h-10 w-auto object-contain"
               />
             </div>
             <div className="leading-tight">
