@@ -962,7 +962,7 @@ export default function App() {
             <div className="mb-6 flex flex-wrap gap-3">
               <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700 border border-blue-100 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                TR’nin Her Yerinden 24 Saat 444 37 59
+                Yüksek Performans, Yüksek Güven
               </div>
               <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-[11px] font-bold text-green-700 border border-green-100 shadow-sm">
                 <Icons.CheckCircle2 size={12} />
