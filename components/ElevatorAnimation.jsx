@@ -1,6 +1,7 @@
-// components/ElevatorAnimation.jsx
+// components/ElevatorAnimation.tsx
+import React from "react";
 
-function ElevatorAnimation() {
+export function ElevatorAnimation() {
   const elevatorModels = [
     { id: 1, label: "İnsan asansörleri" },
     { id: 2, label: "Yük asansörleri" },
@@ -11,38 +12,29 @@ function ElevatorAnimation() {
 
   return (
     <div className="relative w-full max-w-sm">
-      {/* Dış Kutu (Card Container) */}
       <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-xl p-6 md:p-8">
-        {/* Arkaplan Efektleri (Blur Circles) */}
         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-50 pointer-events-none" />
         <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-slate-50 rounded-full blur-3xl opacity-50 pointer-events-none" />
 
-        {/* İçerik */}
         <div className="relative z-10 flex flex-col items-start w-full">
-          {/* Üst Metin - Sola Hizalı */}
           <div className="mb-8 text-left w-full">
             <h3 className="text-lg font-bold text-slate-800 mb-2">
               Akıllı Dikey Ulaşım Sistemleri
             </h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Yük asansörleri, yük platformları, villa asansörleri ve yatay
-              asansörler için Türkiye’nin her yerinden 24 saat 444 37 59
-              numaralı hattan ulaşılabilir güvenli ve konforlu çözümler.
+              Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için
+              Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hattan ulaşılabilir güvenli ve
+              konforlu çözümler.
             </p>
           </div>
 
-          {/* Animasyon Alanı */}
           <div className="flex justify-start items-center gap-6 w-full">
-            {/* SOL: Asansör Kuyusu */}
+            {/* SOL */}
             <div className="relative h-96 w-40 shrink-0 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
-              {/* Kuyu Duvarları */}
               <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-slate-300 bg-slate-200/30" />
-
-              {/* Raylar */}
               <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-slate-400/50" />
               <div className="absolute left-1/2 top-2 bottom-2 w-1 ml-3 bg-slate-400/50" />
 
-              {/* Kat Çizgileri */}
               {Array.from({ length: 5 }).map((_, index) => (
                 <div
                   key={index}
@@ -51,15 +43,10 @@ function ElevatorAnimation() {
                 />
               ))}
 
-              {/* Asansör Kabini */}
               <div
                 className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
-                style={{
-                  top: "6%",
-                  animation: "elevatorMove 20s ease-in-out infinite",
-                }}
+                style={{ top: "6%", animation: "elevatorMove 20s ease-in-out infinite" }}
               >
-                {/* Kabin Kapısı Efekti */}
                 <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
                 <div className="relative w-full h-full flex items-center justify-center px-2">
                   <img
@@ -70,14 +57,13 @@ function ElevatorAnimation() {
                 </div>
               </div>
 
-              {/* Yön Okları */}
               <div className="absolute top-2 left-0 right-0 flex justify-center gap-4 px-4">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]" />
                 <div className="h-2 w-2 rounded-full bg-red-500 opacity-30" />
               </div>
             </div>
 
-            {/* SAĞ: Asansör Modelleri Göstergeleri */}
+            {/* SAĞ */}
             <div className="flex flex-col justify-between h-[18rem] py-2 w-full">
               {elevatorModels
                 .slice()
@@ -106,17 +92,14 @@ function ElevatorAnimation() {
       </div>
 
       <style>{`
-        /* Asansör Hareketi – 5 kat, 1. kattan başlayıp sırayla yukarı çıkıyor */
         @keyframes elevatorMove {
-          0%, 10%   { transform: translateY(400%); }  /* Kat 1 (en alt) */
-          15%, 25%  { transform: translateY(300%); }  /* Kat 2 */
-          30%, 40%  { transform: translateY(200%); }  /* Kat 3 */
-          45%, 55%  { transform: translateY(100%); }  /* Kat 4 */
-          60%, 70%  { transform: translateY(0%); }    /* Kat 5 (en üst) */
-          75%, 100% { transform: translateY(400%); }  /* Geri 1. kata */
+          0%, 10%   { transform: translateY(400%); }
+          15%, 25%  { transform: translateY(300%); }
+          30%, 40%  { transform: translateY(200%); }
+          45%, 55%  { transform: translateY(100%); }
+          60%, 70%  { transform: translateY(0%); }
+          75%, 100% { transform: translateY(400%); }
         }
-
-        /* Kat Işığı Animasyonları (5 model için senkron) */
         @keyframes floorLight1 { 
           0%, 10%, 75%, 100% {
             background-color: #2563EB;
@@ -133,7 +116,6 @@ function ElevatorAnimation() {
             box-shadow: none;
           }
         }
-
         @keyframes floorLight2 { 
           15%, 25% {
             background-color: #2563EB;
@@ -150,7 +132,6 @@ function ElevatorAnimation() {
             box-shadow: none;
           }
         }
-
         @keyframes floorLight3 { 
           30%, 40% {
             background-color: #2563EB;
@@ -167,7 +148,6 @@ function ElevatorAnimation() {
             box-shadow: none;
           }
         }
-
         @keyframes floorLight4 { 
           45%, 55% {
             background-color: #2563EB;
@@ -184,7 +164,6 @@ function ElevatorAnimation() {
             box-shadow: none;
           }
         }
-
         @keyframes floorLight5 { 
           60%, 70% {
             background-color: #2563EB;
@@ -201,7 +180,6 @@ function ElevatorAnimation() {
             box-shadow: none;
           }
         }
-        
         div[data-floor="1"] .indicator-circle { animation: floorLight1 20s infinite; }
         div[data-floor="2"] .indicator-circle { animation: floorLight2 20s infinite; }
         div[data-floor="3"] .indicator-circle { animation: floorLight3 20s infinite; }
@@ -211,5 +189,3 @@ function ElevatorAnimation() {
     </div>
   );
 }
-
-export default ElevatorAnimation;
