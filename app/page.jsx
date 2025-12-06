@@ -272,7 +272,7 @@ export default function App() {
 
   const [hero, setHero] = useState({
     eyebrow: "Premium Asansör Çözümleri",
-    title: "Dünyanın Yükünü Güvenle Taşıyan Mühendislik",
+    title: "Sizin için Dünyanın Yükünü Taşıyoruz",
     subtitle:
       "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler, mühendislik ve servis çözümleri.",
     cta: "Proje Teklifi Al",
