@@ -251,6 +251,8 @@ export default function App() {
   const [showAllReferences, setShowAllReferences] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
+  const [activeVideo, setActiveVideo] = useState(null);
+
 
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [quoteForm, setQuoteForm] = useState({
