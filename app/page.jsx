@@ -235,6 +235,59 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
+  export default function App() {
+  // VİDEO URL'İNİ GÖMME (EMBED) URL'İNE ÇEVİR
+  const getVideoEmbedUrl = (raw) => {
+    if (!raw) return null;
+    const url = raw.trim();
+
+    // YOUTUBE
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      // https://youtu.be/xxxx  →  https://www.youtube.com/embed/xxxx
+      if (url.includes("youtu.be")) {
+        const id = url.split("/").pop().split("?")[0];
+        return `https://www.youtube.com/embed/${id}`;
+      }
+      // https://www.youtube.com/watch?v=xxxx  →  /embed/xxxx
+      const params = new URL(url).searchParams;
+      const id = params.get("v");
+      if (id) return `https://www.youtube.com/embed/${id}`;
+      return url;
+    }
+
+    // INSTAGRAM (post veya reel linki ver)
+    if (url.includes("instagram.com")) {
+      // /p/XXXXX/ veya /reel/XXXXX/ şeklindeki kodu yakala
+      const postMatch =
+        url.match(/instagram\.com\/p\/([^/?]+)/) ||
+        url.match(/instagram\.com\/reel\/([^/?]+)/);
+
+      if (postMatch && postMatch[1]) {
+        const code = postMatch[1];
+        // post ise:
+        if (url.includes("/p/")) {
+          return `https://www.instagram.com/p/${code}/embed`;
+        }
+        // reel ise:
+        if (url.includes("/reel/")) {
+          return `https://www.instagram.com/reel/${code}/embed`;
+        }
+      }
+      return url;
+    }
+
+    // FACEBOOK (video linki ver)
+    if (url.includes("facebook.com")) {
+      // Normal video linkini Facebook video plugin içine göm
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+        url
+      )}&show_text=false`;
+    }
+
+    // Diğer durumlar için olduğu gibi bırak
+    return url;
+  };
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -1708,6 +1761,128 @@ export default function App() {
 
               {/* GRID */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+  {galleryItems
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) =>
+      activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
+    )
+    .slice(0, visibleGalleryCount)
+    .map(({ item, index }) => {
+      // Embed URL dönüştürücü
+      const getEmbedUrl = (raw) => {
+        if (!raw) return null;
+        const url = raw.trim();
+
+        // YouTube
+        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+          if (url.includes("youtu.be")) {
+            const id = url.split("/").pop().split("?")[0];
+            return `https://www.youtube.com/embed/${id}`;
+          }
+          const params = new URL(url).searchParams;
+          const id = params.get("v");
+          if (id) return `https://www.youtube.com/embed/${id}`;
+        }
+
+        // Instagram (post veya reel)
+        if (url.includes("instagram.com")) {
+          const match =
+            url.match(/instagram\.com\/p\/([^/?]+)/) ||
+            url.match(/instagram\.com\/reel\/([^/?]+)/);
+
+          if (match && match[1]) {
+            const code = match[1];
+            if (url.includes("/p/"))
+              return `https://www.instagram.com/p/${code}/embed`;
+            if (url.includes("/reel/"))
+              return `https://www.instagram.com/reel/${code}/embed`;
+          }
+        }
+
+        // Facebook
+        if (url.includes("facebook.com")) {
+          return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+            url
+          )}&show_text=false`;
+        }
+
+        return url;
+      };
+
+      return (
+        <div
+          key={index}
+          className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+        >
+          {/* MEDYA ALANI */}
+          <div
+            className={
+              item.type === "video"
+                ? "relative w-full aspect-video bg-black overflow-hidden"
+                : "relative w-full aspect-square bg-slate-50 overflow-hidden"
+            }
+          >
+            {/* RESİM */}
+            {item.type === "image" ? (
+              item.image ? (
+                <>
+                  <img
+                    src={item.image}
+                    alt={item.caption}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                  <Icons.Image className="w-10 h-10 opacity-50" />
+                </div>
+              )
+            ) : (
+              // VİDEO IFRAME
+              <iframe
+                src={getEmbedUrl(item.embedCode)}
+                className="w-full h-full border-0"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+
+            {/* ADMIN BUTONLARI */}
+            {isLoggedIn && (
+              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => openEdit("gallery", index)}
+                  className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                >
+                  <Icons.Edit size={12} />
+                </button>
+                <button
+                  onClick={() =>
+                    setEditModal({ open: true, type: "gallery", index })
+                  }
+                  className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                >
+                  <Icons.Trash size={12} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* ALT BİLGİ */}
+          <div className="px-3 py-2">
+            <p className="text-[11px] font-semibold text-slate-800 leading-tight">
+              {item.caption || "İçerik"}
+            </p>
+
+            {item.group && (
+              <p className="text-[10px] text-slate-500">{item.group}</p>
+            )}
+          </div>
+        </div>
+      );
+    })}
+</div>
+
                  {galleryItems
                    .map((item, index) => ({ item, index }))
                    .filter(({ item }) =>
