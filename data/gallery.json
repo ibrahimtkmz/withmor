@@ -152,5 +152,12 @@
     "group": "galeri-22",
     "image": "/images/gallery/galeri-22.jpg",
     "embedCode": ""
+  },
+  {
+    "type": "video",
+    "caption": "Fabrika Tanıtımı",
+    "group": "Tanıtım",
+    "image": "/images/gallery/galeri-10.jpg",
+    "embedCode": "https://www.w3schools.com/html/mov_bbb.mp4"
   }
 ]

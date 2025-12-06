@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -237,68 +237,6 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
-  const galleryTabs = [
-    {
-      id: "hidrolik-yuk",
-      title: "Hidrolik Yük Asansörü",
-      images: [
-        "/hidrolik-sistemler.jpg",
-        "/yuk-asansorleri-platformlar.jpg",
-        "/yuk-kabinleri.jpg",
-      ],
-    },
-    {
-      id: "makine-dairesiz-yuk",
-      title: "Makine Dairesiz Yük Asansörü",
-      images: ["/makine-sasesi-mrl-mr.png"],
-    },
-    {
-      id: "homelift",
-      title: "Homelift",
-      images: [
-        "/images/gallery/galeri-4.jpg",
-        "/images/gallery/galeri-8.jpg",
-        "/images/gallery/galeri-16.jpg",
-      ],
-    },
-    {
-      id: "insan-asansoru",
-      title: "İnsan Asansörü",
-      images: ["/kabinler.webp"],
-    },
-    {
-      id: "konveyor-asansorler",
-      title: "Konveyör Asansörler",
-      images: [
-        "/images/gallery/galeri-6.jpg",
-        "/images/gallery/galeri-10.jpg",
-        "/images/gallery/galeri-14.jpg",
-      ],
-    },
-    {
-      id: "panoramik-asansorler",
-      title: "Panoramik Asansörler",
-      images: [
-        "/images/gallery/galeri-12.jpg",
-        "/images/gallery/galeri-15.jpg",
-        "/images/gallery/galeri-18.jpg",
-      ],
-    },
-    {
-      id: "yatay-yamac-asansorler",
-      title: "Yatay Yamaç Asansörler",
-      images: [
-        "/images/gallery/galeri-21.jpg",
-        "/images/gallery/galeri-22.jpg",
-      ],
-    },
-    {
-      id: "ozel-projeler",
-      title: "Özel Projeler",
-      images: ["/celik-konstruksiyonlar.webp"],
-    },
-  ];
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -317,7 +255,7 @@ export default function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
   const [activeVideo, setActiveVideo] = useState(null);
-  const [activeTab, setActiveTab] = useState(galleryTabs[0].id);
+  const [activeTab, setActiveTab] = useState("all");
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [quoteForm, setQuoteForm] = useState({
     name: "",
@@ -345,7 +283,16 @@ export default function App() {
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
-  const activeGroup = galleryTabs.find((tab) => tab.id === activeTab);
+  const galleryGroups = useMemo(() => {
+    const unique = new Set();
+    galleryItems.forEach((item) => unique.add(item.group || "Genel"));
+    return Array.from(unique);
+  }, [galleryItems]);
+
+  const filteredGalleryItems = useMemo(() => {
+    if (activeTab === "all") return galleryItems;
+    return galleryItems.filter((item) => (item.group || "Genel") === activeTab);
+  }, [activeTab, galleryItems]);
 
   useEffect(() => {
     loadActivityLog();
@@ -370,6 +317,32 @@ export default function App() {
     return () => {
       script.onload = null;
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const res = await fetch("/api/gallery", { cache: "no-store" });
+        if (!res.ok) throw new Error("Galeri yüklenemedi");
+        const data = await res.json();
+        if (Array.isArray(data?.items)) {
+          setGalleryItems(
+            data.items.map((item) => ({
+              type: item.type === "video" ? "video" : "image",
+              caption: item.caption || "İçerik",
+              group: item.group || "Genel",
+              image: item.image || "",
+              embedCode: item.embedCode || "",
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Galeri alınamadı", error);
+        setGalleryError("Galeri verisi yüklenemedi");
+      }
+    };
+
+    fetchGallery();
   }, []);
 
   const persistGalleryItems = async (items) => {
@@ -953,6 +926,18 @@ export default function App() {
   const handleImageError = (e) => {
     e.target.src = "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800";
     e.target.onerror = null;
+  };
+
+  const handleOpenVideo = (item) => {
+    const embed = (item.embedCode || "").trim();
+    const content = embed || item.image;
+    if (!content) return;
+
+    setActiveVideo({
+      type: embed.includes("<iframe") ? "embed" : "file",
+      content,
+      caption: item.caption || "Video",
+    });
   };
 
    return (
@@ -1783,48 +1768,149 @@ export default function App() {
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="mx-auto max-w-6xl px-6 space-y-10">
-          <div className="text-center mb-4 relative">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
-            <p className="text-slate-500 text-sm">
-              Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
-            </p>
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div className="text-center md:text-left relative">
+              <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
+              <p className="text-slate-500 text-sm">
+                Ürün, üretim ve referans projelerinden görseller ve videolar.
+              </p>
+              {galleryError && (
+                <p className="text-xs text-red-600 mt-2">{galleryError}</p>
+              )}
+            </div>
+            {isLoggedIn && (
+              <button
+                onClick={() => openAdd("gallery")}
+                className="inline-flex items-center gap-2 self-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100"
+              >
+                <Icons.Plus size={12} /> Yeni içerik ekle
+              </button>
+            )}
           </div>
 
           <section className="space-y-6">
             <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
-              {galleryTabs.map((tab) => (
+              <button
+                type="button"
+                onClick={() => setActiveTab("all")}
+                className={`rounded-full px-4 py-2 text-sm font-medium transition whitespace-nowrap ${
+                  activeTab === "all"
+                    ? "bg-slate-900 text-white shadow-sm"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                Tümü
+              </button>
+              {galleryGroups.map((group) => (
                 <button
-                  key={tab.id}
+                  key={group}
                   type="button"
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => setActiveTab(group)}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition whitespace-nowrap ${
-                    activeTab === tab.id
+                    activeTab === group
                       ? "bg-slate-900 text-white shadow-sm"
                       : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                   }`}
                 >
-                  {tab.title}
+                  {group}
                 </button>
               ))}
             </div>
 
-            {activeGroup && (
+            {filteredGalleryItems.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-slate-200 bg-white p-8 text-center text-slate-500">
+                Henüz galeri içeriği eklenmedi.
+              </div>
+            ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {activeGroup.images.map((src) => (
-                  <div
-                    key={src}
-                    className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="relative aspect-square bg-slate-50">
-                      <img
-                        src={src}
-                        alt={activeGroup.title}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                {filteredGalleryItems.map((item, index) => {
+                  const poster = item.image;
+                  const isVideo = item.type === "video";
+                  return (
+                    <div
+                      key={`${item.caption}-${index}`}
+                      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="relative aspect-square bg-slate-50">
+                        {isVideo ? (
+                          <button
+                            onClick={() => handleOpenVideo(item)}
+                            className="absolute inset-0 w-full h-full"
+                          >
+                            {poster ? (
+                              <img
+                                src={poster}
+                                alt={item.caption}
+                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                onError={handleImageError}
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+                                <Icons.Image className="w-10 h-10" />
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-100 group-hover:bg-black/40 transition-colors">
+                              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-lg">
+                                ▶
+                              </span>
+                            </div>
+                          </button>
+                        ) : (
+                          <img
+                            src={poster}
+                            alt={item.caption}
+                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            onError={handleImageError}
+                          />
+                        )}
+                      </div>
+
+                      <div className="absolute left-2 top-2 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase text-slate-700 shadow-sm">
+                        {isVideo ? "Video" : "Görsel"}
+                      </div>
+
+                      {isLoggedIn && (
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <button
+                            onClick={() => openEdit("gallery", galleryItems.indexOf(item))}
+                            className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                          >
+                            <Icons.Edit size={12} />
+                          </button>
+                          <button
+                            onClick={() =>
+                              setEditModal({
+                                open: true,
+                                type: "gallery",
+                                index: galleryItems.indexOf(item),
+                              })
+                            }
+                            className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                          >
+                            <Icons.Trash size={12} />
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="p-3 flex items-center justify-between border-t border-slate-100 bg-white/80">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-slate-900 truncate">
+                            {item.caption}
+                          </p>
+                          <p className="text-[11px] text-slate-500 truncate">{item.group}</p>
+                        </div>
+                        {isVideo && (
+                          <button
+                            onClick={() => handleOpenVideo(item)}
+                            className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600 shadow-inner hover:bg-blue-100"
+                          >
+                            ▶
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </section>
@@ -1843,14 +1929,21 @@ export default function App() {
       </button>
 
       <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
-        <div className="aspect-video w-full">
-          <video
-            src={activeVideo}
-            className="w-full h-full object-contain"
-            controls
-            autoPlay
-            playsInline
-          />
+        <div className="aspect-video w-full bg-black flex items-center justify-center">
+          {activeVideo.type === "embed" ? (
+            <div
+              className="w-full h-full"
+              dangerouslySetInnerHTML={{ __html: activeVideo.content }}
+            />
+          ) : (
+            <video
+              src={activeVideo.content}
+              className="w-full h-full object-contain"
+              controls
+              autoPlay
+              playsInline
+            />
+          )}
         </div>
       </div>
     </div>

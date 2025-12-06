@@ -2,7 +2,37 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const PUBLIC_GALLERY_DIR = path.join(process.cwd(), "public", "images", "gallery");
+const PUBLIC_GALLERY_DIR = path.join(
+  process.cwd(),
+  "public",
+  "images",
+  "gallery"
+);
+const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_PATH = path.join(DATA_DIR, "gallery.json");
+
+function normalizeItem(item) {
+  return {
+    type: item?.type === "video" ? "video" : "image",
+    caption: item?.caption?.toString() || "İçerik",
+    group: item?.group?.toString() || "Genel",
+    image: item?.image?.toString() || "",
+    embedCode: item?.embedCode?.toString() || "",
+  };
+}
+
+async function readStoredItems() {
+  try {
+    const file = await fs.readFile(DATA_PATH, "utf-8");
+    const parsed = JSON.parse(file);
+    if (Array.isArray(parsed)) {
+      return parsed.map(normalizeItem);
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
 
 async function buildDefaultItems() {
   try {
@@ -16,13 +46,13 @@ async function buildDefaultItems() {
         const caption = base
           .replace(/[-_]+/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase());
-        return {
+        return normalizeItem({
           type: "image",
           caption,
           group: group || "Genel",
           image: `/images/gallery/${file}`,
           embedCode: "",
-        };
+        });
       });
   } catch (error) {
     console.error("Galeri klasörü okunamadı:", error);
@@ -30,22 +60,31 @@ async function buildDefaultItems() {
   }
 }
 
+async function writeGallery(items) {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(DATA_PATH, JSON.stringify(items, null, 2), "utf-8");
+}
+
 export async function GET() {
-  const items = await buildDefaultItems();
+  const stored = await readStoredItems();
+  const items = stored ?? (await buildDefaultItems());
   return NextResponse.json({ items });
 }
 
 export async function POST(request) {
-  // Yönetici panelinden yapılan düzenlemelerin otomatik olarak kalıcılaşması istenmediği
-  // için POST isteği artık veriyi diske yazmaz. İstek başarıyla döner ancak içerik
-  // yalnızca oturum süresince tutulur.
   try {
     const body = await request.json();
     if (!Array.isArray(body?.items)) {
       return NextResponse.json({ error: "Geçersiz veri" }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, persisted: false });
+    const normalizedItems = body.items
+      .map(normalizeItem)
+      .filter((item) => item.type === "image" ? item.image : item.embedCode || item.image);
+
+    await writeGallery(normalizedItems);
+
+    return NextResponse.json({ success: true, persisted: true });
   } catch (error) {
     console.error("Galeri verisi kaydedilemedi:", error);
     return NextResponse.json({ error: "Kaydedilemedi" }, { status: 500 });
