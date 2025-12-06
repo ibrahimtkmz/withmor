@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import Script from "next/script";
+
 
 
 // --- İKON TANIMLAMALARI (SVG) ---
