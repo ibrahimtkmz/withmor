@@ -1621,7 +1621,10 @@ export default function App() {
           </div>
         </section>
 
-                {/* GALERİ BÖLÜMÜ */}
+                // ÜSTTE BİR YERDE (component içinde):
+// const [activeVideo, setActiveVideo] = useState(null);
+
+{/* GALERİ BÖLÜMÜ */}
 <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
   <div className="mx-auto max-w-6xl px-6">
     <div className="text-center mb-12 relative">
@@ -1731,29 +1734,34 @@ export default function App() {
                   </div>
                 )
               ) : item.type === "video" ? (
-                // VİDEO ALANI
                 item.embedCode ? (
-                  item.embedCode.includes("<iframe") ? (
-                    // Tam embed kodu girilmişse: olduğu gibi göster
-                    <div
-                      className="w-full h-full"
-                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                  // SUNUCU VİDEOSU: /videos/xxx.mp4 gibi
+                  <div
+                    className="relative w-full h-full cursor-pointer"
+                    onClick={() => setActiveVideo(item.embedCode.trim())}
+                  >
+                    {/* Karttaki küçük önizleme */}
+                    <video
+                      src={item.embedCode.trim()}
+                      className="w-full h-full object-cover"
+                      muted
+                      loop
+                      playsInline
                     />
-                  ) : (
-                    // Sadece URL girilmişse: kendi iframe'imizi oluşturalım
-                    <iframe
-                      src={item.embedCode}
-                      title={item.caption || "Galeri videosu"}
-                      className="w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
-                  )
+
+                    {/* Overlay + Play butonu */}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
+                        ▶
+                      </span>
+                    </div>
+                  </div>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
                     <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
                     <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                      Video Embed Kodu Girilmemiş
+                      Video URL girilmemiş
                     </span>
                   </div>
                 )
@@ -1845,6 +1853,34 @@ export default function App() {
       )}
   </div>
 </section>
+
+{/* Video Büyütme Modalı */}
+{activeVideo && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+    <div className="relative w-full max-w-3xl px-4">
+      {/* Kapat butonu */}
+      <button
+        onClick={() => setActiveVideo(null)}
+        className="absolute -top-10 right-4 text-sm font-semibold text-slate-200 hover:text-white"
+      >
+        Kapat ✕
+      </button>
+
+      <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
+        <div className="aspect-video w-full">
+          <video
+            src={activeVideo}
+            className="w-full h-full object-contain"
+            controls
+            autoPlay
+            playsInline
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
 
 
