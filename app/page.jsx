@@ -1,4 +1,5 @@
 "use client";
+import Script from "next/script";
 import { useState, useEffect } from "react";
 
 // --- İKON TANIMLAMALARI (SVG) ---
@@ -1853,6 +1854,22 @@ export default function App() {
         </div>
       )}
   </div>
+</section>
+
+{/* SOSYAL MEDYA ALANI */}
+<section id="social-feed" className="py-20 bg-white border-t border-slate-200">
+  <div className="mx-auto max-w-6xl px-6">
+    <div className="text-center mb-8">
+      <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
+      <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
+    </div>
+
+    <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+      <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+    </div>
+  </div>
+
+  <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
 </section>
 
 {/* Video Büyütme Modalı */}
