@@ -1,60 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-function SocialFeedSection() {
-  useEffect(() => {
-    // Script daha önce eklenmiş mi kontrol et
-    const existingScript = document.querySelector(
-      'script[src="https://elfsightcdn.com/platform.js"]'
-    );
 
-    if (!existingScript) {
-      const script = document.createElement("script");
-      script.src = "https://elfsightcdn.com/platform.js";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  return (
-    <section
-      id="social-feed"
-      className="py-20 bg-slate-900 text-slate-100 border-t border-slate-800"
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-          <div>
-            <h2 className="text-3xl font-bold mb-2">Sosyal Medya Akışı</h2>
-            <p className="text-sm text-slate-300 max-w-xl">
-              Instagram @withmorlift hesabımızdan ve diğer sosyal medya
-              kanallarımızdan seçtiğimiz güncel fotoğraf ve videolar.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              Instagram
-            </span>
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              TikTok
-            </span>
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              Facebook
-            </span>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 md:p-6 shadow-[0_18px_45px_rgba(15,23,42,0.8)]">
-          {/* Elfsight widget div'in React versiyonu */}
-          <div
-            className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35"
-            data-elfsight-app-lazy
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -292,28 +239,6 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
-  const [socialItems, setSocialItems] = useState([]);
-const [socialLoading, setSocialLoading] = useState(true);
-const [socialError, setSocialError] = useState(null);
-
-useEffect(() => {
-  async function loadSocial() {
-    try {
-      setSocialLoading(true);
-      const res = await fetch("/api/social-feed");
-      if (!res.ok) throw new Error("Sosyal medya akışı alınamadı.");
-      const data = await res.json();
-      setSocialItems(data.items || []);
-    } catch (err) {
-      console.error(err);
-      setSocialError("Sosyal medya içerikleri yüklenirken bir hata oluştu.");
-    } finally {
-      setSocialLoading(false);
-    }
-  }
-
-  loadSocial();
-}, []);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
