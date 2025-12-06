@@ -1883,63 +1883,7 @@ export default function App() {
     })}
 </div>
 
-                 {galleryItems
-                   .map((item, index) => ({ item, index }))
-                   .filter(({ item }) =>
-                     activeGalleryGroup === "Tümü" ||
-                     item.group === activeGalleryGroup
-                   )
-                   .slice(0, visibleGalleryCount)
-                   .map(({ item, index }) => (
-                    <div
-                      key={index}
-                      className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
-                    >
-                      {/* MEDYA ALANI */}
-                      <div
-                        className={
-                          item.type === "video"
-                            ? "relative w-full aspect-video bg-black flex items-center justify-center"
-                            : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
-                        }
-                      >
-                        {item.type === "image" ? (
-                          item.image ? (
-                            <>
-                              <img
-                                src={item.image}
-                                alt={item.caption || "Galeri görseli"}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                onError={handleImageError}
-                              />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
-                              </div>
-                            </>
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                              <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                                Resim Yok
-                              </span>
-                            </div>
-                          )
-                        ) : item.embedCode ? (
-                          <div className="w-full h-full">
-                            <div
-                              className="w-full h-full"
-                              // YouTube / Instagram / Facebook embed kodunu direkt gösteriyoruz
-                              dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                              Video Embed Kodu Girilmemiş
-                            </span>
-                          </div>
-                        )}
+                 
 
                         {/* Admin edit butonları */}
                         {isLoggedIn && (
