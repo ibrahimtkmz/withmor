@@ -1644,11 +1644,19 @@ export default function App() {
         {[
           "Tümü",
           ...Array.from(
-            new Set(
-              galleryItems
+            new Set([
+              // statik kategori resimlerinin grupları
+              "Çelik Konstrüksiyonlar",
+              "Hidrolik Sistemler",
+              "Kabinler",
+              "Makine Şasesi MRL-MR",
+              "Yük Asansörleri ve Platformlar",
+              "Yük Kabinleri",
+              // admin'den gelen galerinin grupları
+              ...galleryItems
                 .map((item) => item.group)
-                .filter(Boolean)
-            )
+                .filter(Boolean),
+            ])
           ),
         ].map((group) => (
           <button
@@ -1672,19 +1680,80 @@ export default function App() {
     {/* GRID */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[
-        // --- SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
+        // --- 22 sabit galeri görseli ---
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
             image: `/images/gallery/galeri-${i + 1}.jpg`,
             caption: `Galeri ${i + 1}`,
-            // group: null -> sadece "Tümü" filtresinde görünsün
           },
           index: null,
           isStatic: true,
         })),
 
-        // --- MEVCUT GALLERY ITEMS (admin'den gelen) ---
+        // --- public/images altındaki kategori görselleri ---
+        {
+          item: {
+            type: "image",
+            image: "/images/celik-konstrukisyonlar.webp",
+            caption: "Çelik Konstrüksiyonlar",
+            group: "Çelik Konstrüksiyonlar",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/hidrolik-sistemler.jpg",
+            caption: "Hidrolik Sistemler",
+            group: "Hidrolik Sistemler",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/kabinler.webp",
+            caption: "Kabinler",
+            group: "Kabinler",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/makine-sasasi-mrl-mr.png",
+            caption: "Makine Şasesi MRL-MR",
+            group: "Makine Şasesi MRL-MR",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/yuk-asansorleri-platformlar.jpg",
+            caption: "Yük Asansörleri ve Platformlar",
+            group: "Yük Asansörleri ve Platformlar",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/yuk-kabinleri.jpg",
+            caption: "Yük Kabinleri",
+            group: "Yük Kabinleri",
+          },
+          index: null,
+          isStatic: true,
+        },
+
+        // --- admin panelinden gelen dinamik galleryItems ---
         ...galleryItems.map((item, index) => ({
           item,
           index,
@@ -1731,16 +1800,13 @@ export default function App() {
                   </div>
                 )
               ) : item.type === "video" ? (
-                // VİDEO ALANI
                 item.embedCode ? (
                   item.embedCode.includes("<iframe") ? (
-                    // Tam embed kodu girilmişse: olduğu gibi göster
                     <div
                       className="w-full h-full"
                       dangerouslySetInnerHTML={{ __html: item.embedCode }}
                     />
                   ) : (
-                    // Sadece URL girilmişse: kendi iframe'imizi oluşturalım
                     <iframe
                       src={item.embedCode}
                       title={item.caption || "Galeri videosu"}
@@ -1766,7 +1832,7 @@ export default function App() {
                 </div>
               )}
 
-              {/* Admin edit butonları – sabit görsellerde ÇALIŞMASIN */}
+              {/* Admin edit butonları – statik görsellerde çalışmasın */}
               {isLoggedIn && !isStatic && (
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <button
@@ -1776,13 +1842,13 @@ export default function App() {
                     <Icons.Edit size={12} />
                   </button>
                   <button
-                    onClick={() => {
+                    onClick={() =>
                       setEditModal({
                         open: true,
                         type: "gallery",
                         index,
-                      });
-                    }}
+                      })
+                    }
                     className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
                   >
                     <Icons.Trash size={12} />
@@ -1825,6 +1891,66 @@ export default function App() {
           index: null,
           isStatic: true,
         })),
+        {
+          item: {
+            type: "image",
+            image: "/images/celik-konstrukisyonlar.webp",
+            caption: "Çelik Konstrüksiyonlar",
+            group: "Çelik Konstrüksiyonlar",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/hidrolik-sistemler.jpg",
+            caption: "Hidrolik Sistemler",
+            group: "Hidrolik Sistemler",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/kabinler.webp",
+            caption: "Kabinler",
+            group: "Kabinler",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/makine-sasasi-mrl-mr.png",
+            caption: "Makine Şasesi MRL-MR",
+            group: "Makine Şasesi MRL-MR",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/yuk-asansorleri-platformlar.jpg",
+            caption: "Yük Asansörleri ve Platformlar",
+            group: "Yük Asansörleri ve Platformlar",
+          },
+          index: null,
+          isStatic: true,
+        },
+        {
+          item: {
+            type: "image",
+            image: "/images/yuk-kabinleri.jpg",
+            caption: "Yük Kabinleri",
+            group: "Yük Kabinleri",
+          },
+          index: null,
+          isStatic: true,
+        },
         ...galleryItems.map((item, index) => ({
           item,
           index,
@@ -1845,6 +1971,7 @@ export default function App() {
       )}
   </div>
 </section>
+
 
 
 
