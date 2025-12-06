@@ -238,6 +238,29 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
+  const [socialItems, setSocialItems] = useState([]);
+const [socialLoading, setSocialLoading] = useState(true);
+const [socialError, setSocialError] = useState(null);
+
+useEffect(() => {
+  async function loadSocial() {
+    try {
+      setSocialLoading(true);
+      const res = await fetch("/api/social-feed");
+      if (!res.ok) throw new Error("Sosyal medya akışı alınamadı.");
+      const data = await res.json();
+      setSocialItems(data.items || []);
+    } catch (err) {
+      console.error(err);
+      setSocialError("Sosyal medya içerikleri yüklenirken bir hata oluştu.");
+    } finally {
+      setSocialLoading(false);
+    }
+  }
+
+  loadSocial();
+}, []);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
