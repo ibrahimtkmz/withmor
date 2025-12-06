@@ -1623,8 +1623,6 @@ export default function App() {
           </div>
         </section>
 
-                // ÜSTTE BİR YERDE (component içinde):
-// const [activeVideo, setActiveVideo] = useState(null);
 
 {/* GALERİ BÖLÜMÜ */}
 <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
