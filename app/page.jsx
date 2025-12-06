@@ -876,6 +876,7 @@ export default function App() {
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header className="sticky top-0 inset-x-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-lg shadow-[0_8px_30px_rgba(15,23,42,0.08)] supports-[backdrop-filter]:bg-white/80">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-white/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
           <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm">
@@ -1047,6 +1048,10 @@ export default function App() {
               {[ 
                 {
                   text: "Yüksek Performans, Yüksek Güven",
+              {[
+                {
+                  text: "Yüksek Performans, Yüksek Güven",
+                  bg: "from-blue-500/70 via-blue-600/70 to-blue-700/70",
                   content: (
                     <>
                       <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
@@ -1056,6 +1061,7 @@ export default function App() {
                 },
                 {
                   text: "EN-81 Standartlarına Uygun",
+                  bg: "from-green-500/70 via-green-600/70 to-emerald-700/70",
                   content: (
                     <>
                       <Icons.CheckCircle2 size={12} />
@@ -1065,6 +1071,7 @@ export default function App() {
                 },
                 {
                   text: "%100 Müşteri Memnuniyeti",
+                  bg: "from-purple-500/70 via-fuchsia-600/70 to-indigo-700/70",
                   content: (
                     <>
                       <Icons.Star size={12} fill="currentColor" />
@@ -1076,6 +1083,7 @@ export default function App() {
                 <div key={idx} className="relative inline-flex">
                   <span
                     className="absolute inset-[-3px] rounded-full bg-[conic-gradient(at_50%_50%,#ff3737,#ffb347,#2dd4bf,#3b82f6,#a855f7,#ff3737)] opacity-90 animate-border-flow blur-[2px]"
+                    className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
                   />
                   <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
                     {badge.content}
@@ -1670,6 +1678,22 @@ export default function App() {
           </div>
         </section>
 
+
+      {/* SOSYAL MEDYA ALANI */}
+      <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
+            <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+          </div>
+        </div>
+
+        <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+      </section>
 
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
