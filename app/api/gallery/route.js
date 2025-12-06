@@ -2,18 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DATA_FILE = path.join(DATA_DIR, "gallery.json");
 const PUBLIC_GALLERY_DIR = path.join(process.cwd(), "public", "images", "gallery");
-
-async function readGalleryFile() {
-  try {
-    const content = await fs.readFile(DATA_FILE, "utf-8");
-    return JSON.parse(content);
-  } catch (error) {
-    return null;
-  }
-}
 
 async function buildDefaultItems() {
   try {
@@ -23,10 +12,14 @@ async function buildDefaultItems() {
       .sort((a, b) => a.localeCompare(b, "tr"))
       .map((file) => {
         const base = file.replace(/\.[^.]+$/, "");
+        const group = (base.split(/[-_]/)[0] || base).trim();
+        const caption = base
+          .replace(/[-_]+/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase());
         return {
           type: "image",
-          caption: base,
-          group: base,
+          caption,
+          group: group || "Genel",
           image: `/images/gallery/${file}`,
           embedCode: "",
         };
@@ -37,31 +30,22 @@ async function buildDefaultItems() {
   }
 }
 
-async function ensureGalleryData() {
-  let items = await readGalleryFile();
-  if (items && Array.isArray(items)) return items;
-
-  const defaults = await buildDefaultItems();
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(defaults, null, 2), "utf-8");
-  return defaults;
-}
-
 export async function GET() {
-  const items = await ensureGalleryData();
+  const items = await buildDefaultItems();
   return NextResponse.json({ items });
 }
 
 export async function POST(request) {
+  // Yönetici panelinden yapılan düzenlemelerin otomatik olarak kalıcılaşması istenmediği
+  // için POST isteği artık veriyi diske yazmaz. İstek başarıyla döner ancak içerik
+  // yalnızca oturum süresince tutulur.
   try {
     const body = await request.json();
     if (!Array.isArray(body?.items)) {
       return NextResponse.json({ error: "Geçersiz veri" }, { status: 400 });
     }
 
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.writeFile(DATA_FILE, JSON.stringify(body.items, null, 2), "utf-8");
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, persisted: false });
   } catch (error) {
     console.error("Galeri verisi kaydedilemedi:", error);
     return NextResponse.json({ error: "Kaydedilemedi" }, { status: 500 });
