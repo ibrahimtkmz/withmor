@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Script from "next/script";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
@@ -243,6 +243,9 @@ export default function App() {
   const [loginError, setLoginError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Yönetici işlemleri için herkesin görebileceği canlı kayıt listesi
+  const [activityLog, setActivityLog] = useState([]);
+
   // Tab State
   const [activeAboutTab, setActiveAboutTab] = useState("biz-kimiz");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -299,8 +302,35 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedLog = window.localStorage.getItem("withmor_activity_log");
+      if (savedLog) {
+        try {
+          const parsed = JSON.parse(savedLog);
+          if (Array.isArray(parsed)) setActivityLog(parsed);
+        } catch (error) {
+          console.error("Kayıtlar okunamadı", error);
+        }
+      }
+    }
+
     fetchGalleryItems();
-  }, []);
+    loadActivityLog();
+  }, [loadActivityLog]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("withmor_activity_log", JSON.stringify(activityLog));
+    }
+  }, [activityLog]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadActivityLog();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [loadActivityLog]);
 
   const persistGalleryItems = async (items) => {
     try {
@@ -313,6 +343,47 @@ export default function App() {
       console.error("Galeri verisi kaydedilemedi:", err);
         setGalleryError("Galeri verisi kaydedilemedi");
     }
+  };
+
+  const loadActivityLog = useCallback(async () => {
+    try {
+      const res = await fetch("/api/activity", { cache: "no-store" });
+      if (!res.ok) throw new Error("Kayıtlar alınamadı");
+      const data = await res.json();
+      if (Array.isArray(data?.items)) setActivityLog(data.items);
+    } catch (error) {
+      console.error("Kayıtlar yüklenemedi", error);
+    }
+  }, []);
+
+  const persistActivityEntry = async (entry) => {
+    try {
+      const res = await fetch("/api/activity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ entry }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data?.items)) {
+          setActivityLog(data.items);
+        }
+      }
+    } catch (error) {
+      console.error("Kayıt kaydedilemedi", error);
+    }
+  };
+
+  const recordActivity = (action, detail) => {
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      action,
+      detail,
+      timestamp: new Date().toISOString(),
+    };
+    setActivityLog((prev) => [entry, ...prev].slice(0, 50));
+    persistActivityEntry(entry);
   };
 
   // Galeri filtresi için aktif grup
@@ -739,16 +810,18 @@ export default function App() {
         }));
     }
 
-          if (type === "gallery") {
-        if (index !== null) {
-            const copy = [...galleryItems];
-            copy[index] = tempValue;
-            setGalleryItems(copy);
+    if (type === "gallery") {
+      if (index !== null) {
+          const copy = [...galleryItems];
+          copy[index] = tempValue;
+          setGalleryItems(copy);
           persistGalleryItems(copy);
+          recordActivity("Galeri Güncellendi", `${tempValue.caption || "İsimsiz"} içeriği düzenlendi.`);
         } else {
-            const updatedItems = [...galleryItems, tempValue];
-            setGalleryItems(updatedItems);
-            persistGalleryItems(updatedItems);
+          const updatedItems = [...galleryItems, tempValue];
+          setGalleryItems(updatedItems);
+          persistGalleryItems(updatedItems);
+          recordActivity("Galeriye Yeni İçerik", `${tempValue.caption || "Yeni içerik"} ${tempValue.type === "video" ? "video" : "görsel"} olarak eklendi.`);
         }
     }
 
@@ -780,8 +853,10 @@ export default function App() {
         const copy = [...references];
         copy[index] = tempValue;
         setReferences(copy);
+        recordActivity("Referans Güncellendi", `${tempValue.company} referansı düzenlendi.`);
       } else {
         setReferences([...references, tempValue]);
+        recordActivity("Yeni Referans", `${tempValue.company} referansı eklendi.`);
       }
     }
 
@@ -802,9 +877,10 @@ export default function App() {
     }
 
        if (type === "gallery" && index !== null) {
-        const newGallery = galleryItems.filter((_, i) => i !== index);
+       const newGallery = galleryItems.filter((_, i) => i !== index);
         setGalleryItems(newGallery);
            persistGalleryItems(newGallery);
+          recordActivity("Galeri Silindi", `${galleryItems[index]?.caption || "İçerik"} kaldırıldı.`);
     }
 
 
@@ -816,6 +892,7 @@ export default function App() {
     if (type === "reference" && index !== null) {
       const newReferences = references.filter((_, i) => i !== index);
       setReferences(newReferences);
+      recordActivity("Referans Silindi", `${references[index]?.company || "Referans"} kaldırıldı.`);
     }
 
     setEditModal({ open: false, type: null, index: null });
@@ -1495,6 +1572,46 @@ export default function App() {
                  </div>
               </div>
            </div>
+        </section>
+
+        {/* Yönetici Kayıtları (Herkes görebilir) */}
+        <section id="admin-activity" className="py-16 bg-slate-50 border-t border-slate-200">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
+                <Icons.Settings size={20} />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Canlı Yönetici Kayıtları</p>
+                <h2 className="text-2xl font-bold text-slate-900">Yapılan düzenlemeler herkese açık olarak listelenir</h2>
+              </div>
+            </div>
+
+            {activityLog.length === 0 ? (
+              <p className="text-sm text-slate-600 bg-white border border-slate-200 rounded-xl px-5 py-4 shadow-sm">
+                Henüz görüntülenecek bir yönetici kaydı bulunmuyor. Referans, yorum veya galeri üzerinde yapılan işlemler burada anlık olarak görünecektir.
+              </p>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                {activityLog.map((entry) => (
+                  <div key={entry.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
+                      <Icons.CheckCircle2 size={18} />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <p className="text-sm font-bold text-slate-900">{entry.action}</p>
+                        <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                          {new Date(entry.timestamp).toLocaleString("tr-TR")}
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-700 mt-1">{entry.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         {/* YENİ İLETİŞİM VE FORM BÖLÜMÜ (GÜNCELLENDİ) */}
