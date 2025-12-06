@@ -1676,7 +1676,14 @@ export default function App() {
     {/* GRID */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[
-        // --- SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
+        // --- ÖNCE ADMIN'DEN GELEN GALLERY ITEMS (dinamik) ---
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
+        })),
+
+        // --- SONRA SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
@@ -1686,13 +1693,6 @@ export default function App() {
           },
           index: null,
           isStatic: true,
-        })),
-
-        // --- MEVCUT GALLERY ITEMS (admin'den gelen) ---
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
         })),
       ]
         .filter(({ item }) =>
@@ -1741,7 +1741,6 @@ export default function App() {
                     className="relative w-full h-full cursor-pointer"
                     onClick={() => setActiveVideo(item.embedCode.trim())}
                   >
-                    {/* Karttaki küçük önizleme */}
                     <video
                       src={item.embedCode.trim()}
                       className="w-full h-full object-cover"
@@ -1825,6 +1824,12 @@ export default function App() {
     {/* DAHA FAZLA GÖR BUTONU */}
     {visibleGalleryCount <
       [
+        // UZUNLUK HESAPLARKEN DE AYNI SIRAYI KULLANIYORUZ
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
+        })),
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
@@ -1833,11 +1838,6 @@ export default function App() {
           },
           index: null,
           isStatic: true,
-        })),
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
         })),
       ].filter(({ item }) =>
         activeGalleryGroup === "Tümü" ||
@@ -1855,32 +1855,6 @@ export default function App() {
   </div>
 </section>
 
-{/* Video Büyütme Modalı */}
-{activeVideo && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-    <div className="relative w-full max-w-3xl px-4">
-      {/* Kapat butonu */}
-      <button
-        onClick={() => setActiveVideo(null)}
-        className="absolute -top-10 right-4 text-sm font-semibold text-slate-200 hover:text-white"
-      >
-        Kapat ✕
-      </button>
-
-      <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
-        <div className="aspect-video w-full">
-          <video
-            src={activeVideo}
-            className="w-full h-full object-contain"
-            controls
-            autoPlay
-            playsInline
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-)}
 
 
 
