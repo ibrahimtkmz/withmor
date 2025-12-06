@@ -1667,162 +1667,230 @@ export default function App() {
         </section>
 
                 {/* GALERİ BÖLÜMÜ */}
-        <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
-           <div className="mx-auto max-w-6xl px-6">
-              <div className="text-center mb-12 relative">
-                 <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
-                 <p className="text-slate-500 text-sm">
-                   Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
-                 </p>
+<section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
+  <div className="mx-auto max-w-6xl px-6">
+    <div className="text-center mb-12 relative">
+      <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
+      <p className="text-slate-500 text-sm">
+        Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
+      </p>
 
-                 {isLoggedIn && (
-                    <button 
-                       onClick={() => openAdd("gallery")} 
-                       className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
-                    >
-                       <Icons.Plus size={12}/> Yeni Öğe Ekle
-                    </button>
-                 )}
+      {isLoggedIn && (
+        <button
+          onClick={() => openAdd("gallery")}
+          className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
+        >
+          <Icons.Plus size={12} /> Yeni Öğe Ekle
+        </button>
+      )}
 
-                 {/* Grup Filtreleri */}
-                 <div className="mt-6 flex flex-wrap justify-center gap-2">
-                   {["Tümü", ...Array.from(new Set(galleryItems.map(item => item.group).filter(Boolean)))]
-                     .map((group) => (
-                       <button
-                         key={group}
-                         onClick={() => {
-                           setActiveGalleryGroup(group);
-                           setVisibleGalleryCount(8);
-                         }}
-                         className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                           activeGalleryGroup === group
-                             ? "bg-blue-900 text-white border-blue-900"
-                             : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
-                         }`}
-                       >
-                         {group}
-                       </button>
-                   ))}
-                 </div>
-              </div>
+      {/* Grup Filtreleri */}
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {[
+          "Tümü",
+          ...Array.from(
+            new Set(
+              galleryItems
+                .map((item) => item.group)
+                .filter(Boolean)
+            )
+          ),
+        ].map((group) => (
+          <button
+            key={group}
+            onClick={() => {
+              setActiveGalleryGroup(group);
+              setVisibleGalleryCount(8);
+            }}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+              activeGalleryGroup === group
+                ? "bg-blue-900 text-white border-blue-900"
+                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
+            }`}
+          >
+            {group}
+          </button>
+        ))}
+      </div>
+    </div>
 
-              {/* GRID */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {galleryItems
-                   .map((item, index) => ({ item, index }))
-                   .filter(({ item }) =>
-                     activeGalleryGroup === "Tümü" ||
-                     item.group === activeGalleryGroup
-                   )
-                   .slice(0, visibleGalleryCount)
-                   .map(({ item, index }) => (
-                    <div
-                      key={index}
-                      className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
-                    >
-                      {/* MEDYA ALANI */}
-                      <div
-                        className={
-                          item.type === "video"
-                            ? "relative w-full aspect-video bg-black flex items-center justify-center"
-                            : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
-                        }
-                      >
-                        {item.type === "image" ? (
-                          item.image ? (
-                            <>
-                              <img
-                                src={item.image}
-                                alt={item.caption || "Galeri görseli"}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                onError={handleImageError}
-                              />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
-                              </div>
-                            </>
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                              <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                              <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                                Resim Yok
-                              </span>
-                            </div>
-                          )
-                        ) : item.embedCode ? (
-                          <div className="w-full h-full">
-                            <div
-                              className="w-full h-full"
-                              // YouTube / Instagram / Facebook embed kodunu direkt gösteriyoruz
-                              dangerouslySetInnerHTML={{ __html: item.embedCode }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                              Video Embed Kodu Girilmemiş
-                            </span>
-                          </div>
-                        )}
+    {/* GRID */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {[
+        // --- SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
+        ...Array.from({ length: 22 }, (_, i) => ({
+          item: {
+            type: "image",
+            image: `/images/gallery/galeri-${i + 1}.jpg`,
+            caption: `Galeri ${i + 1}`,
+            // group: null -> sadece "Tümü" filtresinde görünsün
+          },
+          index: null,
+          isStatic: true,
+        })),
 
-                        {/* Admin edit butonları */}
-                        {isLoggedIn && (
-                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                             <button
-                               onClick={() => openEdit("gallery", index)}
-                               className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
-                             >
-                               <Icons.Edit size={12}/>
-                             </button>
-                             <button
-                               onClick={() => { setEditModal({open: true, type: "gallery", index}); }}
-                               className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
-                             >
-                               <Icons.Trash size={12}/>
-                             </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* ALT BİLGİ ALANI */}
-                      <div className="px-3 py-2 flex items-center justify-between gap-2">
-                        <div>
-                          <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
-                            {item.caption || "Galeri içeriği"}
-                          </p>
-                          {item.group && (
-                            <p className="text-[10px] text-slate-400 mt-0.5">
-                              {item.group}
-                            </p>
-                          )}
-                        </div>
-                        {item.type === "video" && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
-                            VİDEO
-                          </span>
-                        )}
-                      </div>
+        // --- MEVCUT GALLERY ITEMS (admin'den gelen) ---
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
+        })),
+      ]
+        .filter(({ item }) =>
+          activeGalleryGroup === "Tümü" ||
+          item.group === activeGalleryGroup
+        )
+        .slice(0, visibleGalleryCount)
+        .map(({ item, index, isStatic }, combinedIndex) => (
+          <div
+            key={isStatic ? `static-${combinedIndex}` : `dynamic-${index}`}
+            className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+          >
+            {/* MEDYA ALANI */}
+            <div
+              className={
+                item.type === "video"
+                  ? "relative w-full aspect-video bg-black flex items-center justify-center"
+                  : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
+              }
+            >
+              {item.type === "image" ? (
+                item.image ? (
+                  <>
+                    <img
+                      src={item.image}
+                      alt={item.caption || "Galeri görseli"}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      onError={handleImageError}
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
                     </div>
-                 ))}
-              </div>
-
-              {/* DAHA FAZLA GÖR BUTONU */}
-              {visibleGalleryCount <
-                galleryItems.filter(item =>
-                  activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
-                ).length && (
-                 <div className="mt-10 text-center">
-                    <button 
-                       onClick={() => setVisibleGalleryCount(prev => prev + 8)}
-                       className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
-                    >
-                       Daha Fazla Gör <Icons.ChevronDown size={16} />
-                    </button>
-                 </div>
+                  </>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                    <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                      Resim Yok
+                    </span>
+                  </div>
+                )
+              ) : item.type === "video" ? (
+                // VİDEO ALANI
+                item.embedCode ? (
+                  item.embedCode.includes("<iframe") ? (
+                    // Tam embed kodu girilmişse: olduğu gibi göster
+                    <div
+                      className="w-full h-full"
+                      dangerouslySetInnerHTML={{ __html: item.embedCode }}
+                    />
+                  ) : (
+                    // Sadece URL girilmişse: kendi iframe'imizi oluşturalım
+                    <iframe
+                      src={item.embedCode}
+                      title={item.caption || "Galeri videosu"}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  )
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                    <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                      Video Embed Kodu Girilmemiş
+                    </span>
+                  </div>
+                )
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                  <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                    Medya Yüklenemedi
+                  </span>
+                </div>
               )}
-           </div>
-        </section>
+
+              {/* Admin edit butonları – sabit görsellerde ÇALIŞMASIN */}
+              {isLoggedIn && !isStatic && (
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    onClick={() => openEdit("gallery", index)}
+                    className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                  >
+                    <Icons.Edit size={12} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditModal({
+                        open: true,
+                        type: "gallery",
+                        index,
+                      });
+                    }}
+                    className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                  >
+                    <Icons.Trash size={12} />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* ALT BİLGİ ALANI */}
+            <div className="px-3 py-2 flex items-center justify-between gap-2">
+              <div>
+                <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
+                  {item.caption || "Galeri içeriği"}
+                </p>
+                {item.group && (
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    {item.group}
+                  </p>
+                )}
+              </div>
+              {item.type === "video" && (
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
+                  VİDEO
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+    </div>
+
+    {/* DAHA FAZLA GÖR BUTONU */}
+    {visibleGalleryCount <
+      [
+        ...Array.from({ length: 22 }, (_, i) => ({
+          item: {
+            type: "image",
+            image: `/images/gallery/galeri-${i + 1}.jpg`,
+            caption: `Galeri ${i + 1}`,
+          },
+          index: null,
+          isStatic: true,
+        })),
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
+        })),
+      ].filter(({ item }) =>
+        activeGalleryGroup === "Tümü" ||
+        item.group === activeGalleryGroup
+      ).length && (
+        <div className="mt-10 text-center">
+          <button
+            onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+          >
+            Daha Fazla Gör <Icons.ChevronDown size={16} />
+          </button>
+        </div>
+      )}
+  </div>
+</section>
+
 
 
       </main>
