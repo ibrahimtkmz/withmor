@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Script from "next/script";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -621,6 +620,24 @@ export default function App() {
     }
   }, []);
 
+  // Elfsight sosyal medya eklentisini güvenilir şekilde yükle
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scriptId = "elfsight-platform-script";
+    const existingScript = document.getElementById(scriptId);
+
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "https://static.elfsight.com/platform/platform.js";
+      script.defer = true;
+      document.body.appendChild(script);
+    } else if (window.eapps?.platform?.run) {
+      window.eapps.platform.run();
+    }
+  }, []);
+
   // Yeni Fonksiyon: Bölüm Kaydırma ve Tab Değiştirme
   const scrollToAbout = (tabKey) => {
     setActiveAboutTab(tabKey);
@@ -843,13 +860,22 @@ export default function App() {
     e.target.onerror = null;
   };
 
+  const galleryGroups = [
+    "Tümü",
+    ...new Set(
+      galleryItems
+        .map((item) => item.group || "Galeri")
+        .filter(Boolean)
+    ),
+  ];
+
    return (
     // KURUMSAL TEMA: Beyaz zemin, Koyu gri metinler, Klasik font
     // overflow-x-hidden eklendi: Mobilde sağa sola kaymayı engeller
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
+      <header className="sticky top-0 inset-x-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-lg shadow-[0_8px_30px_rgba(15,23,42,0.08)] supports-[backdrop-filter]:bg-white/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
           <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm">
@@ -1018,18 +1044,44 @@ export default function App() {
           <div>
             {/* Vurgulu Metinler */}
             <div className="mb-6 flex flex-wrap gap-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold text-blue-700 border border-blue-100 shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                Yüksek Performans, Yüksek Güven
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-1 text-[11px] font-bold text-green-700 border border-green-100 shadow-sm">
-                <Icons.CheckCircle2 size={12} />
-                EN-81 Standartlarına Uygun
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-purple-50 px-3 py-1 text-[11px] font-bold text-purple-700 border border-purple-100 shadow-sm">
-                <Icons.Star size={12} fill="currentColor" />
-                %100 Müşteri Memnuniyeti
-              </div>
+              {[ 
+                {
+                  text: "Yüksek Performans, Yüksek Güven",
+                  content: (
+                    <>
+                      <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
+                      Yüksek Performans, Yüksek Güven
+                    </>
+                  ),
+                },
+                {
+                  text: "EN-81 Standartlarına Uygun",
+                  content: (
+                    <>
+                      <Icons.CheckCircle2 size={12} />
+                      EN-81 Standartlarına Uygun
+                    </>
+                  ),
+                },
+                {
+                  text: "%100 Müşteri Memnuniyeti",
+                  content: (
+                    <>
+                      <Icons.Star size={12} fill="currentColor" />
+                      %100 Müşteri Memnuniyeti
+                    </>
+                  ),
+                },
+              ].map((badge, idx) => (
+                <div key={idx} className="relative inline-flex">
+                  <span
+                    className="absolute inset-[-3px] rounded-full bg-[conic-gradient(at_50%_50%,#ff3737,#ffb347,#2dd4bf,#3b82f6,#a855f7,#ff3737)] opacity-90 animate-border-flow blur-[2px]"
+                  />
+                  <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
+                    {badge.content}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem] leading-tight">
@@ -1569,9 +1621,9 @@ export default function App() {
                 
                 {/* 1. RGB Animasyonlu İletişim Formu */}
                 <div className="relative group z-10">
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200 animate-tilt"></div>
-                    <div className="relative overflow-hidden rounded-2xl p-[3px]">
-                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+                    <div className="absolute -inset-[6px] rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-80 blur-md transition duration-1000 group-hover:opacity-100 group-hover:duration-300 animate-tilt"></div>
+                    <div className="relative overflow-hidden rounded-2xl p-[4px]">
+                      <span className="absolute inset-[-120%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                       <div className="relative bg-white h-full rounded-xl p-6 md:p-8 shadow-2xl">
                         <h3 className="text-2xl font-bold text-slate-900 mb-6">Hızlı İletişim Formu</h3>
                         <form onSubmit={handleMainContactSubmit} className="space-y-4">
@@ -1622,199 +1674,212 @@ export default function App() {
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="text-center mb-12 relative">
+          <div className="text-center mb-10 relative">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
-              <p className="text-slate-500 text-sm">
-                Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
-              </p>
+            <p className="text-slate-500 text-sm">
+              Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
+            </p>
 
-              {isLoggedIn && (
-                <button
-                  onClick={() => openAdd("gallery")}
-                  className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
-                >
-                  <Icons.Plus size={12} /> Yeni Öğe Ekle
-                </button>
-              )}
-
-            </div>
-
-      {/* GRID */}
-      {galleryLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={`skeleton-${i}`}
-              className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {galleryItems
-            .filter(
-              (item) =>
-                activeGalleryGroup === "Tümü" ||
-                item.group === activeGalleryGroup
-            )
-            .slice(0, visibleGalleryCount)
-            .map((item, index) => (
-              <div
-                key={`gallery-${index}`}
-                className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+            {isLoggedIn && (
+              <button
+                onClick={() => openAdd("gallery")}
+                className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
               >
-                {/* MEDYA ALANI */}
-                <div
-                  className={
-                    item.type === "video"
-                      ? "relative w-full aspect-video bg-black flex items-center justify-center"
-                      : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
-                  }
-                >
-                  {item.type === "image" ? (
-                    item.image ? (
-                      <>
-                        <img
-                          src={item.image}
-                          alt={item.caption || "Galeri görseli"}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          onError={handleImageError}
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
-                        </div>
-                      </>
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                        <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                          Resim Yok
-                        </span>
-                      </div>
-                    )
-                  ) : item.type === "video" ? (
-                    item.embedCode ? (
-                      <div
-                        className="relative w-full h-full cursor-pointer"
-                        onClick={() => setActiveVideo(item.embedCode.trim())}
-                      >
-                        <video
-                          src={item.embedCode.trim()}
-                          className="w-full h-full object-cover"
-                          muted
-                          loop
-                          playsInline
-                        />
+                <Icons.Plus size={12} /> Yeni Öğe Ekle
+              </button>
+            )}
+          </div>
 
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
-                            ▶
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {galleryGroups.map((group) => (
+              <button
+                key={group}
+                onClick={() => setActiveGalleryGroup(group)}
+                className={`rounded-full border px-4 py-2 text-xs font-semibold transition-all shadow-sm hover:shadow-md ${
+                  activeGalleryGroup === group
+                    ? "bg-blue-700 border-blue-700 text-white"
+                    : "bg-white border-slate-200 text-slate-600 hover:border-blue-200 hover:text-blue-700"
+                }`}
+              >
+                {group}
+              </button>
+            ))}
+          </div>
+
+          {galleryLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={`skeleton-${i}`}
+                  className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {galleryItems
+                .filter(
+                  (item) =>
+                    activeGalleryGroup === "Tümü" ||
+                    item.group === activeGalleryGroup
+                )
+                .slice(0, visibleGalleryCount)
+                .map((item, index) => (
+                  <div
+                    key={`gallery-${index}`}
+                    className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+                  >
+                    {/* MEDYA ALANI */}
+                    <div
+                      className={
+                        item.type === "video"
+                          ? "relative w-full aspect-video bg-black flex items-center justify-center"
+                          : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
+                      }
+                    >
+                      {item.type === "image" ? (
+                        item.image ? (
+                          <>
+                            <img
+                              src={item.image}
+                              alt={item.caption || "Galeri görseli"}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              onError={handleImageError}
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                              <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                            </div>
+                          </>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                              Resim Yok
+                            </span>
+                          </div>
+                        )
+                      ) : item.type === "video" ? (
+                        item.embedCode ? (
+                          <div
+                            className="relative w-full h-full cursor-pointer"
+                            onClick={() => setActiveVideo(item.embedCode.trim())}
+                          >
+                            <video
+                              src={item.embedCode.trim()}
+                              className="w-full h-full object-cover"
+                              muted
+                              loop
+                              playsInline
+                            />
+
+                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
+                                ▶
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                              Video URL girilmemiş
+                            </span>
+                          </div>
+                        )
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                          <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                            Medya Yüklenemedi
                           </span>
                         </div>
+                      )}
+
+                      {isLoggedIn && (
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <button
+                            onClick={() => openEdit("gallery", index)}
+                            className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                          >
+                            <Icons.Edit size={12} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditModal({
+                                open: true,
+                                type: "gallery",
+                                index,
+                              });
+                            }}
+                            className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                          >
+                            <Icons.Trash size={12} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* ALT BİLGİ ALANI */}
+                    <div className="px-3 py-2 flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
+                          {item.caption || "Galeri içeriği"}
+                        </p>
+                        {item.group && (
+                          <p className="text-[10px] text-slate-400 mt-0.5">
+                            {item.group}
+                          </p>
+                        )}
                       </div>
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                        <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                          Video URL girilmemiş
+                      {item.type === "video" && (
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
+                          VİDEO
                         </span>
-                      </div>
-                    )
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                      <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                        Medya Yüklenemedi
-                      </span>
+                      )}
                     </div>
-                  )}
-
-                  {isLoggedIn && (
-                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <button
-                        onClick={() => openEdit("gallery", index)}
-                        className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
-                      >
-                        <Icons.Edit size={12} />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditModal({
-                            open: true,
-                            type: "gallery",
-                            index,
-                          });
-                        }}
-                        className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
-                      >
-                        <Icons.Trash size={12} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* ALT BİLGİ ALANI */}
-                <div className="px-3 py-2 flex items-center justify-between gap-2">
-                  <div>
-                    <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
-                      {item.caption || "Galeri içeriği"}
-                    </p>
-                    {item.group && (
-                      <p className="text-[10px] text-slate-400 mt-0.5">
-                        {item.group}
-                      </p>
-                    )}
                   </div>
-                  {item.type === "video" && (
-                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
-                      VİDEO
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+                ))}
+            </div>
+          )}
+
+          {galleryError && (
+            <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
+          )}
+
+          {/* DAHA FAZLA GÖR BUTONU */}
+          {galleryItems.filter(
+            (item) =>
+              activeGalleryGroup === "Tümü" ||
+              item.group === activeGalleryGroup
+          ).length && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+              >
+                Daha Fazla Gör <Icons.ChevronDown size={16} />
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </section>
 
-      {galleryError && (
-        <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
-      )}
+      {/* SOSYAL MEDYA ALANI */}
+      <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
+            <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
+          </div>
 
-      {/* DAHA FAZLA GÖR BUTONU */}
-      {galleryItems.filter(
-        (item) =>
-          activeGalleryGroup === "Tümü" ||
-          item.group === activeGalleryGroup
-      ).length && (
-        <div className="mt-10 text-center">
-          <button
-            onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
-          >
-            Daha Fazla Gör <Icons.ChevronDown size={16} />
-          </button>
+          <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+          </div>
         </div>
-      )}
-      </div>
-    </section>
-        {/* SOSYAL MEDYA ALANI */}
-  <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
-    <div className="mx-auto max-w-6xl px-6">
-      <div className="text-center mb-8">
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
-      <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
-    </div>
+      </section>
 
-    <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
-      <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
-    </div>
-  </div>
-
-  <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-</section>
-
-{/* Video Büyütme Modalı */}
+      {/* Video Büyütme Modalı */}
 {activeVideo && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
     <div className="relative w-full max-w-3xl px-4">
@@ -2059,6 +2124,17 @@ export default function App() {
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        @keyframes border-flow {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        .animate-border-flow {
+          animation: border-flow 6s linear infinite;
+          background-size: 200% 200%;
+        }
+      `}</style>
     </div>
   );
 }
