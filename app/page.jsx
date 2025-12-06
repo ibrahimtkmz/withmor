@@ -1882,65 +1882,6 @@ export default function App() {
       );
     })}
 </div>
-
-                 
-
-                        {/* Admin edit butonları */}
-                        {isLoggedIn && (
-                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                             <button
-                               onClick={() => openEdit("gallery", index)}
-                               className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
-                             >
-                               <Icons.Edit size={12}/>
-                             </button>
-                             <button
-                               onClick={() => { setEditModal({open: true, type: "gallery", index}); }}
-                               className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
-                             >
-                               <Icons.Trash size={12}/>
-                             </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* ALT BİLGİ ALANI */}
-                      <div className="px-3 py-2 flex items-center justify-between gap-2">
-                        <div>
-                          <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
-                            {item.caption || "Galeri içeriği"}
-                          </p>
-                          {item.group && (
-                            <p className="text-[10px] text-slate-400 mt-0.5">
-                              {item.group}
-                            </p>
-                          )}
-                        </div>
-                        {item.type === "video" && (
-                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
-                            VİDEO
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                 ))}
-              </div>
-
-              {/* DAHA FAZLA GÖR BUTONU */}
-              {visibleGalleryCount <
-                galleryItems.filter(item =>
-                  activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
-                ).length && (
-                 <div className="mt-10 text-center">
-                    <button 
-                       onClick={() => setVisibleGalleryCount(prev => prev + 8)}
-                       className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
-                    >
-                       Daha Fazla Gör <Icons.ChevronDown size={16} />
-                    </button>
-                 </div>
-              )}
-           </div>
         </section>
 
 
