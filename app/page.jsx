@@ -237,6 +237,68 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
+  const galleryTabs = [
+    {
+      id: "hidrolik-yuk",
+      title: "Hidrolik Yük Asansörü",
+      images: [
+        "/hidrolik-sistemler.jpg",
+        "/yuk-asansorleri-platformlar.jpg",
+        "/yuk-kabinleri.jpg",
+      ],
+    },
+    {
+      id: "makine-dairesiz-yuk",
+      title: "Makine Dairesiz Yük Asansörü",
+      images: ["/makine-sasesi-mrl-mr.png"],
+    },
+    {
+      id: "homelift",
+      title: "Homelift",
+      images: [
+        "/images/gallery/galeri-4.jpg",
+        "/images/gallery/galeri-8.jpg",
+        "/images/gallery/galeri-16.jpg",
+      ],
+    },
+    {
+      id: "insan-asansoru",
+      title: "İnsan Asansörü",
+      images: ["/kabinler.webp"],
+    },
+    {
+      id: "konveyor-asansorler",
+      title: "Konveyör Asansörler",
+      images: [
+        "/images/gallery/galeri-6.jpg",
+        "/images/gallery/galeri-10.jpg",
+        "/images/gallery/galeri-14.jpg",
+      ],
+    },
+    {
+      id: "panoramik-asansorler",
+      title: "Panoramik Asansörler",
+      images: [
+        "/images/gallery/galeri-12.jpg",
+        "/images/gallery/galeri-15.jpg",
+        "/images/gallery/galeri-18.jpg",
+      ],
+    },
+    {
+      id: "yatay-yamac-asansorler",
+      title: "Yatay Yamaç Asansörler",
+      images: [
+        "/images/gallery/galeri-21.jpg",
+        "/images/gallery/galeri-22.jpg",
+      ],
+    },
+    {
+      id: "ozel-projeler",
+      title: "Özel Projeler",
+      images: ["/celik-konstruksiyonlar.webp"],
+    },
+  ];
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -255,8 +317,7 @@ export default function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [visibleReviewCount, setVisibleReviewCount] = useState(3);
   const [activeVideo, setActiveVideo] = useState(null);
-
-
+  const [activeTab, setActiveTab] = useState(galleryTabs[0].id);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [quoteForm, setQuoteForm] = useState({
     name: "",
@@ -284,6 +345,7 @@ export default function App() {
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
+  const activeGroup = galleryTabs.find((tab) => tab.id === activeTab);
 
   useEffect(() => {
     loadActivityLog();
@@ -892,60 +954,6 @@ export default function App() {
     e.target.src = "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&q=80&w=800";
     e.target.onerror = null;
   };
-
-  const galleryGroups = [
-    {
-      title: "Hidrolik Yük Asansörü",
-      images: [
-        "/hidrolik-sistemler.jpg",
-        "/yuk-asansorleri-platformlar.jpg",
-        "/yuk-kabinleri.jpg",
-      ],
-    },
-    {
-      title: "Makine Dairesiz Yük Asansörü",
-      images: ["/makine-sasesi-mrl-mr.png"],
-    },
-    {
-      title: "Homelift",
-      images: [
-        "/images/gallery/galeri-4.jpg",
-        "/images/gallery/galeri-8.jpg",
-        "/images/gallery/galeri-16.jpg",
-      ],
-    },
-    {
-      title: "İnsan Asansörü",
-      images: ["/kabinler.webp"],
-    },
-    {
-      title: "Konveyör Asansörler",
-      images: [
-        "/images/gallery/galeri-6.jpg",
-        "/images/gallery/galeri-10.jpg",
-        "/images/gallery/galeri-14.jpg",
-      ],
-    },
-    {
-      title: "Panoramik Asansörler",
-      images: [
-        "/images/gallery/galeri-12.jpg",
-        "/images/gallery/galeri-15.jpg",
-        "/images/gallery/galeri-18.jpg",
-      ],
-    },
-    {
-      title: "Yatay Yamaç Asansörler",
-      images: [
-        "/images/gallery/galeri-21.jpg",
-        "/images/gallery/galeri-22.jpg",
-      ],
-    },
-    {
-      title: "Özel Projeler",
-      images: ["/celik-konstruksiyonlar.webp"],
-    },
-  ];
 
    return (
     // KURUMSAL TEMA: Beyaz zemin, Koyu gri metinler, Klasik font
@@ -1774,40 +1782,52 @@ export default function App() {
 
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="text-center mb-10 relative">
+        <div className="mx-auto max-w-6xl px-6 space-y-10">
+          <div className="text-center mb-4 relative">
             <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
             <p className="text-slate-500 text-sm">
               Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
             </p>
           </div>
 
-          <div className="space-y-10">
-            {galleryGroups.map((group) => (
-              <div key={group.title} className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-slate-900">{group.title}</h3>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {group.images.map((src) => (
-                    <div
-                      key={src}
-                      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="relative aspect-square bg-slate-50">
-                        <img
-                          src={src}
-                          alt={group.title}
-                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                      </div>
+          <section className="space-y-6">
+            <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
+              {galleryTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  {tab.title}
+                </button>
+              ))}
+            </div>
+
+            {activeGroup && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {activeGroup.images.map((src) => (
+                  <div
+                    key={src}
+                    className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="relative aspect-square bg-slate-50">
+                      <img
+                        src={src}
+                        alt={activeGroup.title}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </section>
         </div>
       </section>
       {/* Video Büyütme Modalı */}
