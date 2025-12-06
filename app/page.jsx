@@ -276,6 +276,40 @@ export default function App() {
 
    // GALERİ: Resim + Video + Grup Bazlı Yapı
   const [galleryItems, setGalleryItems] = useState([
+      // SAYFA YENİLENİNCE GALERİYİ KAYBETMEMEK İÇİN LOCALSTORAGE KULLAN
+  // 1) İlk yüklemede localStorage'dan oku
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const stored = window.localStorage.getItem("withmor_gallery_items");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setGalleryItems(parsed);
+        }
+      }
+    } catch (err) {
+      console.error("Galeri verisi okunamadı:", err);
+    }
+  }, []);
+
+  // 2) galleryItems her değiştiğinde localStorage'a yaz
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      window.localStorage.setItem(
+        "withmor_gallery_items",
+        JSON.stringify(galleryItems)
+      );
+    } catch (err) {
+      console.error("Galeri verisi kaydedilemedi:", err);
+    }
+  }, [galleryItems]);
+
+
+    
     {
       type: "image", // "image" veya "video"
       caption: "Sanayi tesisi – yük asansörü",
