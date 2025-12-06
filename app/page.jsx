@@ -279,24 +279,24 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-   const [galleryItems, setGalleryItems] = useState([]);
+  const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [galleryError, setGalleryError] = useState("");
 
   const fetchGalleryItems = async () => {
-    
-
-  const fetchGalleryItems = async () => {
     try {
-         const res = await fetch("/api/gallery");
+      const res = await fetch("/api/gallery");
       if (!res.ok) throw new Error("Galeri verisi alınamadı");
       const data = await res.json();
       if (Array.isArray(data?.items)) {
         setGalleryItems(data.items);
       }
     } catch (err) {
-      
+      setGalleryError("Galeri verisi alınamadı");
+    } finally {
+      setGalleryLoading(false);
     }
+  };
 
   useEffect(() => {
     fetchGalleryItems();
