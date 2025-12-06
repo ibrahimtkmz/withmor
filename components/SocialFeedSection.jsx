@@ -16,7 +16,7 @@ export default function SocialFeedSection() {
     }
 
     const scriptId = "elfsight-platform-script";
-    const existingScript = document.getElementById(scriptId) as HTMLScriptElement | null;
+    const existingScript = document.getElementById(scriptId);
 
     if (existingScript) {
       // Script daha önce eklenmiş
