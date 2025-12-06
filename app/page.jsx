@@ -245,6 +245,7 @@ export default function App() {
 
   // Yönetici işlemleri için herkesin görebileceği canlı kayıt listesi
   const [activityLog, setActivityLog] = useState([]);
+  const [socialReady, setSocialReady] = useState(false);
 
   // Tab State
   const [activeAboutTab, setActiveAboutTab] = useState("biz-kimiz");
@@ -288,7 +289,7 @@ export default function App() {
 
   const fetchGalleryItems = async () => {
     try {
-      const res = await fetch("/api/gallery");
+      const res = await fetch("/api/gallery", { cache: "no-store" });
       if (!res.ok) throw new Error("Galeri verisi alınamadı");
       const data = await res.json();
       if (Array.isArray(data?.items)) {
@@ -302,44 +303,28 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedLog = window.localStorage.getItem("withmor_activity_log");
-      if (savedLog) {
-        try {
-          const parsed = JSON.parse(savedLog);
-          if (Array.isArray(parsed)) setActivityLog(parsed);
-        } catch (error) {
-          console.error("Kayıtlar okunamadı", error);
-        }
-      }
-    }
-
+    setSocialReady(true);
     fetchGalleryItems();
     loadActivityLog();
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("withmor_activity_log", JSON.stringify(activityLog));
-    }
-  }, [activityLog]);
-
   const persistGalleryItems = async (items) => {
     try {
-       await fetch("/api/gallery", {
+      await fetch("/api/gallery", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items }),
+        cache: "no-store",
       });
     } catch (err) {
       console.error("Galeri verisi kaydedilemedi:", err);
-        setGalleryError("Galeri verisi kaydedilemedi");
+      setGalleryError("Galeri verisi kaydedilemedi");
     }
   };
 
   const loadActivityLog = async () => {
     try {
-      const res = await fetch("/api/activity");
+      const res = await fetch("/api/activity", { cache: "no-store" });
       if (!res.ok) throw new Error("Kayıtlar alınamadı");
       const data = await res.json();
       if (Array.isArray(data?.items)) setActivityLog(data.items);
@@ -354,6 +339,7 @@ export default function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ entry }),
+        cache: "no-store",
       });
       if (res.ok) {
         const data = await res.json();
@@ -1565,46 +1551,6 @@ export default function App() {
            </div>
         </section>
 
-        {/* Yönetici Kayıtları (Herkes görebilir) */}
-        <section id="admin-activity" className="py-16 bg-slate-50 border-t border-slate-200">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
-                <Icons.Settings size={20} />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Canlı Yönetici Kayıtları</p>
-                <h2 className="text-2xl font-bold text-slate-900">Yapılan düzenlemeler herkese açık olarak listelenir</h2>
-              </div>
-            </div>
-
-            {activityLog.length === 0 ? (
-              <p className="text-sm text-slate-600 bg-white border border-slate-200 rounded-xl px-5 py-4 shadow-sm">
-                Henüz görüntülenecek bir yönetici kaydı bulunmuyor. Referans, yorum veya galeri üzerinde yapılan işlemler burada anlık olarak görünecektir.
-              </p>
-            ) : (
-              <div className="grid md:grid-cols-2 gap-4">
-                {activityLog.map((entry) => (
-                  <div key={entry.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
-                      <Icons.CheckCircle2 size={18} />
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <p className="text-sm font-bold text-slate-900">{entry.action}</p>
-                        <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                          {new Date(entry.timestamp).toLocaleString("tr-TR")}
-                        </span>
-                      </div>
-                      <p className="text-sm text-slate-700 mt-1">{entry.detail}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
         {/* YENİ İLETİŞİM VE FORM BÖLÜMÜ (GÜNCELLENDİ) */}
         <section id="contact" className="py-20 bg-white scroll-mt-20">
           <div className="mx-auto max-w-6xl px-6">
@@ -1774,11 +1720,19 @@ export default function App() {
           </div>
 
           <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
-            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+            {socialReady ? (
+              <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+            ) : (
+              <div className="h-[480px] flex items-center justify-center text-slate-400 text-sm">
+                Sosyal medya akışı yükleniyor...
+              </div>
+            )}
           </div>
         </div>
 
-        <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+        {socialReady && (
+          <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+        )}
       </section>
 
       {/* GALERİ BÖLÜMÜ */}
