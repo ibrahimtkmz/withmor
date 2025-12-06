@@ -1,35 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Script from "next/script";
-
-// 📌 SOSYAL MEDYA FEED BÖLÜMÜ
-function SocialFeedSection() {
-  return (
-    <section
-      id="social-feed"
-      className="py-20 bg-slate-900 text-slate-100 border-t border-slate-800"
-    >
-      {/* Elfsight Script */}
-      <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-
-      <div className="mx-auto max-w-6xl px-6">
-        <h2 className="text-3xl font-bold mb-2">Sosyal Medya Akışı</h2>
-        <p className="text-sm text-slate-300 mb-6">
-          Instagram @withmorlift hesabımızdan paylaşılan fotoğraf ve videolar.
-        </p>
-
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 shadow-xl">
-          <div
-            className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35"
-            data-elfsight-app-lazy
-          ></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
 
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
@@ -268,7 +238,6 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -1656,65 +1625,6 @@ export default function App() {
         </section>
 
 
-        // 📌 SOSYAL MEDYA FEED BÖLÜMÜ (ELFSIGHT)
-function SocialFeedSection() {
-  // Elfsight script yükleyici
-  useEffect(() => {
-    const existing = document.querySelector(
-      'script[src="https://elfsightcdn.com/platform.js"]'
-    );
-
-    if (!existing) {
-      const script = document.createElement("script");
-      script.src = "https://elfsightcdn.com/platform.js";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  return (
-    <section
-      id="social-feed"
-      className="py-20 bg-slate-900 text-slate-100 border-t border-slate-800"
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Başlık */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-          <div>
-            <h2 className="text-3xl font-bold mb-2">Sosyal Medya Akışı</h2>
-            <p className="text-sm text-slate-300 max-w-xl">
-              Instagram @withmorlift hesabımızdan paylaşılan fotoğraf ve videolar.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              Instagram
-            </span>
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              TikTok
-            </span>
-            <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
-              Facebook
-            </span>
-          </div>
-        </div>
-
-        {/* ⭐ Elfsight Widget Alanı ⭐ */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 md:p-6 shadow-[0_18px_45px_rgba(15,23,42,0.8)]">
-          <div
-            className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35"
-            data-elfsight-app-lazy
-          ></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-
-
 {/* GALERİ BÖLÜMÜ */}
 <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
   <div className="mx-auto max-w-6xl px-6">
@@ -1766,14 +1676,7 @@ function SocialFeedSection() {
     {/* GRID */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[
-        // --- ÖNCE ADMIN'DEN GELEN GALLERY ITEMS (dinamik) ---
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
-        })),
-
-        // --- SONRA SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
+        // --- SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
@@ -1783,6 +1686,13 @@ function SocialFeedSection() {
           },
           index: null,
           isStatic: true,
+        })),
+
+        // --- MEVCUT GALLERY ITEMS (admin'den gelen) ---
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
         })),
       ]
         .filter(({ item }) =>
@@ -1831,6 +1741,7 @@ function SocialFeedSection() {
                     className="relative w-full h-full cursor-pointer"
                     onClick={() => setActiveVideo(item.embedCode.trim())}
                   >
+                    {/* Karttaki küçük önizleme */}
                     <video
                       src={item.embedCode.trim()}
                       className="w-full h-full object-cover"
@@ -1914,12 +1825,6 @@ function SocialFeedSection() {
     {/* DAHA FAZLA GÖR BUTONU */}
     {visibleGalleryCount <
       [
-        // UZUNLUK HESAPLARKEN DE AYNI SIRAYI KULLANIYORUZ
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
-        })),
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
@@ -1928,6 +1833,11 @@ function SocialFeedSection() {
           },
           index: null,
           isStatic: true,
+        })),
+        ...galleryItems.map((item, index) => ({
+          item,
+          index,
+          isStatic: false,
         })),
       ].filter(({ item }) =>
         activeGalleryGroup === "Tümü" ||
@@ -1945,6 +1855,32 @@ function SocialFeedSection() {
   </div>
 </section>
 
+{/* Video Büyütme Modalı */}
+{activeVideo && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+    <div className="relative w-full max-w-3xl px-4">
+      {/* Kapat butonu */}
+      <button
+        onClick={() => setActiveVideo(null)}
+        className="absolute -top-10 right-4 text-sm font-semibold text-slate-200 hover:text-white"
+      >
+        Kapat ✕
+      </button>
+
+      <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
+        <div className="aspect-video w-full">
+          <video
+            src={activeVideo}
+            className="w-full h-full object-contain"
+            controls
+            autoPlay
+            playsInline
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
 
 
