@@ -286,6 +286,7 @@ export default function App() {
   const fetchGalleryItems = async () => {
     
 
+  const fetchGalleryItems = async () => {
     try {
          const res = await fetch("/api/gallery");
       if (!res.ok) throw new Error("Galeri verisi alınamadı");
@@ -1618,53 +1619,23 @@ export default function App() {
         </section>
 
 
-{/* GALERİ BÖLÜMÜ */}
-<section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
-  <div className="mx-auto max-w-6xl px-6">
-    <div className="text-center mb-12 relative">
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
-      <p className="text-slate-500 text-sm">
-        Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
-      </p>
+      {/* GALERİ BÖLÜMÜ */}
+      <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center mb-12 relative">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
+            <p className="text-slate-500 text-sm">
+              Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
+            </p>
 
-      {isLoggedIn && (
-        <button
-          onClick={() => openAdd("gallery")}
-          className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
-        >
-          <Icons.Plus size={12} /> Yeni Öğe Ekle
-        </button>
-      )}
-
-      {/* Grup Filtreleri */}
-      <div className="mt-6 flex flex-wrap justify-center gap-2">
-        {[
-          "Tümü",
-          ...Array.from(
-            new Set(
-              galleryItems
-                .map((item) => item.group)
-                .filter(Boolean)
-            )
-          ),
-        ].map((group) => (
-          <button
-            key={group}
-            onClick={() => {
-              setActiveGalleryGroup(group);
-              setVisibleGalleryCount(8);
-            }}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-              activeGalleryGroup === group
-                ? "bg-blue-900 text-white border-blue-900"
-                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
-            }`}
-          >
-            {group}
-          </button>
-        ))}
-      </div>
-    </div>
+            {isLoggedIn && (
+              <button
+                onClick={() => openAdd("gallery")}
+                className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
+              >
+                <Icons.Plus size={12} /> Yeni Öğe Ekle
+              </button>
+            )}
 
     {/* GRID */}
   {galleryLoading ? (
@@ -1718,46 +1689,102 @@ export default function App() {
                     </span>
                   </div>
                 )
-              ) : item.type === "video" ? (
-                item.embedCode ? (
-                  // SUNUCU VİDEOSU: /videos/xxx.mp4 gibi
+                .slice(0, visibleGalleryCount)
+                .map((item, index) => (
                   <div
-                    className="relative w-full h-full cursor-pointer"
-                    onClick={() => setActiveVideo(item.embedCode.trim())}
+                    key={`gallery-${index}`}
+                    className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
                   >
-                    {/* Karttaki küçük önizleme */}
-                    <video
-                      src={item.embedCode.trim()}
-                      className="w-full h-full object-cover"
-                      muted
-                      loop
-                      playsInline
-                    />
+                    {/* MEDYA ALANI */}
+                    <div
+                      className={
+                        item.type === "video"
+                          ? "relative w-full aspect-video bg-black flex items-center justify-center"
+                          : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
+                      }
+                    >
+                      {item.type === "image" ? (
+                        item.image ? (
+                          <>
+                            <img
+                              src={item.image}
+                              alt={item.caption || "Galeri görseli"}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              onError={handleImageError}
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                              <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                            </div>
+                          </>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                              Resim Yok
+                            </span>
+                          </div>
+                        )
+                      ) : item.type === "video" ? (
+                        item.embedCode ? (
+                          <div
+                            className="relative w-full h-full cursor-pointer"
+                            onClick={() => setActiveVideo(item.embedCode.trim())}
+                          >
+                            <video
+                              src={item.embedCode.trim()}
+                              className="w-full h-full object-cover"
+                              muted
+                              loop
+                              playsInline
+                            />
 
-                    {/* Overlay + Play butonu */}
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
-                        ▶
-                      </span>
+                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
+                                ▶
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                              Video URL girilmemiş
+                            </span>
+                          </div>
+                        )
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                          <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                            Medya Yüklenemedi
+                          </span>
+                        </div>
+                      )}
+
+                      {isLoggedIn && (
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <button
+                            onClick={() => openEdit("gallery", index)}
+                            className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                          >
+                            <Icons.Edit size={12} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditModal({
+                                open: true,
+                                type: "gallery",
+                                index,
+                              });
+                            }}
+                            className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                          >
+                            <Icons.Trash size={12} />
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                    <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                      Video URL girilmemiş
-                    </span>
-                  </div>
-                )
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                  <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                    Medya Yüklenemedi
-                  </span>
-                </div>
-              )}
 
             {/* Admin edit butonları */}
               {isLoggedIn && (
@@ -1783,6 +1810,7 @@ export default function App() {
                 </div>
               )}
             </div>
+          )}
 
             {/* ALT BİLGİ ALANI */}
             <div className="px-3 py-2 flex items-center justify-between gap-2">
@@ -1824,9 +1852,7 @@ export default function App() {
             Daha Fazla Gör <Icons.ChevronDown size={16} />
           </button>
         </div>
-      )}
-  </div>
-</section>
+      </section>
 
         {/* SOSYAL MEDYA ALANI */}
 <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
