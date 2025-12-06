@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import SocialFeedSection from "./components/SocialFeedSection.jsx";
+import SocialFeedSection from "./SocialFeedSection";
 
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
