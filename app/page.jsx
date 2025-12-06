@@ -1938,39 +1938,39 @@ export default function App() {
           </section>
         </div>
       </section>
-      {/* Video Büyütme Modalı */}
-{activeVideo && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-    <div className="relative w-full max-w-3xl px-4">
-      {/* Kapat butonu */}
-      <button
-        onClick={() => setActiveVideo(null)}
-        className="absolute -top-10 right-4 text-sm font-semibold text-slate-200 hover:text-white"
-      >
-        Kapat ✕
-      </button>
+        {/* Video Büyütme Modalı */}
+        {activeVideo && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            <div className="relative w-full max-w-3xl px-4">
+              {/* Kapat butonu */}
+              <button
+                onClick={() => setActiveVideo(null)}
+                className="absolute -top-10 right-4 text-sm font-semibold text-slate-200 hover:text-white"
+              >
+                Kapat ✕
+              </button>
 
-      <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
-        <div className="aspect-video w-full bg-black flex items-center justify-center">
-          {activeVideo.type === "embed" ? (
-            <div
-              className="w-full h-full"
-              dangerouslySetInnerHTML={{ __html: activeVideo.content }}
-            />
-          ) : (
-            <video
-              src={activeVideo.content}
-              className="w-full h-full object-contain"
-              controls
-              autoPlay
-              playsInline
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+              <div className="w-full rounded-2xl bg-black overflow-hidden shadow-2xl">
+                <div className="aspect-video w-full bg-black flex items-center justify-center">
+                  {activeVideo.type === "embed" ? (
+                    <div
+                      className="w-full h-full"
+                      dangerouslySetInnerHTML={{ __html: activeVideo.content }}
+                    />
+                  ) : (
+                    <video
+                      src={activeVideo.content}
+                      className="w-full h-full object-contain"
+                      controls
+                      autoPlay
+                      playsInline
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
 <SocialFeedSection />
 
