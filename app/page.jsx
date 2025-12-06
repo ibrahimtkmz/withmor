@@ -1684,7 +1684,7 @@ export default function App() {
         ...Array.from({ length: 22 }, (_, i) => ({
           item: {
             type: "image",
-            image: `/images/gallery/galeri-${i + 1}.jpg`,
+            image: `/gallery/galeri-${i + 1}.jpg`,
             caption: `Galeri ${i + 1}`,
           },
           index: null,
@@ -1695,7 +1695,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/celik-konstrukisyonlar.webp",
+            image: "/public/celik-konstrukisyonlar.webp",
             caption: "Çelik Konstrüksiyonlar",
             group: "Çelik Konstrüksiyonlar",
           },
@@ -1705,7 +1705,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/hidrolik-sistemler.jpg",
+            image: "/public/hidrolik-sistemler.jpg",
             caption: "Hidrolik Sistemler",
             group: "Hidrolik Sistemler",
           },
@@ -1715,7 +1715,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/kabinler.webp",
+            image: "/public/kabinler.webp",
             caption: "Kabinler",
             group: "Kabinler",
           },
@@ -1725,7 +1725,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/makine-sasasi-mrl-mr.png",
+            image: "/public/makine-sasasi-mrl-mr.png",
             caption: "Makine Şasesi MRL-MR",
             group: "Makine Şasesi MRL-MR",
           },
@@ -1735,7 +1735,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/yuk-asansorleri-platformlar.jpg",
+            image: "/public/yuk-asansorleri-platformlar.jpg",
             caption: "Yük Asansörleri ve Platformlar",
             group: "Yük Asansörleri ve Platformlar",
           },
@@ -1745,7 +1745,7 @@ export default function App() {
         {
           item: {
             type: "image",
-            image: "/images/yuk-kabinleri.jpg",
+            image: "/public/yuk-kabinleri.jpg",
             caption: "Yük Kabinleri",
             group: "Yük Kabinleri",
           },
