@@ -1939,7 +1939,7 @@ export default function App() {
                <div className="flex items-center gap-2 mb-4 text-white">
                   <div className="h-8 w-24 flex items-center">
                     <img
-                      src="/images/withmor-logo.png"
+                      src="/images/withmor-logo-beyaz.png"
                       alt="Withmor Logo"
                       className="h-15 w-auto object-contain"
                     />
