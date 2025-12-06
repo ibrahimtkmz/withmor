@@ -279,26 +279,24 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-   // GALERİ: Resim + Video + Grup Bazlı Yapı
-  const [galleryItems, setGalleryItems] = useState([]);
+   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [galleryError, setGalleryError] = useState("");
 
   const fetchGalleryItems = async () => {
+    
+
+  const fetchGalleryItems = async () => {
     try {
-      const res = await fetch("/api/gallery");
+         const res = await fetch("/api/gallery");
       if (!res.ok) throw new Error("Galeri verisi alınamadı");
       const data = await res.json();
       if (Array.isArray(data?.items)) {
         setGalleryItems(data.items);
       }
     } catch (err) {
-      console.error("Galeri verisi alınırken hata oluştu:", err);
-      setGalleryError("Galeri verisi alınamadı");
-    } finally {
-      setGalleryLoading(false);
+      
     }
-  };
 
   useEffect(() => {
     fetchGalleryItems();
@@ -306,14 +304,14 @@ export default function App() {
 
   const persistGalleryItems = async (items) => {
     try {
-      await fetch("/api/gallery", {
+       await fetch("/api/gallery", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items }),
       });
     } catch (err) {
       console.error("Galeri verisi kaydedilemedi:", err);
-      setGalleryError("Galeri verisi kaydedilemedi");
+        setGalleryError("Galeri verisi kaydedilemedi");
     }
   };
 
@@ -746,7 +744,7 @@ export default function App() {
             const copy = [...galleryItems];
             copy[index] = tempValue;
             setGalleryItems(copy);
-            persistGalleryItems(copy);
+          persistGalleryItems(copy);
         } else {
             const updatedItems = [...galleryItems, tempValue];
             setGalleryItems(updatedItems);
@@ -806,7 +804,7 @@ export default function App() {
        if (type === "gallery" && index !== null) {
         const newGallery = galleryItems.filter((_, i) => i !== index);
         setGalleryItems(newGallery);
-        persistGalleryItems(newGallery);
+           persistGalleryItems(newGallery);
     }
 
 
@@ -1639,51 +1637,57 @@ export default function App() {
               </button>
             )}
 
-            {/* Grup Filtreleri */}
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {[
-                "Tümü",
-                ...Array.from(
-                  new Set(
-                    galleryItems
-                      .map((item) => item.group)
-                      .filter(Boolean)
-                  )
-                ),
-              ].map((group) => (
-                <button
-                  key={group}
-                  onClick={() => {
-                    setActiveGalleryGroup(group);
-                    setVisibleGalleryCount(8);
-                  }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                    activeGalleryGroup === group
-                      ? "bg-blue-900 text-white border-blue-900"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
-                  }`}
-                >
-                  {group}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* GRID */}
-          {galleryLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={`skeleton-${i}`}
-                  className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {galleryItems
-                .filter((item) =>
-                  activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
+    {/* GRID */}
+  {galleryLoading ? (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`skeleton-${i}`}
+            className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {galleryItems
+          .filter((item) =>
+            activeGalleryGroup === "Tümü" ||
+            item.group === activeGalleryGroup
+          )
+          .slice(0, visibleGalleryCount)
+          .map((item, index) => (
+            <div
+              key={`gallery-${index}`}
+              className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+            >
+            {/* MEDYA ALANI */}
+            <div
+              className={
+                item.type === "video"
+                  ? "relative w-full aspect-video bg-black flex items-center justify-center"
+                  : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
+              }
+            >
+              {item.type === "image" ? (
+                item.image ? (
+                  <>
+                    <img
+                      src={item.image}
+                      alt={item.caption || "Galeri görseli"}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      onError={handleImageError}
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                    </div>
+                  </>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                    <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                      Resim Yok
+                    </span>
+                  </div>
                 )
                 .slice(0, visibleGalleryCount)
                 .map((item, index) => (
@@ -1782,43 +1786,71 @@ export default function App() {
                       )}
                     </div>
 
-                    <div className="px-3 py-2 flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
-                          {item.caption || "Galeri içeriği"}
-                        </p>
-                        {item.group && (
-                          <p className="text-[10px] text-slate-400 mt-0.5">{item.group}</p>
-                        )}
-                      </div>
-                      {item.type === "video" && (
-                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
-                          VİDEO
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            {/* Admin edit butonları */}
+              {isLoggedIn && (
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    onClick={() => openEdit("gallery", index)}
+                    className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
+                  >
+                    <Icons.Edit size={12} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditModal({
+                        open: true,
+                        type: "gallery",
+                        index,
+                      });
+                    }}
+                    className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
+                  >
+                    <Icons.Trash size={12} />
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
-          {galleryError && (
-            <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
-          )}
-
-          {visibleGalleryCount <
-            galleryItems.filter(
-              (item) => activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
-            ).length && (
-              <div className="mt-10 text-center">
-                <button
-                  onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
-                >
-                  Daha Fazla Gör <Icons.ChevronDown size={16} />
-                </button>
+            {/* ALT BİLGİ ALANI */}
+            <div className="px-3 py-2 flex items-center justify-between gap-2">
+              <div>
+                <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
+                  {item.caption || "Galeri içeriği"}
+                </p>
+                {item.group && (
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    {item.group}
+                  </p>
+                )}
               </div>
-            )}
+              {item.type === "video" && (
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
+                  VİDEO
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+   </div>
+    )}
+
+    {galleryError && (
+      <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
+    )}
+
+    {/* DAHA FAZLA GÖR BUTONU */}
+    galleryItems.filter((item) =>
+        activeGalleryGroup === "Tümü" ||
+        item.group === activeGalleryGroup
+      ).length && (
+        <div className="mt-10 text-center">
+          <button
+            onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+          >
+            Daha Fazla Gör <Icons.ChevronDown size={16} />
+          </button>
         </div>
       </section>
 

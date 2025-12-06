@@ -5,15 +5,6 @@ import path from "path";
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "gallery.json");
 const PUBLIC_GALLERY_DIR = path.join(process.cwd(), "public", "images", "gallery");
-const GROUP_LABELS = [
-  "Yük Asansörleri",
-  "Hidrolik Sistemler",
-  "Çelik Kontrüksüyonlar",
-  "Homelift",
-  "Makine Şasesi Mrl Mr",
-  "Yük Asansorleri Platformlar",
-  "Kabinler",
-];
 
 async function readGalleryFile() {
   try {
@@ -27,21 +18,19 @@ async function readGalleryFile() {
 async function buildDefaultItems() {
   try {
     const files = await fs.readdir(PUBLIC_GALLERY_DIR);
-    const orderedFiles = files
+    return files
       .filter((file) => /\.(png|jpe?g|webp)$/i.test(file))
-      .sort((a, b) => a.localeCompare(b, "tr"));
-
-    return orderedFiles.map((file, index) => {
-      const base = file.replace(/\.[^.]+$/, "");
-      const group = GROUP_LABELS[index % GROUP_LABELS.length];
-      return {
-        type: "image",
-        caption: `${group} - ${base}`,
-        group,
-        image: `/images/gallery/${file}`,
-        embedCode: "",
-      };
-    });
+      .sort((a, b) => a.localeCompare(b, "tr"))
+      .map((file) => {
+        const base = file.replace(/\.[^.]+$/, "");
+        return {
+          type: "image",
+          caption: base,
+          group: base,
+          image: `/images/gallery/${file}`,
+          embedCode: "",
+        };
+      });
   } catch (error) {
     console.error("Galeri klasörü okunamadı:", error);
     return [];
