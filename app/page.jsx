@@ -88,10 +88,11 @@ function ElevatorAnimation() {
                 <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
                 <div className="relative w-full h-full flex items-center justify-center px-2">
                   <img
-                    src="/images/withmor-logo.png"
-                    alt="Withmor Logo"
-                    className="w-full h-full object-contain opacity-95"
-                  />
+  src="/images/withmor-logo.png"
+  alt="Withmor Logo"
+  className="w-6 h-6 object-contain"
+/>
+
                 </div>
               </div>
 
