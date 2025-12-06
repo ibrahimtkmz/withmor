@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-
+import Script from "next/script";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -1853,6 +1853,22 @@ export default function App() {
         </div>
       )}
   </div>
+</section>
+
+        {/* SOSYAL MEDYA ALANI */}
+<section id="social-feed" className="py-20 bg-white border-t border-slate-200">
+  <div className="mx-auto max-w-6xl px-6">
+    <div className="text-center mb-8">
+      <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
+      <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
+    </div>
+
+    <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+      <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+    </div>
+  </div>
+
+  <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
 </section>
 
 {/* Video Büyütme Modalı */}
