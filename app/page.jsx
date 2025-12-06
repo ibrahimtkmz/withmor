@@ -283,6 +283,7 @@ export default function App() {
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
+  const [visibleGalleryCount, setVisibleGalleryCount] = useState(8);
   const galleryGroups = useMemo(() => {
     const unique = new Set();
     galleryItems.forEach((item) => unique.add(item.group || "Genel"));
@@ -292,6 +293,10 @@ export default function App() {
   const filteredGalleryItems = useMemo(() => {
     if (activeTab === "all") return galleryItems;
     return galleryItems.filter((item) => (item.group || "Genel") === activeTab);
+  }, [activeTab, galleryItems]);
+
+  useEffect(() => {
+    setVisibleGalleryCount(8);
   }, [activeTab, galleryItems]);
 
   useEffect(() => {
@@ -1823,6 +1828,7 @@ export default function App() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {filteredGalleryItems.slice(0, visibleGalleryCount).map((item, index) => {
                 {filteredGalleryItems.map((item, index) => {
                   const poster = item.image;
                   const isVideo = item.type === "video";
@@ -1911,6 +1917,21 @@ export default function App() {
                     </div>
                   );
                 })}
+              </div>
+            )}
+            {filteredGalleryItems.length > visibleGalleryCount && (
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setVisibleGalleryCount((prev) =>
+                      Math.min(prev + 8, filteredGalleryItems.length)
+                    )
+                  }
+                  className="mt-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100"
+                >
+                  Daha fazlasını gör
+                </button>
               </div>
             )}
           </section>
