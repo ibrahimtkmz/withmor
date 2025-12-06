@@ -246,7 +246,6 @@ export default function App() {
 
   // Yönetici işlemleri için herkesin görebileceği canlı kayıt listesi
   const [activityLog, setActivityLog] = useState([]);
-  const [socialReady, setSocialReady] = useState(false);
 
   // Tab State
   const [activeAboutTab, setActiveAboutTab] = useState("biz-kimiz");
@@ -303,27 +302,6 @@ export default function App() {
 
   useEffect(() => {
     loadActivityLog();
-  }, []);
-
-  useEffect(() => {
-    const scriptId = "elfsight-platform-script";
-    const existingScript = document.getElementById(scriptId);
-
-    if (existingScript) {
-      setSocialReady(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.id = scriptId;
-    script.src = "https://elfsightcdn.com/platform.js";
-    script.async = true;
-    script.onload = () => setSocialReady(true);
-    document.body.appendChild(script);
-
-    return () => {
-      script.onload = null;
-    };
   }, []);
 
   useEffect(() => {
@@ -1752,26 +1730,6 @@ export default function App() {
         </section>
 
 
-      {/* SOSYAL MEDYA ALANI */}
-      <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
-            <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
-          </div>
-
-        <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
-          {socialReady ? (
-            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
-          ) : (
-            <div className="h-[480px] flex items-center justify-center text-slate-400 text-sm">
-              Sosyal medya akışı yükleniyor...
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="mx-auto max-w-6xl px-6 space-y-10">
@@ -1938,6 +1896,7 @@ export default function App() {
           </section>
         </div>
       </section>
+      <SocialFeedSection />
       {/* Video Büyütme Modalı */}
 {activeVideo && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
@@ -1971,13 +1930,6 @@ export default function App() {
     </div>
   </div>
 )}
-
-<SocialFeedSection />
-
-
-
-
-
       </main>
 
       {/* Footer - GÜNCELLENDİ (Bizi Takip Edin) */}
