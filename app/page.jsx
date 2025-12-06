@@ -1648,6 +1648,120 @@ useEffect(() => {
         </section>
 
 
+        {/* SOSYAL MEDYA AKIŞI */}
+<section
+  id="social-feed"
+  className="py-20 bg-slate-900 text-slate-100 border-t border-slate-800"
+>
+  <div className="mx-auto max-w-6xl px-6">
+    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+      <div>
+        <h2 className="text-3xl font-bold mb-2">Sosyal Medya Akışı</h2>
+        <p className="text-sm text-slate-300 max-w-xl">
+          Instagram, TikTok ve Facebook hesaplarımızdan seçtiğimiz güncel fotoğraf
+          ve videolar. Projelerimizi, montaj süreçlerimizi ve sahadan kareleri
+          buradan takip edebilirsiniz.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-2 text-xs">
+        <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
+          Instagram
+        </span>
+        <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
+          TikTok
+        </span>
+        <span className="px-2 py-1 rounded-full bg-slate-800 border border-slate-700">
+          Facebook
+        </span>
+      </div>
+    </div>
+
+    {/* Durumlar */}
+    {socialLoading && (
+      <p className="text-sm text-slate-400">Sosyal medya içerikleri yükleniyor...</p>
+    )}
+
+    {socialError && !socialLoading && (
+      <p className="text-sm text-red-400">{socialError}</p>
+    )}
+
+    {!socialLoading && !socialError && socialItems.length === 0 && (
+      <p className="text-sm text-slate-400">
+        Şu anda listelenecek sosyal medya içeriği bulunamadı.
+      </p>
+    )}
+
+    {/* Grid */}
+    {!socialLoading && socialItems.length > 0 && (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {socialItems.map((item) => (
+          <article
+            key={item.id}
+            className="group bg-slate-800/70 border border-slate-700 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+          >
+            <div className="relative w-full aspect-square bg-slate-900 flex items-center justify-center overflow-hidden">
+              {item.type === "image" ? (
+                <>
+                  <img
+                    src={item.mediaUrl}
+                    alt={item.caption || "Sosyal medya görseli"}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                </>
+              ) : (
+                // video
+                <div className="relative w-full h-full">
+                  <video
+                    src={item.mediaUrl}
+                    className="w-full h-full object-cover"
+                    muted
+                    loop
+                    playsInline
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/80 text-white text-xl font-semibold shadow-lg">
+                      ▶
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Platform etiketi */}
+              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-black/70 text-slate-100">
+                {item.platform}
+              </span>
+            </div>
+
+            <div className="px-3 py-2 flex flex-col gap-1">
+              <p className="text-[11px] font-medium text-slate-100 line-clamp-2">
+                {item.caption || "Sosyal medya içeriği"}
+              </p>
+              <div className="flex items-center justify-between">
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[10px] font-semibold text-blue-300 hover:text-blue-200 underline"
+                >
+                  Gönderiyi Aç
+                </a>
+                <span className="text-[10px] text-slate-400">
+                  {item.platform}
+                </span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+
+
 {/* GALERİ BÖLÜMÜ */}
 <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
   <div className="mx-auto max-w-6xl px-6">
