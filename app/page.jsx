@@ -1,6 +1,34 @@
 "use client";
 import { useState, useEffect } from "react";
 import Script from "next/script";
+import Script from "next/script";
+
+// 📌 SOSYAL MEDYA FEED BÖLÜMÜ
+function SocialFeedSection() {
+  return (
+    <section
+      id="social-feed"
+      className="py-20 bg-slate-900 text-slate-100 border-t border-slate-800"
+    >
+      {/* Elfsight Script */}
+      <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="text-3xl font-bold mb-2">Sosyal Medya Akışı</h2>
+        <p className="text-sm text-slate-300 mb-6">
+          Instagram @withmorlift hesabımızdan paylaşılan fotoğraf ve videolar.
+        </p>
+
+        <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 shadow-xl">
+          <div
+            className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35"
+            data-elfsight-app-lazy
+          ></div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 
 
