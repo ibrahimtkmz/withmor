@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import Script from "next/script";
-import Script from "next/script";
 
 // 📌 SOSYAL MEDYA FEED BÖLÜMÜ
 function SocialFeedSection() {
@@ -269,7 +268,6 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
-  <SocialFeedSection />
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
