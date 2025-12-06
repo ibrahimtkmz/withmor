@@ -235,59 +235,6 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
-  export default function App() {
-  // VİDEO URL'İNİ GÖMME (EMBED) URL'İNE ÇEVİR
-  const getVideoEmbedUrl = (raw) => {
-    if (!raw) return null;
-    const url = raw.trim();
-
-    // YOUTUBE
-    if (url.includes("youtube.com") || url.includes("youtu.be")) {
-      // https://youtu.be/xxxx  →  https://www.youtube.com/embed/xxxx
-      if (url.includes("youtu.be")) {
-        const id = url.split("/").pop().split("?")[0];
-        return `https://www.youtube.com/embed/${id}`;
-      }
-      // https://www.youtube.com/watch?v=xxxx  →  /embed/xxxx
-      const params = new URL(url).searchParams;
-      const id = params.get("v");
-      if (id) return `https://www.youtube.com/embed/${id}`;
-      return url;
-    }
-
-    // INSTAGRAM (post veya reel linki ver)
-    if (url.includes("instagram.com")) {
-      // /p/XXXXX/ veya /reel/XXXXX/ şeklindeki kodu yakala
-      const postMatch =
-        url.match(/instagram\.com\/p\/([^/?]+)/) ||
-        url.match(/instagram\.com\/reel\/([^/?]+)/);
-
-      if (postMatch && postMatch[1]) {
-        const code = postMatch[1];
-        // post ise:
-        if (url.includes("/p/")) {
-          return `https://www.instagram.com/p/${code}/embed`;
-        }
-        // reel ise:
-        if (url.includes("/reel/")) {
-          return `https://www.instagram.com/reel/${code}/embed`;
-        }
-      }
-      return url;
-    }
-
-    // FACEBOOK (video linki ver)
-    if (url.includes("facebook.com")) {
-      // Normal video linkini Facebook video plugin içine göm
-      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-        url
-      )}&show_text=false`;
-    }
-
-    // Diğer durumlar için olduğu gibi bırak
-    return url;
-  };
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -327,63 +274,12 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-   // GALERİ: Resim + Video + Grup Bazlı Yapı
-  const [galleryItems, setGalleryItems] = useState([
-       {
-      type: "image", // "image" veya "video"
-      caption: "Sanayi tesisi – yük asansörü",
-      group: "Yük Asansörleri", // Ürün / hizmet grubu adı
-      image: "/images/gallery/galeri-1.jpg",
-      embedCode: "", // resim ise boş bırak
-    },
-    {
-      type: "video",
-      caption: "Yük asansörü tanıtım videosu",
-      group: "Yük Asansörleri",
-      image: "", // video ise boş bırak
-      // YouTube / Instagram / Facebook embed kodunu buraya yapıştır:
-      // ÖRN: <iframe ...></iframe>
-      embedCode: "",
-    },
-    // İstediğin kadar öğe ekleyebilirsin
-  ]);
+  // GALERİ İÇİN STATE - DÜZELTİLDİ (19 Adet Resim)
+  const [galleryImages, setGalleryImages] = useState(
+    Array.from({ length: 19 }, (_, i) => `/images/gallery/galeri-${i + 1}.jpg`)
+  );
 
-   // SAYFA YENİLENİNCE GALERİYİ KAYBETMEMEK İÇİN LOCALSTORAGE KULLAN
-  // 1) İlk yüklemede localStorage'dan oku
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      const stored = window.localStorage.getItem("withmor_gallery_items");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setGalleryItems(parsed);
-        }
-      }
-    } catch (err) {
-      console.error("Galeri verisi okunamadı:", err);
-    }
-  }, []);
-
-  // 2) galleryItems her değiştiğinde localStorage'a yaz
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      window.localStorage.setItem(
-        "withmor_gallery_items",
-        JSON.stringify(galleryItems)
-      );
-    } catch (err) {
-      console.error("Galeri verisi kaydedilemedi:", err);
-    }
-  }, [galleryItems]);
-
-  // Galeri filtresi için aktif grup
-  const [activeGalleryGroup, setActiveGalleryGroup] = useState("Tümü");
-
-  // Görünecek öğe sayısı
+  // YENİ STATE: Görünecek Galeri Resmi Sayısı
   const [visibleGalleryCount, setVisibleGalleryCount] = useState(8);
 
   const [aboutTabs, setAboutTabs] = useState({
@@ -769,10 +665,9 @@ export default function App() {
         setTempValue({ ...aboutTabs[index] });
     }
 
-        if (type === "gallery" && index !== null) {
-        setTempValue({ ...galleryItems[index] });
+    if (type === "gallery" && index !== null) {
+        setTempValue({ image: galleryImages[index] });
     }
-
   };
 
   const openAdd = (type) => {
@@ -786,9 +681,7 @@ export default function App() {
       setTempValue({ id: `new-${Date.now()}`, name: "", desc: "", image: "", longDesc: "" });
     if (type === "project") setTempValue({ name: "", type: "", desc: "" });
     if (type === "reference") setTempValue({ company: "", quote: "", name: "", title: "" });
-        if (type === "gallery")
-      setTempValue({ type: "image", caption: "", group: "", image: "", embedCode: "" });
-
+    if (type === "gallery") setTempValue({ image: "" });
   };
 
   const saveEdit = () => {
@@ -804,17 +697,15 @@ export default function App() {
         }));
     }
 
-          if (type === "gallery") {
+    if (type === "gallery") {
         if (index !== null) {
-            const copy = [...galleryItems];
-            copy[index] = tempValue;
-            setGalleryItems(copy);
+            const copy = [...galleryImages];
+            copy[index] = tempValue.image;
+            setGalleryImages(copy);
         } else {
-            setGalleryItems([...galleryItems, tempValue]);
+            setGalleryImages([...galleryImages, tempValue.image]);
         }
     }
-
-
 
     if (type === "service") {
       if (index !== null) {
@@ -863,11 +754,10 @@ export default function App() {
       }
     }
 
-       if (type === "gallery" && index !== null) {
-        const newGallery = galleryItems.filter((_, i) => i !== index);
-        setGalleryItems(newGallery);
+    if (type === "gallery" && index !== null) {
+        const newGallery = galleryImages.filter((_, i) => i !== index);
+        setGalleryImages(newGallery);
     }
-
 
     if (type === "project" && index !== null) {
       const newProjects = projects.filter((_, i) => i !== index);
@@ -1719,171 +1609,63 @@ export default function App() {
           </div>
         </section>
 
-                {/* GALERİ BÖLÜMÜ */}
+        {/* GALERİ BÖLÜMÜ */}
         <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
            <div className="mx-auto max-w-6xl px-6">
               <div className="text-center mb-12 relative">
                  <h2 className="text-3xl font-bold text-slate-900 mb-2">Galeri</h2>
-                 <p className="text-slate-500 text-sm">
-                   Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
-                 </p>
+                 <p className="text-slate-500 text-sm">Üretim tesisimiz ve tamamlanan projelerimizden kareler.</p>
 
                  {isLoggedIn && (
                     <button 
                        onClick={() => openAdd("gallery")} 
                        className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
                     >
-                       <Icons.Plus size={12}/> Yeni Öğe Ekle
+                       <Icons.Plus size={12}/> Yeni Resim Ekle
                     </button>
                  )}
-
-                 {/* Grup Filtreleri */}
-                 <div className="mt-6 flex flex-wrap justify-center gap-2">
-                   {["Tümü", ...Array.from(new Set(galleryItems.map(item => item.group).filter(Boolean)))]
-                     .map((group) => (
-                       <button
-                         key={group}
-                         onClick={() => {
-                           setActiveGalleryGroup(group);
-                           setVisibleGalleryCount(8);
-                         }}
-                         className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                           activeGalleryGroup === group
-                             ? "bg-blue-900 text-white border-blue-900"
-                             : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
-                         }`}
-                       >
-                         {group}
-                       </button>
-                   ))}
-                 </div>
               </div>
 
-              {/* GRID */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-  {galleryItems
-    .map((item, index) => ({ item, index }))
-    .filter(({ item }) =>
-      activeGalleryGroup === "Tümü" || item.group === activeGalleryGroup
-    )
-    .slice(0, visibleGalleryCount)
-    .map(({ item, index }) => {
-      // Embed URL dönüştürücü
-      const getEmbedUrl = (raw) => {
-        if (!raw) return null;
-        const url = raw.trim();
+                 {galleryImages.slice(0, visibleGalleryCount).map((img, i) => (
+                    <div key={i} className="group relative aspect-square bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 animate-in fade-in zoom-in">
+                       {img ? (
+                          <>
+                             <img src={img} alt={`Galeri ${i+1}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onError={handleImageError} />
+                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
+                             </div>
+                          </>
+                       ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-50">
+                             <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
+                             <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Resim Alanı {i+1}</span>
+                          </div>
+                       )}
 
-        // YouTube
-        if (url.includes("youtube.com") || url.includes("youtu.be")) {
-          if (url.includes("youtu.be")) {
-            const id = url.split("/").pop().split("?")[0];
-            return `https://www.youtube.com/embed/${id}`;
-          }
-          const params = new URL(url).searchParams;
-          const id = params.get("v");
-          if (id) return `https://www.youtube.com/embed/${id}`;
-        }
-
-        // Instagram (post veya reel)
-        if (url.includes("instagram.com")) {
-          const match =
-            url.match(/instagram\.com\/p\/([^/?]+)/) ||
-            url.match(/instagram\.com\/reel\/([^/?]+)/);
-
-          if (match && match[1]) {
-            const code = match[1];
-            if (url.includes("/p/"))
-              return `https://www.instagram.com/p/${code}/embed`;
-            if (url.includes("/reel/"))
-              return `https://www.instagram.com/reel/${code}/embed`;
-          }
-        }
-
-        // Facebook
-        if (url.includes("facebook.com")) {
-          return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-            url
-          )}&show_text=false`;
-        }
-
-        return url;
-      };
-
-      return (
-        <div
-          key={index}
-          className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
-        >
-          {/* MEDYA ALANI */}
-          <div
-            className={
-              item.type === "video"
-                ? "relative w-full aspect-video bg-black overflow-hidden"
-                : "relative w-full aspect-square bg-slate-50 overflow-hidden"
-            }
-          >
-            {/* RESİM */}
-            {item.type === "image" ? (
-              item.image ? (
-                <>
-                  <img
-                    src={item.image}
-                    alt={item.caption}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-300">
-                  <Icons.Image className="w-10 h-10 opacity-50" />
-                </div>
-              )
-            ) : (
-              // VİDEO IFRAME
-              <iframe
-                src={getEmbedUrl(item.embedCode)}
-                className="w-full h-full border-0"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowFullScreen
-              />
-            )}
-
-            {/* ADMIN BUTONLARI */}
-            {isLoggedIn && (
-              <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => openEdit("gallery", index)}
-                  className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
-                >
-                  <Icons.Edit size={12} />
-                </button>
-                <button
-                  onClick={() =>
-                    setEditModal({ open: true, type: "gallery", index })
-                  }
-                  className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
-                >
-                  <Icons.Trash size={12} />
-                </button>
+                       {isLoggedIn && (
+                          <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                             <button onClick={() => openEdit("gallery", i)} className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"><Icons.Edit size={12}/></button>
+                             <button onClick={() => { setEditModal({open: true, type: "gallery", index: i}); }} className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"><Icons.Trash size={12}/></button>
+                          </div>
+                       )}
+                    </div>
+                 ))}
               </div>
-            )}
-          </div>
 
-          {/* ALT BİLGİ */}
-          <div className="px-3 py-2">
-            <p className="text-[11px] font-semibold text-slate-800 leading-tight">
-              {item.caption || "İçerik"}
-            </p>
-
-            {item.group && (
-              <p className="text-[10px] text-slate-500">{item.group}</p>
-            )}
-          </div>
-        </div>
-      );
-    })}
-</div>
+              {/* DAHA FAZLA GÖR BUTONU */}
+              {visibleGalleryCount < galleryImages.length && (
+                 <div className="mt-10 text-center">
+                    <button 
+                       onClick={() => setVisibleGalleryCount(prev => prev + 8)}
+                       className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
+                    >
+                       Daha Fazla Gör <Icons.ChevronDown size={16} />
+                    </button>
+                 </div>
+              )}
+           </div>
         </section>
-
 
       </main>
 
