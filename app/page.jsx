@@ -279,58 +279,40 @@ export default function App() {
     secondaryCta: "Referanslarımızı İnceleyin",
   });
 
-   // GALERİ: Resim + Video + Grup Bazlı Yapı
-  const [galleryItems, setGalleryItems] = useState([
-       {
-      type: "image", // "image" veya "video"
-      caption: "Sanayi tesisi – yük asansörü",
-      group: "Yük Asansörleri", // Ürün / hizmet grubu adı
-      image: "/images/gallery/galeri-1.jpg",
-      embedCode: "", // resim ise boş bırak
-    },
-    {
-      type: "video",
-      caption: "Yük asansörü tanıtım videosu",
-      group: "Yük Asansörleri",
-      image: "", // video ise boş bırak
-      // YouTube / Instagram / Facebook embed kodunu buraya yapıştır:
-      // ÖRN: <iframe ...></iframe>
-      embedCode: "",
-    },
-    // İstediğin kadar öğe ekleyebilirsin
-  ]);
+   const [galleryItems, setGalleryItems] = useState([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+  const [galleryError, setGalleryError] = useState("");
 
-   // SAYFA YENİLENİNCE GALERİYİ KAYBETMEMEK İÇİN LOCALSTORAGE KULLAN
-  // 1) İlk yüklemede localStorage'dan oku
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const fetchGalleryItems = async () => {
+    
 
     try {
-      const stored = window.localStorage.getItem("withmor_gallery_items");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setGalleryItems(parsed);
-        }
+         const res = await fetch("/api/gallery");
+      if (!res.ok) throw new Error("Galeri verisi alınamadı");
+      const data = await res.json();
+      if (Array.isArray(data?.items)) {
+        setGalleryItems(data.items);
       }
     } catch (err) {
-      console.error("Galeri verisi okunamadı:", err);
+      
     }
+
+  useEffect(() => {
+    fetchGalleryItems();
   }, []);
 
-  // 2) galleryItems her değiştiğinde localStorage'a yaz
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  const persistGalleryItems = async (items) => {
     try {
-      window.localStorage.setItem(
-        "withmor_gallery_items",
-        JSON.stringify(galleryItems)
-      );
+       await fetch("/api/gallery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
     } catch (err) {
       console.error("Galeri verisi kaydedilemedi:", err);
+        setGalleryError("Galeri verisi kaydedilemedi");
     }
-  }, [galleryItems]);
+  };
 
   // Galeri filtresi için aktif grup
   const [activeGalleryGroup, setActiveGalleryGroup] = useState("Tümü");
@@ -761,8 +743,11 @@ export default function App() {
             const copy = [...galleryItems];
             copy[index] = tempValue;
             setGalleryItems(copy);
+          persistGalleryItems(copy);
         } else {
-            setGalleryItems([...galleryItems, tempValue]);
+            const updatedItems = [...galleryItems, tempValue];
+            setGalleryItems(updatedItems);
+            persistGalleryItems(updatedItems);
         }
     }
 
@@ -818,6 +803,7 @@ export default function App() {
        if (type === "gallery" && index !== null) {
         const newGallery = galleryItems.filter((_, i) => i !== index);
         setGalleryItems(newGallery);
+           persistGalleryItems(newGallery);
     }
 
 
@@ -1681,37 +1667,28 @@ export default function App() {
     </div>
 
     {/* GRID */}
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {[
-        // --- SABİT 22 GÖRSEL (withmor/public/images/gallery/galeri-1.jpg .. 22) ---
-        ...Array.from({ length: 22 }, (_, i) => ({
-          item: {
-            type: "image",
-            image: `/images/gallery/galeri-${i + 1}.jpg`,
-            caption: `Galeri ${i + 1}`,
-            // group: null -> sadece "Tümü" filtresinde görünsün
-          },
-          index: null,
-          isStatic: true,
-        })),
-
-        // --- MEVCUT GALLERY ITEMS (admin'den gelen) ---
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
-        })),
-      ]
-        .filter(({ item }) =>
-          activeGalleryGroup === "Tümü" ||
-          item.group === activeGalleryGroup
-        )
-        .slice(0, visibleGalleryCount)
-        .map(({ item, index, isStatic }, combinedIndex) => (
+  {galleryLoading ? (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, i) => (
           <div
-            key={isStatic ? `static-${combinedIndex}` : `dynamic-${index}`}
-            className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
-          >
+            key={`skeleton-${i}`}
+            className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {galleryItems
+          .filter((item) =>
+            activeGalleryGroup === "Tümü" ||
+            item.group === activeGalleryGroup
+          )
+          .slice(0, visibleGalleryCount)
+          .map((item, index) => (
+            <div
+              key={`gallery-${index}`}
+              className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+            >
             {/* MEDYA ALANI */}
             <div
               className={
@@ -1782,8 +1759,8 @@ export default function App() {
                 </div>
               )}
 
-              {/* Admin edit butonları – sabit görsellerde ÇALIŞMASIN */}
-              {isLoggedIn && !isStatic && (
+            {/* Admin edit butonları */}
+              {isLoggedIn && (
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <button
                     onClick={() => openEdit("gallery", index)}
@@ -1827,26 +1804,15 @@ export default function App() {
             </div>
           </div>
         ))}
-    </div>
+   </div>
+    )}
+
+    {galleryError && (
+      <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
+    )}
 
     {/* DAHA FAZLA GÖR BUTONU */}
-    {visibleGalleryCount <
-      [
-        ...Array.from({ length: 22 }, (_, i) => ({
-          item: {
-            type: "image",
-            image: `/images/gallery/galeri-${i + 1}.jpg`,
-            caption: `Galeri ${i + 1}`,
-          },
-          index: null,
-          isStatic: true,
-        })),
-        ...galleryItems.map((item, index) => ({
-          item,
-          index,
-          isStatic: false,
-        })),
-      ].filter(({ item }) =>
+    galleryItems.filter((item) =>
         activeGalleryGroup === "Tümü" ||
         item.group === activeGalleryGroup
       ).length && (
