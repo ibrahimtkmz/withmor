@@ -276,7 +276,26 @@ export default function App() {
 
    // GALERİ: Resim + Video + Grup Bazlı Yapı
   const [galleryItems, setGalleryItems] = useState([
-      // SAYFA YENİLENİNCE GALERİYİ KAYBETMEMEK İÇİN LOCALSTORAGE KULLAN
+       {
+      type: "image", // "image" veya "video"
+      caption: "Sanayi tesisi – yük asansörü",
+      group: "Yük Asansörleri", // Ürün / hizmet grubu adı
+      image: "/images/gallery/galeri-1.jpg",
+      embedCode: "", // resim ise boş bırak
+    },
+    {
+      type: "video",
+      caption: "Yük asansörü tanıtım videosu",
+      group: "Yük Asansörleri",
+      image: "", // video ise boş bırak
+      // YouTube / Instagram / Facebook embed kodunu buraya yapıştır:
+      // ÖRN: <iframe ...></iframe>
+      embedCode: "",
+    },
+    // İstediğin kadar öğe ekleyebilirsin
+  ]);
+
+   // SAYFA YENİLENİNCE GALERİYİ KAYBETMEMEK İÇİN LOCALSTORAGE KULLAN
   // 1) İlk yüklemede localStorage'dan oku
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -307,27 +326,6 @@ export default function App() {
       console.error("Galeri verisi kaydedilemedi:", err);
     }
   }, [galleryItems]);
-
-
-    
-    {
-      type: "image", // "image" veya "video"
-      caption: "Sanayi tesisi – yük asansörü",
-      group: "Yük Asansörleri", // Ürün / hizmet grubu adı
-      image: "/images/gallery/galeri-1.jpg",
-      embedCode: "", // resim ise boş bırak
-    },
-    {
-      type: "video",
-      caption: "Yük asansörü tanıtım videosu",
-      group: "Yük Asansörleri",
-      image: "", // video ise boş bırak
-      // YouTube / Instagram / Facebook embed kodunu buraya yapıştır:
-      // ÖRN: <iframe ...></iframe>
-      embedCode: "",
-    },
-    // İstediğin kadar öğe ekleyebilirsin
-  ]);
 
   // Galeri filtresi için aktif grup
   const [activeGalleryGroup, setActiveGalleryGroup] = useState("Tümü");
