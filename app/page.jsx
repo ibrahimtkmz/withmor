@@ -269,6 +269,7 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
+  <SocialFeedSection />
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
