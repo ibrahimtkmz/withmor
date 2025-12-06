@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Script from "next/script";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -284,28 +283,31 @@ export default function App() {
   });
 
   const [galleryItems, setGalleryItems] = useState([]);
-  const [galleryLoading, setGalleryLoading] = useState(true);
   const [galleryError, setGalleryError] = useState("");
 
-  const fetchGalleryItems = async () => {
-    try {
-      const res = await fetch("/api/gallery", { cache: "no-store" });
-      if (!res.ok) throw new Error("Galeri verisi alınamadı");
-      const data = await res.json();
-      if (Array.isArray(data?.items)) {
-        setGalleryItems(data.items);
-      }
-    } catch (err) {
-      setGalleryError("Galeri verisi alınamadı");
-    } finally {
-      setGalleryLoading(false);
-    }
-  };
+  useEffect(() => {
+    loadActivityLog();
+  }, []);
 
   useEffect(() => {
-    setSocialReady(true);
-    fetchGalleryItems();
-    loadActivityLog();
+    const scriptId = "elfsight-platform-script";
+    const existingScript = document.getElementById(scriptId);
+
+    if (existingScript) {
+      setSocialReady(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = "https://elfsightcdn.com/platform.js";
+    script.async = true;
+    script.onload = () => setSocialReady(true);
+    document.body.appendChild(script);
+
+    return () => {
+      script.onload = null;
+    };
   }, []);
 
   const persistGalleryItems = async (items) => {
@@ -362,12 +364,6 @@ export default function App() {
     setActivityLog((prev) => [entry, ...prev].slice(0, 50));
     persistActivityEntry(entry);
   };
-
-  // Galeri filtresi için aktif grup
-  const [activeGalleryGroup, setActiveGalleryGroup] = useState("Tümü");
-
-  // Görünecek öğe sayısı
-  const [visibleGalleryCount, setVisibleGalleryCount] = useState(8);
 
   const [aboutTabs, setAboutTabs] = useState({
     "biz-kimiz": {
@@ -898,12 +894,57 @@ export default function App() {
   };
 
   const galleryGroups = [
-    "Tümü",
-    ...new Set(
-      galleryItems
-        .map((item) => item.group || "Galeri")
-        .filter(Boolean)
-    ),
+    {
+      title: "Hidrolik Yük Asansörü",
+      images: [
+        "/hidrolik-sistemler.jpg",
+        "/yuk-asansorleri-platformlar.jpg",
+        "/yuk-kabinleri.jpg",
+      ],
+    },
+    {
+      title: "Makine Dairesiz Yük Asansörü",
+      images: ["/makine-sasesi-mrl-mr.png"],
+    },
+    {
+      title: "Homelift",
+      images: [
+        "/images/gallery/galeri-4.jpg",
+        "/images/gallery/galeri-8.jpg",
+        "/images/gallery/galeri-16.jpg",
+      ],
+    },
+    {
+      title: "İnsan Asansörü",
+      images: ["/kabinler.webp"],
+    },
+    {
+      title: "Konveyör Asansörler",
+      images: [
+        "/images/gallery/galeri-6.jpg",
+        "/images/gallery/galeri-10.jpg",
+        "/images/gallery/galeri-14.jpg",
+      ],
+    },
+    {
+      title: "Panoramik Asansörler",
+      images: [
+        "/images/gallery/galeri-12.jpg",
+        "/images/gallery/galeri-15.jpg",
+        "/images/gallery/galeri-18.jpg",
+      ],
+    },
+    {
+      title: "Yatay Yamaç Asansörler",
+      images: [
+        "/images/gallery/galeri-21.jpg",
+        "/images/gallery/galeri-22.jpg",
+      ],
+    },
+    {
+      title: "Özel Projeler",
+      images: ["/celik-konstruksiyonlar.webp"],
+    },
   ];
 
    return (
@@ -1719,21 +1760,17 @@ export default function App() {
             <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
-            {socialReady ? (
-              <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
-            ) : (
-              <div className="h-[480px] flex items-center justify-center text-slate-400 text-sm">
-                Sosyal medya akışı yükleniyor...
-              </div>
-            )}
-          </div>
+        <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+          {socialReady ? (
+            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+          ) : (
+            <div className="h-[480px] flex items-center justify-center text-slate-400 text-sm">
+              Sosyal medya akışı yükleniyor...
+            </div>
+          )}
         </div>
-
-        {socialReady && (
-          <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-        )}
-      </section>
+      </div>
+    </section>
 
       {/* GALERİ BÖLÜMÜ */}
       <section id="gallery" className="py-20 bg-slate-50 border-t border-slate-200">
@@ -1743,192 +1780,36 @@ export default function App() {
             <p className="text-slate-500 text-sm">
               Ürün ve hizmet gruplarına göre projelerden ve üretimden kareler.
             </p>
-
-            {isLoggedIn && (
-              <button
-                onClick={() => openAdd("gallery")}
-                className="absolute top-0 right-0 flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-bold hover:bg-blue-100 border border-blue-200"
-              >
-                <Icons.Plus size={12} /> Yeni Öğe Ekle
-              </button>
-            )}
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
+          <div className="space-y-10">
             {galleryGroups.map((group) => (
-              <button
-                key={group}
-                onClick={() => setActiveGalleryGroup(group)}
-                className={`rounded-full border px-4 py-2 text-xs font-semibold transition-all shadow-sm hover:shadow-md ${
-                  activeGalleryGroup === group
-                    ? "bg-blue-700 border-blue-700 text-white"
-                    : "bg-white border-slate-200 text-slate-600 hover:border-blue-200 hover:text-blue-700"
-                }`}
-              >
-                {group}
-              </button>
+              <div key={group.title} className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-slate-900">{group.title}</h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {group.images.map((src) => (
+                    <div
+                      key={src}
+                      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="relative aspect-square bg-slate-50">
+                        <img
+                          src={src}
+                          alt={group.title}
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-
-          {galleryLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={`skeleton-${i}`}
-                  className="animate-pulse bg-white rounded-xl border border-slate-200 h-40"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {galleryItems
-                .filter(
-                  (item) =>
-                    activeGalleryGroup === "Tümü" ||
-                    item.group === activeGalleryGroup
-                )
-                .slice(0, visibleGalleryCount)
-                .map((item, index) => (
-                  <div
-                    key={`gallery-${index}`}
-                    className="group relative bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
-                  >
-                    {/* MEDYA ALANI */}
-                    <div
-                      className={
-                        item.type === "video"
-                          ? "relative w-full aspect-video bg-black flex items-center justify-center"
-                          : "relative w-full aspect-square bg-slate-50 flex items-center justify-center"
-                      }
-                    >
-                      {item.type === "image" ? (
-                        item.image ? (
-                          <>
-                            <img
-                              src={item.image}
-                              alt={item.caption || "Galeri görseli"}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              onError={handleImageError}
-                            />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                              <Icons.ZoomIn className="text-white w-8 h-8 drop-shadow-md" />
-                            </div>
-                          </>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                              Resim Yok
-                            </span>
-                          </div>
-                        )
-                      ) : item.type === "video" ? (
-                        item.embedCode ? (
-                          <div
-                            className="relative w-full h-full cursor-pointer"
-                            onClick={() => setActiveVideo(item.embedCode.trim())}
-                          >
-                            <video
-                              src={item.embedCode.trim()}
-                              className="w-full h-full object-cover"
-                              muted
-                              loop
-                              playsInline
-                            />
-
-                            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300" />
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white text-xl font-semibold shadow-lg">
-                                ▶
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                            <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                              Video URL girilmemiş
-                            </span>
-                          </div>
-                        )
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                          <Icons.Image className="w-10 h-10 mb-2 opacity-50" />
-                          <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                            Medya Yüklenemedi
-                          </span>
-                        </div>
-                      )}
-
-                      {isLoggedIn && (
-                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <button
-                            onClick={() => openEdit("gallery", index)}
-                            className="p-1.5 bg-white rounded-full text-slate-600 hover:text-blue-600 shadow-sm"
-                          >
-                            <Icons.Edit size={12} />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setEditModal({
-                                open: true,
-                                type: "gallery",
-                                index,
-                              });
-                            }}
-                            className="p-1.5 bg-white rounded-full text-red-500 hover:text-red-700 shadow-sm"
-                          >
-                            <Icons.Trash size={12} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* ALT BİLGİ ALANI */}
-                    <div className="px-3 py-2 flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-[11px] font-semibold text-slate-800 line-clamp-2">
-                          {item.caption || "Galeri içeriği"}
-                        </p>
-                        {item.group && (
-                          <p className="text-[10px] text-slate-400 mt-0.5">
-                            {item.group}
-                          </p>
-                        )}
-                      </div>
-                      {item.type === "video" && (
-                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-100">
-                          VİDEO
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-            </div>
-          )}
-
-          {galleryError && (
-            <p className="text-center text-sm text-red-600 mt-4">{galleryError}</p>
-          )}
-
-          {/* DAHA FAZLA GÖR BUTONU */}
-          {galleryItems.filter(
-            (item) =>
-              activeGalleryGroup === "Tümü" ||
-              item.group === activeGalleryGroup
-          ).length && (
-            <div className="mt-10 text-center">
-              <button
-                onClick={() => setVisibleGalleryCount((prev) => prev + 8)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all shadow-sm hover:shadow-md"
-              >
-                Daha Fazla Gör <Icons.ChevronDown size={16} />
-              </button>
-            </div>
-          )}
         </div>
       </section>
-
       {/* Video Büyütme Modalı */}
 {activeVideo && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
