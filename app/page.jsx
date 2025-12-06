@@ -869,7 +869,7 @@ export default function App() {
   <img
     src="/images/withmor-logo-beyaz.png"
     alt="Withmor Logo"
-    className="h-8 w-auto object-contain"
+    className="h-12 w-auto object-contain"
   />
 </div>
 
