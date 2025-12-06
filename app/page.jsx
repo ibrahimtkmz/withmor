@@ -112,13 +112,14 @@ function ElevatorAnimation() {
                   data-floor={item.id}
                   className="floor-indicator flex items-center gap-3 group w-full"
                 >
-                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all duration-300 bg-white overflow-hidden">
-                    <img
-                      src="/images/withmor-logo.png"
-                      alt="Withmor Logo"
-                      className="w-6 h-6 object-contain"
-                    />
-                  </div>
+                  <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all duration-300 bg-black overflow-hidden">
+  <img
+    src="/images/withmor-logo-beyaz.png"
+    alt="Withmor Logo"
+    className="w-6 h-6 object-contain"
+  />
+</div>
+
                   <span className="indicator-text text-xs font-medium text-slate-400 tracking-wide whitespace-nowrap transition-colors">
                     {item.label}
                   </span>
