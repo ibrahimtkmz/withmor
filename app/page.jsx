@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Script from "next/script";
 // --- İKON TANIMLAMALARI (SVG) ---
 const Icons = {
   MapPin: (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>),
@@ -621,6 +620,24 @@ export default function App() {
     }
   }, []);
 
+  // Elfsight sosyal medya eklentisini güvenilir şekilde yükle
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scriptId = "elfsight-platform-script";
+    const existingScript = document.getElementById(scriptId);
+
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "https://static.elfsight.com/platform/platform.js";
+      script.defer = true;
+      document.body.appendChild(script);
+    } else if (window.eapps?.platform?.run) {
+      window.eapps.platform.run();
+    }
+  }, []);
+
   // Yeni Fonksiyon: Bölüm Kaydırma ve Tab Değiştirme
   const scrollToAbout = (tabKey) => {
     setActiveAboutTab(tabKey);
@@ -858,6 +875,7 @@ export default function App() {
     <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
+      <header className="sticky top-0 inset-x-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-lg shadow-[0_8px_30px_rgba(15,23,42,0.08)] supports-[backdrop-filter]:bg-white/80">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-white/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
@@ -1027,6 +1045,9 @@ export default function App() {
           <div>
             {/* Vurgulu Metinler */}
             <div className="mb-6 flex flex-wrap gap-3">
+              {[ 
+                {
+                  text: "Yüksek Performans, Yüksek Güven",
               {[
                 {
                   text: "Yüksek Performans, Yüksek Güven",
@@ -1061,6 +1082,7 @@ export default function App() {
               ].map((badge, idx) => (
                 <div key={idx} className="relative inline-flex">
                   <span
+                    className="absolute inset-[-3px] rounded-full bg-[conic-gradient(at_50%_50%,#ff3737,#ffb347,#2dd4bf,#3b82f6,#a855f7,#ff3737)] opacity-90 animate-border-flow blur-[2px]"
                     className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
                   />
                   <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
@@ -1607,9 +1629,9 @@ export default function App() {
                 
                 {/* 1. RGB Animasyonlu İletişim Formu */}
                 <div className="relative group z-10">
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200 animate-tilt"></div>
-                    <div className="relative overflow-hidden rounded-2xl p-[3px]">
-                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+                    <div className="absolute -inset-[6px] rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-80 blur-md transition duration-1000 group-hover:opacity-100 group-hover:duration-300 animate-tilt"></div>
+                    <div className="relative overflow-hidden rounded-2xl p-[4px]">
+                      <span className="absolute inset-[-120%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                       <div className="relative bg-white h-full rounded-xl p-6 md:p-8 shadow-2xl">
                         <h3 className="text-2xl font-bold text-slate-900 mb-6">Hızlı İletişim Formu</h3>
                         <form onSubmit={handleMainContactSubmit} className="space-y-4">
@@ -1864,6 +1886,20 @@ export default function App() {
               </button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* SOSYAL MEDYA ALANI */}
+      <section id="social-feed" className="py-20 bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">Sosyal Medya</h2>
+            <p className="text-slate-500 text-sm">Withmor'dan en güncel paylaşımlar.</p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden bg-white">
+            <div className="elfsight-app-149bc35a-94cc-4c90-8aed-ce6de5295a35" data-elfsight-app-lazy></div>
+          </div>
         </div>
       </section>
 
