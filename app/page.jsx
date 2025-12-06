@@ -860,16 +860,17 @@ export default function App() {
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-24 items-center justify-center">
-              <img
-                src="/images/withmor-logo.png"
-                alt="Withmor Logo"
-                className="h-16 w-auto object-contain"
-              />
-            </div>
+          <div className="flex h-10 w-32 items-center justify-center rounded-xl bg-white/90 shadow-md dark:bg-white">
+  <img
+    src="/images/withmor-logo.png"
+    alt="Withmor Logo"
+    className="h-8 w-auto object-contain"
+  />
+</div>
+
             <div className="leading-tight">
               
-              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Elevator Solutions</p>
+              <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Asansör Teknoloji Merkezi </p>
             </div>
           </div>
 
