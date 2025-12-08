@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import SocialFeedSection from "../components/SocialFeedSection";
 
 // --- İKON TANIMLAMALARI (SVG) ---
@@ -240,6 +240,8 @@ function ElevatorAnimation() {
 
 export default function App() {
   const [language, setLanguage] = useState("tr");
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const languageMenuRef = useRef(null);
   const translations = useMemo(
     () => ({
       tr: {
@@ -468,6 +470,10 @@ export default function App() {
     [hero, t]
   );
   const localizedBadges = useMemo(() => t?.badges || translations.tr.badges, [t, translations]);
+  const currentLanguage = useMemo(
+    () => languageOptions.find((option) => option.code === language) || languageOptions[0],
+    [language, languageOptions]
+  );
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
@@ -496,6 +502,17 @@ export default function App() {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target)) {
+        setLanguageMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -1302,21 +1319,43 @@ export default function App() {
       </header>
 
       {/* Language Switcher */}
-      <div className="fixed right-4 top-24 z-40 flex flex-col gap-2">
-        {languageOptions.map((option) => (
-          <button
-            key={option.code}
-            onClick={() => setLanguage(option.code)}
-            className={`flex items-center gap-2 rounded-full border bg-white/90 px-3 py-1 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-              language === option.code ? "border-blue-600 text-blue-700" : "border-slate-200 text-slate-600"
-            }`}
-          >
-            <span className="text-lg" aria-hidden>
-              {option.icon}
-            </span>
-            <span>{option.label}</span>
-          </button>
-        ))}
+      <div className="fixed right-4 top-24 z-40" ref={languageMenuRef}>
+        <button
+          onClick={() => setLanguageMenuOpen((prev) => !prev)}
+          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md text-slate-700"
+        >
+          <span className="text-lg" aria-hidden>
+            {currentLanguage?.icon}
+          </span>
+          <span>{currentLanguage?.label}</span>
+          <Icons.ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? "rotate-180" : ""}`} />
+        </button>
+        {languageMenuOpen && (
+          <div className="mt-2 w-48 rounded-xl border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
+            <div className="flex flex-col gap-1">
+              {languageOptions.map((option) => (
+                <button
+                  key={option.code}
+                  onClick={() => {
+                    setLanguage(option.code);
+                    setLanguageMenuOpen(false);
+                  }}
+                  className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition hover:bg-blue-50 ${
+                    language === option.code ? "bg-blue-100 text-blue-800" : "text-slate-700"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-lg" aria-hidden>
+                      {option.icon}
+                    </span>
+                    {option.label}
+                  </span>
+                  {language === option.code && <Icons.CheckCircle2 size={16} className="text-blue-600" />}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <style>{badgeAnimationStyles}</style>
