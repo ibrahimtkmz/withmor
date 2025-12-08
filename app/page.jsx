@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import SocialFeedSection from "../components/SocialFeedSection";
 
 // --- İKON TANIMLAMALARI (SVG) ---
@@ -240,6 +240,8 @@ function ElevatorAnimation() {
 
 export default function App() {
   const [language, setLanguage] = useState("tr");
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const languageMenuRef = useRef(null);
   const translations = useMemo(
     () => ({
       tr: {
@@ -421,24 +423,33 @@ export default function App() {
   });
 
   const badgeAnimationStyles = `
-    @keyframes badgeSlideTop {
-      0%, 15% { transform: translate(0, 0); opacity: 1; }
-      35% { transform: translate(-18px, 0); opacity: 0.8; }
-      55% { transform: translate(-36px, -8px); opacity: 0.4; }
-      75% { transform: translate(-12px, -14px); opacity: 0.7; }
-      100% { transform: translate(0, 0); opacity: 1; }
+    @keyframes badgeSwap {
+      0%, 10% {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+      }
+      25% {
+        transform: translate(-145%, 0) scale(0.95);
+        opacity: 0;
+      }
+      26% {
+        transform: translate(45%, 0) scale(0.95);
+        opacity: 0;
+      }
+      45%, 100% {
+        transform: translate(-50%, 0) scale(1);
+        opacity: 1;
+      }
     }
 
-    @keyframes badgeSlideBottom {
-      0%, 15% { transform: translate(0, 0); opacity: 1; }
-      35% { transform: translate(18px, 0); opacity: 0.8; }
-      55% { transform: translate(36px, -10px); opacity: 0.4; }
-      75% { transform: translate(12px, -16px); opacity: 0.7; }
-      100% { transform: translate(0, 0); opacity: 1; }
+    .badge-carousel-item {
+      animation: badgeSwap 12s ease-in-out infinite;
     }
 
-    .animate-badge-slide-top { animation: badgeSlideTop 10s ease-in-out infinite; }
-    .animate-badge-slide-bottom { animation: badgeSlideBottom 10s ease-in-out infinite; }
+    .badge-carousel-item:nth-child(1) { animation-delay: 0s; }
+    .badge-carousel-item:nth-child(2) { animation-delay: 3s; }
+    .badge-carousel-item:nth-child(3) { animation-delay: 6s; }
+    .badge-carousel-item:nth-child(4) { animation-delay: 9s; }
   `;
 
   const languageOptions = useMemo(
@@ -468,6 +479,10 @@ export default function App() {
     [hero, t]
   );
   const localizedBadges = useMemo(() => t?.badges || translations.tr.badges, [t, translations]);
+  const currentLanguage = useMemo(
+    () => languageOptions.find((option) => option.code === language) || languageOptions[0],
+    [language, languageOptions]
+  );
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
@@ -496,6 +511,17 @@ export default function App() {
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target)) {
+        setLanguageMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -1212,6 +1238,44 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onClick={() => setLanguageMenuOpen((prev) => !prev)}
+                className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md text-slate-700"
+              >
+                <span className="text-lg" aria-hidden>
+                  {currentLanguage?.icon}
+                </span>
+                <span>{currentLanguage?.label}</span>
+                <Icons.ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+              {languageMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-xl border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
+                  <div className="flex flex-col gap-1">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => {
+                          setLanguage(option.code);
+                          setLanguageMenuOpen(false);
+                        }}
+                        className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition hover:bg-blue-50 ${
+                          language === option.code ? "bg-blue-100 text-blue-800" : "text-slate-700"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span className="text-lg" aria-hidden>
+                            {option.icon}
+                          </span>
+                          {option.label}
+                        </span>
+                        {language === option.code && <Icons.CheckCircle2 size={16} className="text-blue-600" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
             {isLoggedIn && (
               <span className="hidden text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 sm:inline-flex items-center gap-1">
                  <Icons.CheckCircle2 size={12} /> Yönetici
@@ -1301,24 +1365,6 @@ export default function App() {
         )}
       </header>
 
-      {/* Language Switcher */}
-      <div className="fixed right-4 top-24 z-40 flex flex-col gap-2">
-        {languageOptions.map((option) => (
-          <button
-            key={option.code}
-            onClick={() => setLanguage(option.code)}
-            className={`flex items-center gap-2 rounded-full border bg-white/90 px-3 py-1 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-              language === option.code ? "border-blue-600 text-blue-700" : "border-slate-200 text-slate-600"
-            }`}
-          >
-            <span className="text-lg" aria-hidden>
-              {option.icon}
-            </span>
-            <span>{option.label}</span>
-          </button>
-        ))}
-      </div>
-
       <style>{badgeAnimationStyles}</style>
 
       {/* HERO SECTION - KORUNDU */}
@@ -1327,69 +1373,65 @@ export default function App() {
           {/* Sol Kısım */}
           <div>
             {/* Vurgulu Metinler */}
-            <div className="mb-6 flex flex-col gap-3">
-              {[0, 1].map((row) => (
-                <div
-                  key={row}
-                  className={`flex flex-wrap gap-3 ${
-                    row === 0 ? "animate-badge-slide-top" : "animate-badge-slide-bottom"
-                  }`}
-                >
-                  {[
-                    {
-                      key: "performance",
-                      bg: "from-blue-500/70 via-blue-600/70 to-blue-700/70",
-                      content: (
-                        <>
-                          <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                          {localizedBadges.performance}
-                        </>
-                      ),
-                    },
-                    {
-                      key: "en81",
-                      bg: "from-green-500/70 via-green-600/70 to-emerald-700/70",
-                      content: (
-                        <>
-                          <Icons.CheckCircle2 size={12} />
-                          {localizedBadges.en81}
-                        </>
-                      ),
-                    },
-                    {
-                      key: "satisfaction",
-                      bg: "from-purple-500/70 via-fuchsia-600/70 to-indigo-700/70",
-                      content: (
-                        <>
-                          <Icons.Star size={12} fill="currentColor" />
-                          {localizedBadges.satisfaction}
-                        </>
-                      ),
-                    },
-                    {
-                      key: "inHouse",
-                      bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
-                      content: (
-                        <>
-                          <Icons.Settings size={12} />
-                          {localizedBadges.inHouse}
-                        </>
-                      ),
-                    },
-                  ]
-                    .slice(row * 2, row * 2 + 2)
-                    .map((badge) => (
-                      <div key={badge.key} className="relative inline-flex">
-                        <span
-                          className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
-                        />
-                        <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
-                          {badge.content}
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              ))}
+            <div className="mb-6 w-full max-w-2xl">
+              <div className="relative h-12 overflow-hidden">
+                {[
+                  {
+                    key: "performance",
+                    bg: "from-blue-500/70 via-blue-600/70 to-blue-700/70",
+                    content: (
+                      <>
+                        <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
+                        {localizedBadges.performance}
+                      </>
+                    ),
+                  },
+                  {
+                    key: "en81",
+                    bg: "from-green-500/70 via-green-600/70 to-emerald-700/70",
+                    content: (
+                      <>
+                        <Icons.CheckCircle2 size={12} />
+                        {localizedBadges.en81}
+                      </>
+                    ),
+                  },
+                  {
+                    key: "satisfaction",
+                    bg: "from-purple-500/70 via-fuchsia-600/70 to-indigo-700/70",
+                    content: (
+                      <>
+                        <Icons.Star size={12} fill="currentColor" />
+                        {localizedBadges.satisfaction}
+                      </>
+                    ),
+                  },
+                  {
+                    key: "inHouse",
+                    bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
+                    content: (
+                      <>
+                        <Icons.Settings size={12} />
+                        {localizedBadges.inHouse}
+                      </>
+                    ),
+                  },
+                ].map((badge) => (
+                  <div
+                    key={badge.key}
+                    className="badge-carousel-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                  >
+                    <div className="relative inline-flex">
+                      <span
+                        className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
+                      />
+                      <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
+                        {badge.content}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem] leading-tight">
@@ -1415,7 +1457,7 @@ export default function App() {
               </button>
 
             <a
-                href="#projects"
+                href="#references"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-700 group"
               >
                 {localizedHero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
