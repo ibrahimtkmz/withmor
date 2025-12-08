@@ -460,6 +460,8 @@ export default function App() {
 
     .badge-carousel-item {
       animation: badgeSlide 16s ease-in-out infinite;
+      animation-fill-mode: both;
+      opacity: 0;
     }
 
     .badge-carousel-item:nth-child(1) { animation-delay: 0s; }
@@ -1259,7 +1261,7 @@ export default function App() {
             <a href="#contact" className="hover:text-blue-700 transition-colors">{t.nav.contact}</a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end gap-2 md:flex-row md:items-center md:gap-3">
             <div className="relative" ref={languageMenuRef}>
               <button
                 onClick={() => setLanguageMenuOpen((prev) => !prev)}
