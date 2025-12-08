@@ -452,13 +452,6 @@ export default function App() {
     []
   );
 
-  const t = translations[language] || translations.tr;
-  const localizedHero = useMemo(
-    () => ({ ...hero, ...(t?.hero || {}) }),
-    [hero, t]
-  );
-  const localizedBadges = useMemo(() => t?.badges || translations.tr.badges, [t, translations]);
-
   const [hero, setHero] = useState({
     eyebrow: "Premium Asansör Çözümleri",
     title: "Sizin için Dünyanın Yükünü Kaldırıyoruz",
@@ -468,6 +461,13 @@ export default function App() {
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
+
+  const t = translations[language] || translations.tr;
+  const localizedHero = useMemo(
+    () => ({ ...hero, ...(t?.hero || {}) }),
+    [hero, t]
+  );
+  const localizedBadges = useMemo(() => t?.badges || translations.tr.badges, [t, translations]);
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
