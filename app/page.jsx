@@ -242,6 +242,8 @@ export default function App() {
   const [language, setLanguage] = useState("tr");
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const languageMenuRef = useRef(null);
+  const [translatorReady, setTranslatorReady] = useState(false);
+  const translatorInitRef = useRef(false);
   const translations = useMemo(
     () => ({
       tr: {
@@ -550,6 +552,48 @@ export default function App() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || translatorInitRef.current) return;
+
+    translatorInitRef.current = true;
+
+    window.googleTranslateElementInit = () => {
+      if (!window.google?.translate) return;
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: "tr",
+          includedLanguages: "tr,en,ar,ru,fr",
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+        },
+        "google_translate_element"
+      );
+      setTranslatorReady(true);
+    };
+
+    const existingScript = document.getElementById("google-translate-script");
+    if (existingScript) {
+      if (window.google?.translate) {
+        window.googleTranslateElementInit();
+      }
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "google-translate-script";
+    script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    if (!translatorReady) return;
+    const combo = document.querySelector(".goog-te-combo");
+    if (!combo) return;
+    if (combo.value === language) return;
+    combo.value = language;
+    combo.dispatchEvent(new Event("change"));
+  }, [language, translatorReady]);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -1186,6 +1230,8 @@ export default function App() {
       dir={t?.dir || "ltr"}
       className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden"
     >
+
+      <div id="google_translate_element" className="hidden" aria-hidden="true" />
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header
