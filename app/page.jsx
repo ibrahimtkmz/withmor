@@ -238,8 +238,8 @@ function ElevatorAnimation() {
   );
 }
 
-export default function App() {
-  const [language, setLanguage] = useState("tr");
+export function WithmorPage({ initialLanguage = "tr" }) {
+  const [language, setLanguage] = useState(initialLanguage);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const languageMenuRef = useRef(null);
   const [translatorReady, setTranslatorReady] = useState(false);
@@ -2538,4 +2538,8 @@ export default function App() {
       `}</style>
     </div>
   );
+}
+
+export default function Page() {
+  return <WithmorPage initialLanguage="tr" />;
 }
