@@ -1132,6 +1132,16 @@ export default function App() {
                     </>
                   ),
                 },
+                {
+                  text: "Sadece Kendi Üretimimizi Kullanıyoruz",
+                  bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
+                  content: (
+                    <>
+                      <Icons.Settings size={12} />
+                      Sadece Kendi Üretimimizi Kullanıyoruz
+                    </>
+                  ),
+                },
               ].map((badge, idx) => (
                 <div key={idx} className="relative inline-flex">
                   <span
