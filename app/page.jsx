@@ -239,6 +239,153 @@ function ElevatorAnimation() {
 }
 
 export default function App() {
+  const [language, setLanguage] = useState("tr");
+  const translations = useMemo(
+    () => ({
+      tr: {
+        dir: "ltr",
+        nav: {
+          corporate: "Kurumsal",
+          products: "Ürünlerimiz",
+          projects: "Projeler",
+          references: "Referanslar",
+          contact: "İletişim",
+          menu: "Menü",
+          admin: "Yönetici Girişi",
+          logout: "Çıkış Yap",
+        },
+        hero: {
+          eyebrow: "Premium Asansör Çözümleri",
+          title: "Sizin için Dünyanın Yükünü Kaldırıyoruz",
+          subtitle:
+            "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler, mühendislik ve servis çözümleri.",
+          manufacturingNote: "İmalatımız haricinde başka firmalara ait ürün yoktur.",
+          cta: "Proje Teklifi Al",
+          secondaryCta: "Referanslarımızı İnceleyin",
+        },
+        badges: {
+          performance: "Yüksek Performans, Yüksek Güven",
+          en81: "EN-81 Standartlarına Uygun",
+          satisfaction: "%100 Müşteri Memnuniyeti",
+          inHouse: "Sadece Kendi Üretimimizi Kullanıyoruz",
+        },
+      },
+      en: {
+        dir: "ltr",
+        nav: {
+          corporate: "Corporate",
+          products: "Products",
+          projects: "Projects",
+          references: "References",
+          contact: "Contact",
+          menu: "Menu",
+          admin: "Admin Login",
+          logout: "Log Out",
+        },
+        hero: {
+          eyebrow: "Premium Elevator Solutions",
+          title: "We Lift the World's Weight for You",
+          subtitle:
+            "Cargo lifts, platforms, villa elevators and horizontal elevators with engineering and service excellence.",
+          manufacturingNote: "We do not offer products from other brands—only our own manufacturing.",
+          cta: "Get a Project Quote",
+          secondaryCta: "View Our References",
+        },
+        badges: {
+          performance: "High Performance, High Safety",
+          en81: "Compliant with EN-81 Standards",
+          satisfaction: "100% Customer Satisfaction",
+          inHouse: "We Use Only Our Own Production",
+        },
+      },
+      ar: {
+        dir: "rtl",
+        nav: {
+          corporate: "الشركة",
+          products: "منتجاتنا",
+          projects: "المشاريع",
+          references: "المراجع",
+          contact: "اتصل بنا",
+          menu: "القائمة",
+          admin: "دخول الإدارة",
+          logout: "تسجيل الخروج",
+        },
+        hero: {
+          eyebrow: "حلول مصاعد متميزة",
+          title: "نرفع عنك عبء العالم",
+          subtitle:
+            "مصاعد البضائع، المنصات، مصاعد الفيلات والمصاعد الأفقية مع خدمات هندسية متكاملة.",
+          manufacturingNote: "نقدم فقط منتجات تصنيعنا ولا نعرض منتجات شركات أخرى.",
+          cta: "احصل على عرض مشروع",
+          secondaryCta: "استعرض مراجعنا",
+        },
+        badges: {
+          performance: "أداء عالٍ وسلامة عالية",
+          en81: "متوافق مع معايير EN-81",
+          satisfaction: "%100 رضا العملاء",
+          inHouse: "نستخدم فقط إنتاجنا الخاص",
+        },
+      },
+      ru: {
+        dir: "ltr",
+        nav: {
+          corporate: "О компании",
+          products: "Продукция",
+          projects: "Проекты",
+          references: "Референсы",
+          contact: "Контакты",
+          menu: "Меню",
+          admin: "Вход для админа",
+          logout: "Выход",
+        },
+        hero: {
+          eyebrow: "Премиальные лифтовые решения",
+          title: "Мы поднимаем мир для вас",
+          subtitle:
+            "Грузовые лифты, платформы, лифты для вилл и горизонтальные лифты с инженерной поддержкой и сервисом.",
+          manufacturingNote: "Мы предлагаем только собственное производство, без сторонних брендов.",
+          cta: "Получить предложение",
+          secondaryCta: "Посмотреть наши референсы",
+        },
+        badges: {
+          performance: "Высокая производительность и безопасность",
+          en81: "Соответствует стандарту EN-81",
+          satisfaction: "100% удовлетворенность клиентов",
+          inHouse: "Используем только собственное производство",
+        },
+      },
+      fr: {
+        dir: "ltr",
+        nav: {
+          corporate: "Société",
+          products: "Produits",
+          projects: "Projets",
+          references: "Références",
+          contact: "Contact",
+          menu: "Menu",
+          admin: "Connexion admin",
+          logout: "Déconnexion",
+        },
+        hero: {
+          eyebrow: "Solutions d'ascenseurs premium",
+          title: "Nous soulevons le poids du monde pour vous",
+          subtitle:
+            "Ascenseurs de charge, plateformes, ascenseurs de villa et ascenseurs horizontaux avec ingénierie et service.",
+          manufacturingNote: "Nous proposons uniquement notre propre production, aucun autre fabricant.",
+          cta: "Obtenir un devis",
+          secondaryCta: "Voir nos références",
+        },
+        badges: {
+          performance: "Haute performance, sécurité élevée",
+          en81: "Conforme aux normes EN-81",
+          satisfaction: "100% satisfaction client",
+          inHouse: "Nous utilisons uniquement notre production",
+        },
+      },
+    }),
+    []
+  );
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -273,6 +420,38 @@ export default function App() {
     message: "",
   });
 
+  const badgeAnimationStyles = `
+    @keyframes badgeSlideTop {
+      0%, 15% { transform: translate(0, 0); opacity: 1; }
+      35% { transform: translate(-18px, 0); opacity: 0.8; }
+      55% { transform: translate(-36px, -8px); opacity: 0.4; }
+      75% { transform: translate(-12px, -14px); opacity: 0.7; }
+      100% { transform: translate(0, 0); opacity: 1; }
+    }
+
+    @keyframes badgeSlideBottom {
+      0%, 15% { transform: translate(0, 0); opacity: 1; }
+      35% { transform: translate(18px, 0); opacity: 0.8; }
+      55% { transform: translate(36px, -10px); opacity: 0.4; }
+      75% { transform: translate(12px, -16px); opacity: 0.7; }
+      100% { transform: translate(0, 0); opacity: 1; }
+    }
+
+    .animate-badge-slide-top { animation: badgeSlideTop 10s ease-in-out infinite; }
+    .animate-badge-slide-bottom { animation: badgeSlideBottom 10s ease-in-out infinite; }
+  `;
+
+  const languageOptions = useMemo(
+    () => [
+      { code: "tr", label: "Türkçe", icon: "🇹🇷" },
+      { code: "en", label: "English", icon: "🇬🇧" },
+      { code: "ar", label: "العربية", icon: "🇸🇦" },
+      { code: "ru", label: "Русский", icon: "🇷🇺" },
+      { code: "fr", label: "Français", icon: "🇫🇷" },
+    ],
+    []
+  );
+
   const [hero, setHero] = useState({
     eyebrow: "Premium Asansör Çözümleri",
     title: "Sizin için Dünyanın Yükünü Kaldırıyoruz",
@@ -282,6 +461,13 @@ export default function App() {
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
+
+  const t = translations[language] || translations.tr;
+  const localizedHero = useMemo(
+    () => ({ ...hero, ...(t?.hero || {}) }),
+    [hero, t]
+  );
+  const localizedBadges = useMemo(() => t?.badges || translations.tr.badges, [t, translations]);
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryError, setGalleryError] = useState("");
@@ -304,6 +490,20 @@ export default function App() {
   useEffect(() => {
     loadActivityLog();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = language;
+      document.documentElement.dir = t?.dir || "ltr";
+    }
+  }, [language, t]);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -929,10 +1129,17 @@ export default function App() {
    return (
     // KURUMSAL TEMA: Beyaz zemin, Koyu gri metinler, Klasik font
     // overflow-x-hidden eklendi: Mobilde sağa sola kaymayı engeller
-    <div className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden">
+    <div
+      dir={t?.dir || "ltr"}
+      className="min-h-screen bg-white text-slate-800 font-sans selection:bg-blue-100 overflow-x-hidden"
+    >
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-white/80">
+      <header
+        className={`sticky top-0 z-40 border-b border-slate-200 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 transition-all duration-300 ${
+          isScrolled ? "bg-white/95 shadow-md" : "bg-white/80"
+        }`}
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
           <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm">
@@ -962,7 +1169,7 @@ export default function App() {
             {/* Kurumsal Dropdown Menü */}
             <div className="relative group h-full flex items-center">
                 <a href="#about" onClick={(e) => { e.preventDefault(); scrollToAbout('biz-kimiz'); }} className="hover:text-blue-700 transition-colors flex items-center gap-1 py-4">
-                    Kurumsal <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+                    {t.nav.corporate} <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
                 </a>
                 <div className="absolute left-0 top-full pt-2 w-48 hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden py-1">
@@ -982,7 +1189,7 @@ export default function App() {
             {/* YENİ: Ürünlerimiz Dropdown Menü */}
             <div className="relative group h-full flex items-center">
                 <a href="#services" onClick={(e) => { e.preventDefault(); scrollToService('services'); }} className="hover:text-blue-700 transition-colors flex items-center gap-1 py-4">
-                    Ürünlerimiz <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+                    {t.nav.products} <Icons.ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
                 </a>
                 <div className="absolute left-0 top-full pt-2 w-56 hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden py-1">
@@ -999,9 +1206,9 @@ export default function App() {
                 </div>
             </div>
 
-            <a href="#projects" className="hover:text-blue-700 transition-colors">Projeler</a>
-            <a href="#references" className="hover:text-blue-700 transition-colors">Referanslar</a>
-            <a href="#contact" className="hover:text-blue-700 transition-colors">İletişim</a>
+            <a href="#projects" className="hover:text-blue-700 transition-colors">{t.nav.projects}</a>
+            <a href="#references" className="hover:text-blue-700 transition-colors">{t.nav.references}</a>
+            <a href="#contact" className="hover:text-blue-700 transition-colors">{t.nav.contact}</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -1023,7 +1230,7 @@ export default function App() {
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-slate-600">
                 {isLoggedIn ? <Icons.LogOut size={12}/> : <Icons.User size={12}/>}
               </span>
-              {isLoggedIn ? "Çıkış" : "Giriş"}
+              {isLoggedIn ? t.nav.logout : t.nav.admin}
             </button>
 
             {/* Mobile Menu Button */}
@@ -1037,14 +1244,14 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="fixed inset-0 z-[100] bg-white h-[100dvh] flex flex-col animate-in slide-in-from-right duration-200 md:hidden">
              <div className="p-4 flex justify-between items-center border-b border-slate-100">
-                <span className="font-bold text-slate-900">Menü</span>
+                <span className="font-bold text-slate-900">{t.nav.menu}</span>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-600">
                   <Icons.X size={24} />
                 </button>
              </div>
              <nav className="flex flex-col p-6 gap-4 text-lg font-medium text-slate-700 overflow-y-auto">
                 <div>
-                    <span className="text-blue-900 font-bold block mb-2">Kurumsal</span>
+                    <span className="text-blue-900 font-bold block mb-2">{t.nav.corporate}</span>
                     <div className="pl-4 flex flex-col gap-3 text-base border-l-2 border-slate-100">
                         {Object.keys(aboutTabs).map((key) => (
                             <button
@@ -1058,7 +1265,7 @@ export default function App() {
                     </div>
                 </div>
                 <div>
-                    <span className="text-blue-900 font-bold block mb-2">Ürünlerimiz</span>
+                    <span className="text-blue-900 font-bold block mb-2">{t.nav.products}</span>
                     <div className="pl-4 flex flex-col gap-3 text-base border-l-2 border-slate-100">
                         {services.map((service) => (
                             <button
@@ -1071,9 +1278,9 @@ export default function App() {
                         ))}
                     </div>
                 </div>
-                <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Projeler</a>
-                <a href="#references" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">Referanslar</a>
-                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">İletişim</a>
+                <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">{t.nav.projects}</a>
+                <a href="#references" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">{t.nav.references}</a>
+                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-blue-700">{t.nav.contact}</a>
 
                 <div className="h-px bg-slate-100 my-2" />
                 <button
@@ -1087,12 +1294,32 @@ export default function App() {
                   }}
                   className="text-left text-blue-700 font-bold"
                 >
-                  {isLoggedIn ? "Çıkış Yap" : "Yönetici Girişi"}
+                  {isLoggedIn ? t.nav.logout : t.nav.admin}
                 </button>
              </nav>
           </div>
         )}
       </header>
+
+      {/* Language Switcher */}
+      <div className="fixed right-4 top-24 z-40 flex flex-col gap-2">
+        {languageOptions.map((option) => (
+          <button
+            key={option.code}
+            onClick={() => setLanguage(option.code)}
+            className={`flex items-center gap-2 rounded-full border bg-white/90 px-3 py-1 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+              language === option.code ? "border-blue-600 text-blue-700" : "border-slate-200 text-slate-600"
+            }`}
+          >
+            <span className="text-lg" aria-hidden>
+              {option.icon}
+            </span>
+            <span>{option.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <style>{badgeAnimationStyles}</style>
 
       {/* HERO SECTION - KORUNDU */}
       <section className="w-full border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-16 lg:py-24">
@@ -1100,69 +1327,81 @@ export default function App() {
           {/* Sol Kısım */}
           <div>
             {/* Vurgulu Metinler */}
-            <div className="mb-6 flex flex-wrap gap-3">
-              {[
-                {
-                  text: "Yüksek Performans, Yüksek Güven",
-                  bg: "from-blue-500/70 via-blue-600/70 to-blue-700/70",
-                  content: (
-                    <>
-                      <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-                      Yüksek Performans, Yüksek Güven
-                    </>
-                  ),
-                },
-                {
-                  text: "EN-81 Standartlarına Uygun",
-                  bg: "from-green-500/70 via-green-600/70 to-emerald-700/70",
-                  content: (
-                    <>
-                      <Icons.CheckCircle2 size={12} />
-                      EN-81 Standartlarına Uygun
-                    </>
-                  ),
-                },
-                {
-                  text: "%100 Müşteri Memnuniyeti",
-                  bg: "from-purple-500/70 via-fuchsia-600/70 to-indigo-700/70",
-                  content: (
-                    <>
-                      <Icons.Star size={12} fill="currentColor" />
-                      %100 Müşteri Memnuniyeti
-                    </>
-                  ),
-                },
-                {
-                  text: "Sadece Kendi Üretimimizi Kullanıyoruz",
-                  bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
-                  content: (
-                    <>
-                      <Icons.Settings size={12} />
-                      Sadece Kendi Üretimimizi Kullanıyoruz
-                    </>
-                  ),
-                },
-              ].map((badge, idx) => (
-                <div key={idx} className="relative inline-flex">
-                  <span
-                    className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
-                  />
-                  <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
-                    {badge.content}
-                  </span>
+            <div className="mb-6 flex flex-col gap-3">
+              {[0, 1].map((row) => (
+                <div
+                  key={row}
+                  className={`flex flex-wrap gap-3 ${
+                    row === 0 ? "animate-badge-slide-top" : "animate-badge-slide-bottom"
+                  }`}
+                >
+                  {[
+                    {
+                      key: "performance",
+                      bg: "from-blue-500/70 via-blue-600/70 to-blue-700/70",
+                      content: (
+                        <>
+                          <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
+                          {localizedBadges.performance}
+                        </>
+                      ),
+                    },
+                    {
+                      key: "en81",
+                      bg: "from-green-500/70 via-green-600/70 to-emerald-700/70",
+                      content: (
+                        <>
+                          <Icons.CheckCircle2 size={12} />
+                          {localizedBadges.en81}
+                        </>
+                      ),
+                    },
+                    {
+                      key: "satisfaction",
+                      bg: "from-purple-500/70 via-fuchsia-600/70 to-indigo-700/70",
+                      content: (
+                        <>
+                          <Icons.Star size={12} fill="currentColor" />
+                          {localizedBadges.satisfaction}
+                        </>
+                      ),
+                    },
+                    {
+                      key: "inHouse",
+                      bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
+                      content: (
+                        <>
+                          <Icons.Settings size={12} />
+                          {localizedBadges.inHouse}
+                        </>
+                      ),
+                    },
+                  ]
+                    .slice(row * 2, row * 2 + 2)
+                    .map((badge) => (
+                      <div key={badge.key} className="relative inline-flex">
+                        <span
+                          className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
+                        />
+                        <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
+                          {badge.content}
+                        </span>
+                      </div>
+                    ))}
                 </div>
               ))}
             </div>
 
             <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-[3.2rem] leading-tight">
-              {hero.title}
+              {localizedHero.title}
             </h1>
             <p className="mb-8 max-w-xl text-base leading-relaxed text-slate-600">
-              {hero.subtitle}
+              {localizedHero.subtitle}
             </p>
-            <p className="mb-6 max-w-xl text-sm font-semibold text-slate-700">
-              {hero.manufacturingNote}
-            </p>
+            <div className="mb-10 inline-flex items-center gap-2 rounded-full bg-green-50 px-3 py-2 text-[12px] font-semibold text-green-700 border border-green-100 shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-green-500 animate-ping" />
+              {localizedHero.manufacturingNote}
+            </div>
             <div className="mb-8 flex flex-wrap items-center gap-4">
 
               <button
@@ -1171,7 +1410,7 @@ export default function App() {
               >
                 <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                 <span className="relative flex h-full w-full items-center justify-center rounded-md bg-blue-900 px-8 py-3 text-sm font-semibold text-white transition group-hover:bg-blue-800">
-                  {hero.cta}
+                  {localizedHero.cta}
                 </span>
               </button>
 
@@ -1179,7 +1418,7 @@ export default function App() {
                 href="#projects"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-700 group"
               >
-                {hero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                {localizedHero.secondaryCta} <Icons.ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
             {/* Dış sarmalayıcı: hem üstten ayır, hem genişliği sınırla */}
@@ -1965,11 +2204,11 @@ export default function App() {
                </p>
             </div>
             <div>
-               <h4 className="text-white font-bold text-sm mb-4">Hızlı Erişim</h4>
+               <h4 className="text-white font-bold text-sm mb-4">{t.nav.menu}</h4>
                <ul className="space-y-2 text-xs">
-                  <li><a href="#services" className="hover:text-white transition-colors">Hizmetler</a></li>
-                  <li><a href="#projects" className="hover:text-white transition-colors">Projeler</a></li>
-                  <li><a href="#contact" className="hover:text-white transition-colors">İletişim</a></li>
+                  <li><a href="#services" className="hover:text-white transition-colors">{t.nav.products}</a></li>
+                  <li><a href="#projects" className="hover:text-white transition-colors">{t.nav.projects}</a></li>
+                  <li><a href="#contact" className="hover:text-white transition-colors">{t.nav.contact}</a></li>
                </ul>
             </div>
             <div>
