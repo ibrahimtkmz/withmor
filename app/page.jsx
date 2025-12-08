@@ -431,25 +431,25 @@ export default function App() {
         opacity: 0;
         filter: brightness(0.85) blur(1px);
       }
-      10% {
-        transform: translate(-70%, -50%) scale(0.98) rotateY(-6deg);
+      8% {
+        transform: translate(-80%, -50%) scale(0.97) rotateY(-7deg);
         opacity: 1;
         filter: brightness(0.95);
       }
-      25% {
-        transform: translate(0%, -50%) scale(1.03) rotateY(0deg);
+      22% {
+        transform: translate(0%, -50%) scale(1.02) rotateY(0deg);
         opacity: 1;
         filter: brightness(1);
       }
-      40% {
-        transform: translate(70%, -50%) scale(1) rotateY(6deg);
-        opacity: 1;
-        filter: brightness(0.98);
+      32% {
+        transform: translate(70%, -50%) scale(0.98) rotateY(6deg);
+        opacity: 0.9;
+        filter: brightness(0.95);
       }
-      50% {
-        transform: translate(140%, -50%) scale(0.95) rotateY(10deg);
+      40% {
+        transform: translate(140%, -50%) scale(0.93) rotateY(10deg);
         opacity: 0;
-        filter: brightness(0.9) blur(1px);
+        filter: brightness(0.88) blur(1px);
       }
       100% {
         transform: translate(-140%, -50%) scale(0.9) rotateY(-12deg);
@@ -459,20 +459,23 @@ export default function App() {
     }
 
     .badge-carousel-item {
-      animation: badgeSlide 16s ease-in-out infinite;
+      animation: badgeSlide 20s ease-in-out infinite;
       animation-fill-mode: both;
       opacity: 0;
     }
 
     .badge-carousel-item:nth-child(1) { animation-delay: 0s; }
-    .badge-carousel-item:nth-child(2) { animation-delay: 4s; }
-    .badge-carousel-item:nth-child(3) { animation-delay: 8s; }
-    .badge-carousel-item:nth-child(4) { animation-delay: 12s; }
+    .badge-carousel-item:nth-child(2) { animation-delay: 5s; }
+    .badge-carousel-item:nth-child(3) { animation-delay: 10s; }
+    .badge-carousel-item:nth-child(4) { animation-delay: 15s; }
 
     @media (max-width: 768px) {
       .badge-carousel-item {
-        animation-duration: 14s;
+        animation-duration: 24s;
       }
+      .badge-carousel-item:nth-child(2) { animation-delay: 6s; }
+      .badge-carousel-item:nth-child(3) { animation-delay: 12s; }
+      .badge-carousel-item:nth-child(4) { animation-delay: 18s; }
     }
   `;
 
@@ -1404,7 +1407,7 @@ export default function App() {
       <style>{badgeAnimationStyles}</style>
 
       {/* HERO SECTION - KORUNDU */}
-      <section className="w-full border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-16 lg:py-24">
+      <section className="w-full border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-12 lg:py-20">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <div className="grid items-start gap-12 md:grid-cols-2">
           {/* Sol Kısım */}
