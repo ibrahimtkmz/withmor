@@ -278,6 +278,7 @@ export default function App() {
     title: "Sizin için Dünyanın Yükünü Kaldırıyoruz",
     subtitle:
       "Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler, mühendislik ve servis çözümleri.",
+    manufacturingNote: "İmalatımız haricinde başka firmalara ait ürün yoktur.",
     cta: "Proje Teklifi Al",
     secondaryCta: "Referanslarımızı İnceleyin",
   });
@@ -1131,6 +1132,16 @@ export default function App() {
                     </>
                   ),
                 },
+                {
+                  text: "Sadece Kendi Üretimimizi Kullanıyoruz",
+                  bg: "from-amber-400/70 via-orange-500/70 to-red-600/70",
+                  content: (
+                    <>
+                      <Icons.Settings size={12} />
+                      Sadece Kendi Üretimimizi Kullanıyoruz
+                    </>
+                  ),
+                },
               ].map((badge, idx) => (
                 <div key={idx} className="relative inline-flex">
                   <span
@@ -1148,6 +1159,9 @@ export default function App() {
             </h1>
             <p className="mb-8 max-w-xl text-base leading-relaxed text-slate-600">
               {hero.subtitle}
+            </p>
+            <p className="mb-6 max-w-xl text-sm font-semibold text-slate-700">
+              {hero.manufacturingNote}
             </p>
             <div className="mb-8 flex flex-wrap items-center gap-4">
 
