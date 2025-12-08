@@ -423,49 +423,55 @@ export default function App() {
   });
 
   const badgeAnimationStyles = `
-    .badge-stack { perspective: 900px; }
+    .badge-stack { perspective: 1100px; }
 
-    @keyframes badgeSwap {
-      0%, 10% {
-        transform: translate(-50%, -50%) translateZ(80px) scale(1);
-        opacity: 1;
-        filter: brightness(1);
-      }
-      25% {
-        transform: translate(-55%, -40%) translateZ(0) scale(0.95);
-        opacity: 0.85;
-        filter: brightness(0.95);
-      }
-      45% {
-        transform: translate(40%, -35%) translateZ(-160px) scale(0.9);
-        opacity: 0.35;
+    @keyframes badgeSlide {
+      0% {
+        transform: translate(-140%, -50%) scale(0.9) rotateY(-12deg);
+        opacity: 0;
         filter: brightness(0.85) blur(1px);
       }
-      55% {
-        transform: translate(50%, -35%) translateZ(-220px) scale(0.9);
-        opacity: 0;
-        filter: brightness(0.8) blur(2px);
-      }
-      70% {
-        transform: translate(-45%, -45%) translateZ(0) scale(0.96);
-        opacity: 0.75;
+      10% {
+        transform: translate(-70%, -50%) scale(0.98) rotateY(-6deg);
+        opacity: 1;
         filter: brightness(0.95);
       }
-      100% {
-        transform: translate(-50%, -50%) translateZ(80px) scale(1);
+      25% {
+        transform: translate(0%, -50%) scale(1.03) rotateY(0deg);
         opacity: 1;
         filter: brightness(1);
+      }
+      40% {
+        transform: translate(70%, -50%) scale(1) rotateY(6deg);
+        opacity: 1;
+        filter: brightness(0.98);
+      }
+      50% {
+        transform: translate(140%, -50%) scale(0.95) rotateY(10deg);
+        opacity: 0;
+        filter: brightness(0.9) blur(1px);
+      }
+      100% {
+        transform: translate(-140%, -50%) scale(0.9) rotateY(-12deg);
+        opacity: 0;
+        filter: brightness(0.85) blur(1px);
       }
     }
 
     .badge-carousel-item {
-      animation: badgeSwap 12s ease-in-out infinite;
+      animation: badgeSlide 16s ease-in-out infinite;
     }
 
     .badge-carousel-item:nth-child(1) { animation-delay: 0s; }
-    .badge-carousel-item:nth-child(2) { animation-delay: 3s; }
-    .badge-carousel-item:nth-child(3) { animation-delay: 6s; }
-    .badge-carousel-item:nth-child(4) { animation-delay: 9s; }
+    .badge-carousel-item:nth-child(2) { animation-delay: 4s; }
+    .badge-carousel-item:nth-child(3) { animation-delay: 8s; }
+    .badge-carousel-item:nth-child(4) { animation-delay: 12s; }
+
+    @media (max-width: 768px) {
+      .badge-carousel-item {
+        animation-duration: 14s;
+      }
+    }
   `;
 
   const languageOptions = useMemo(
@@ -1254,6 +1260,56 @@ export default function App() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onClick={() => setLanguageMenuOpen((prev) => !prev)}
+                className="hidden md:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md text-slate-700"
+              >
+                <span className="text-lg" aria-hidden>
+                  {currentLanguage?.icon}
+                </span>
+                <span>{currentLanguage?.label}</span>
+                <Icons.ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <button
+                onClick={() => setLanguageMenuOpen((prev) => !prev)}
+                className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                aria-label="Dil Değiştir"
+              >
+                <span className="text-xl" aria-hidden>
+                  {currentLanguage?.icon}
+                </span>
+              </button>
+
+              {languageMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-xl border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur-sm z-50">
+                  <div className="flex flex-col gap-1">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => {
+                          setLanguage(option.code);
+                          setLanguageMenuOpen(false);
+                        }}
+                        className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition hover:bg-blue-50 ${
+                          language === option.code ? "bg-blue-100 text-blue-800" : "text-slate-700"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span className="text-lg" aria-hidden>
+                            {option.icon}
+                          </span>
+                          {option.label}
+                        </span>
+                        {language === option.code && <Icons.CheckCircle2 size={16} className="text-blue-600" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {isLoggedIn && (
               <span className="hidden text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 sm:inline-flex items-center gap-1">
                  <Icons.CheckCircle2 size={12} /> Yönetici
@@ -1348,53 +1404,12 @@ export default function App() {
       {/* HERO SECTION - KORUNDU */}
       <section className="w-full border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-16 lg:py-24">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
-          <div className="mb-6 flex justify-end">
-            <div className="relative" ref={languageMenuRef}>
-              <button
-                onClick={() => setLanguageMenuOpen((prev) => !prev)}
-                className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md text-slate-700"
-              >
-                <span className="text-lg" aria-hidden>
-                  {currentLanguage?.icon}
-                </span>
-                <span>{currentLanguage?.label}</span>
-                <Icons.ChevronDown size={16} className={`transition-transform ${languageMenuOpen ? "rotate-180" : ""}`} />
-              </button>
-              {languageMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-xl border border-slate-200 bg-white/95 p-2 shadow-lg backdrop-blur-sm">
-                  <div className="flex flex-col gap-1">
-                    {languageOptions.map((option) => (
-                      <button
-                        key={option.code}
-                        onClick={() => {
-                          setLanguage(option.code);
-                          setLanguageMenuOpen(false);
-                        }}
-                        className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition hover:bg-blue-50 ${
-                          language === option.code ? "bg-blue-100 text-blue-800" : "text-slate-700"
-                        }`}
-                      >
-                        <span className="flex items-center gap-2">
-                          <span className="text-lg" aria-hidden>
-                            {option.icon}
-                          </span>
-                          {option.label}
-                        </span>
-                        {language === option.code && <Icons.CheckCircle2 size={16} className="text-blue-600" />}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
           <div className="grid items-start gap-12 md:grid-cols-2">
           {/* Sol Kısım */}
           <div>
             {/* Vurgulu Metinler */}
             <div className="mb-6 w-full max-w-2xl">
-              <div className="relative h-12 overflow-hidden badge-stack">
+              <div className="relative h-16 sm:h-12 overflow-hidden badge-stack px-2">
                 {[
                   {
                     key: "performance",
@@ -1445,7 +1460,7 @@ export default function App() {
                       <span
                         className={`absolute inset-[-1px] rounded-full bg-gradient-to-r ${badge.bg} opacity-90 animate-border-flow blur-[1px]`}
                       />
-                      <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
+                      <span className="relative inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[10px] sm:text-[11px] font-bold text-slate-800 border border-white/60 shadow-sm backdrop-blur-sm">
                         {badge.content}
                       </span>
                     </div>
