@@ -153,7 +153,6 @@ function ElevatorAnimation() {
           }
           11%, 74% {
             background-color: transparent;
-            color: #1D4ED8;
             border-color: #CBD5E1;
             transform: scale(1);
             box-shadow: none;
@@ -162,7 +161,7 @@ function ElevatorAnimation() {
 
         @keyframes floorLight2 {
           15%, 25% {
-            background-color: var(--brand-blue-500);
+            background-color: var(--brand-blue-700);
             color: #FFFFFF;
             border-color: var(--brand-blue-700);
             transform: scale(1.1);
