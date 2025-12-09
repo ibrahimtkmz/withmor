@@ -1241,21 +1241,20 @@ export function WithmorPage({ initialLanguage = "tr" }) {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm">
-  <img
-    src="/images/withmor-logo-beyaz.png"
-    alt="Withmor Logo"
-    className="h-14 w-auto object-contain"
-  />
-</div>
+            <div className="flex items-center justify-center bg-blue-900 px-3 py-1 rounded-md shadow-sm shadow-blue-900/30">
+              <img
+                src="/images/withmor-logo-beyaz.png"
+                alt="Withmor Logo"
+                className="h-14 w-auto object-contain"
+              />
+            </div>
 
-
-                       <div className="leading-tight flex flex-col gap-1">
+            <div className="leading-tight flex flex-col gap-1">
               <p className="text-[11px] font-semibold text-slate-900 uppercase tracking-[0.2em]">Asansör</p>
               <p className="text-[12px] font-semibold text-blue-700 uppercase tracking-[0.25em]">Teknoloji Merkezi</p>
               <a
                 href="tel:4443759"
-                className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm transition hover:bg-blue-800"
+                className="inline-flex items-center gap-2 rounded-full bg-blue-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm transition hover:bg-blue-800"
               >
                 <Icons.Phone className="h-3.5 w-3.5" />
                 444 37 59
