@@ -12,16 +12,16 @@ export function ElevatorAnimation() {
 
   return (
     <div className="relative w-full max-w-sm">
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-xl p-6 md:p-8">
-        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-50 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-slate-50 rounded-full blur-3xl opacity-50 pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl bg-blue-900 border border-blue-800 shadow-xl shadow-blue-900/30 p-6 md:p-8">
+        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-700/40 rounded-full blur-2xl opacity-60 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-blue-800/40 rounded-full blur-3xl opacity-60 pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-start w-full">
           <div className="mb-8 text-left w-full">
-            <h3 className="text-lg font-bold text-slate-800 mb-2">
+            <h3 className="text-lg font-bold text-white mb-2">
               Akıllı Dikey Ulaşım Sistemleri
             </h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-blue-100 leading-relaxed">
               Yük asansörleri, yük platformları, villa asansörleri ve yatay asansörler için
               Türkiye’nin her yerinden 24 saat 444 37 59 numaralı hattan ulaşılabilir güvenli ve
               konforlu çözümler.
@@ -30,15 +30,15 @@ export function ElevatorAnimation() {
 
           <div className="flex justify-start items-center gap-6 w-full">
             {/* SOL */}
-            <div className="relative h-96 w-40 shrink-0 overflow-hidden rounded-md border-2 border-slate-300 bg-slate-100 shadow-inner">
-              <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-slate-300 bg-slate-200/30" />
-              <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-slate-400/50" />
-              <div className="absolute left-1/2 top-2 bottom-2 w-1 ml-3 bg-slate-400/50" />
+            <div className="relative h-96 w-40 shrink-0 overflow-hidden rounded-md border-2 border-blue-300/40 bg-blue-50/10 shadow-inner">
+              <div className="absolute inset-x-2 top-2 bottom-2 border-x-2 border-blue-200/40 bg-blue-200/20" />
+              <div className="absolute left-1/2 top-2 bottom-2 w-1 -ml-4 bg-blue-300/40" />
+              <div className="absolute left-1/2 top-2 bottom-2 w-1 ml-3 bg-blue-300/40" />
 
               {Array.from({ length: 5 }).map((_, index) => (
                 <div
                   key={index}
-                  className="absolute left-4 right-4 border-t border-slate-400/40"
+                  className="absolute left-4 right-4 border-t border-blue-300/30"
                   style={{ top: `${(index + 1) * 16}%` }}
                 />
               ))}
@@ -74,14 +74,14 @@ export function ElevatorAnimation() {
                     data-floor={item.id}
                     className="floor-indicator flex items-center gap-3 group w-full"
                   >
-                    <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all duration-300 bg-white overflow-hidden">
+                    <div className="indicator-circle w-10 h-10 shrink-0 rounded-full border-2 border-blue-200/50 flex items-center justify-center transition-all duration-300 bg-white/90 overflow-hidden">
                       <img
                         src="/images/withmor-logo.png"
                         alt="Withmor Logo"
                         className="w-6 h-6 object-contain"
                       />
                     </div>
-                    <span className="indicator-text text-xs font-medium text-slate-400 tracking-wide whitespace-nowrap transition-colors">
+                    <span className="indicator-text text-xs font-semibold text-blue-100 tracking-wide whitespace-nowrap transition-colors">
                       {item.label}
                     </span>
                   </div>
