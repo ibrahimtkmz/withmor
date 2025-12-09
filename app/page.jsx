@@ -82,11 +82,11 @@ function ElevatorAnimation() {
 
               {/* Asansör Kabini */}
               <div
-                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
+                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-700 bg-gradient-to-br from-blue-700 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
                 style={{ top: '6%', animation: "elevatorMove 20s ease-in-out infinite" }}
               >
                 {/* Kabin Kapısı Efekti */}
-                <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
+                <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-700/30" />
                 <div className="relative w-full h-full flex items-center justify-center px-2">
                   <img
   src="/images/withmor-logo-beyaz-dolu.png"
@@ -149,7 +149,7 @@ function ElevatorAnimation() {
             color: #FFFFFF;
             border-color: var(--brand-blue-500);
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
           }
           11%, 74% {
             background-color: transparent;
