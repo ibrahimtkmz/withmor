@@ -145,9 +145,9 @@ function ElevatorAnimation() {
         /* Kat Işığı Animasyonları (5 model için senkron) */
         @keyframes floorLight1 {
           0%, 10%, 75%, 100% {
-            background-color: var(--brand-blue-500);
+            background-color: var(--brand-blue-700);
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: var(--brand-blue-700);
             transform: scale(1.1);
             box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
           }
