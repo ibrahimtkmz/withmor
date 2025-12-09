@@ -1450,6 +1450,9 @@ export function WithmorPage({ initialLanguage = "tr" }) {
         )}
       </header>
 
+      {/* Sticky header spacer */}
+      <div className="h-[92px]" aria-hidden="true" />
+
       <style>{badgeAnimationStyles}</style>
 
       {/* HERO SECTION - KORUNDU */}
