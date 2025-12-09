@@ -5,3 +5,19 @@
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
 }
+
+:root {
+  --brand-blue-50: #e8edf6;
+  --brand-blue-100: #d4deef;
+  --brand-blue-200: #a8c0df;
+  --brand-blue-300: #7ca0cf;
+  --brand-blue-400: #5383bf;
+  --brand-blue-500: #3569a8;
+  --brand-blue-600: #264f83;
+  --brand-blue-700: #1c3c64;
+  --brand-blue-800: #132c48;
+  --brand-blue-900: #0d2035;
+  --brand-blue: var(--brand-blue-800);
+  --brand-blue-rgb: 19, 44, 72;
+  --brand-blue-500-rgb: 53, 105, 168;
+}
