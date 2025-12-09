@@ -1235,7 +1235,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
 
       {/* Navbar - GÜNCELLENDİ (Dropdown Menu Eklendi) */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 border-b border-slate-200 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 transition-all duration-300 ${
+        className={`sticky top-0 left-0 right-0 z-50 border-b border-slate-200 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 transition-all duration-300 ${
           isScrolled ? "bg-white/95 shadow-md" : "bg-white/80"
         }`}
       >
