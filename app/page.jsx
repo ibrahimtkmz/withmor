@@ -145,14 +145,15 @@ function ElevatorAnimation() {
         /* Kat Işığı Animasyonları (5 model için senkron) */
         @keyframes floorLight1 {
           0%, 10%, 75%, 100% {
-            background-color: var(--bg-blue-700);
+            background-color: var(--bg-blue-500);
             color: #FFFFFF;
-            border-color: var(--bg-blue-700);
+            border-color: var(--bg-blue-500);
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
           }
           11%, 74% {
             background-color: transparent;
+            color: #94A3B8;
             border-color: #CBD5E1;
             transform: scale(1);
             box-shadow: none;
@@ -161,11 +162,11 @@ function ElevatorAnimation() {
 
         @keyframes floorLight2 {
           15%, 25% {
-            background-color: var(--brand-blue-700);
+            background-color: var(--brand-blue-500);
             color: #FFFFFF;
-            border-color: var(--brand-blue-700);
+            border-color: var(--brand-blue-500);
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
           }
           0%, 14%, 26%, 100% {
             background-color: transparent;
