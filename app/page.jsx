@@ -145,9 +145,9 @@ function ElevatorAnimation() {
         /* Kat Işığı Animasyonları (5 model için senkron) */
         @keyframes floorLight1 {
           0%, 10%, 75%, 100% {
-            background-color: var(--brand-blue-700);
+            background-color: var(--bg-blue-700);
             color: #FFFFFF;
-            border-color: var(--brand-blue-700);
+            border-color: var(--bg-blue-700);
             transform: scale(1.1);
             box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
           }
@@ -1254,7 +1254,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
               <p className="text-[12px] font-semibold text-blue-700 uppercase tracking-[0.25em]">Teknoloji Merkezi</p>
               <a
                 href="tel:4443759"
-                className="inline-flex items-center gap-2 rounded-full bg-blue-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm transition hover:bg-blue-800"
+                className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white shadow-sm transition hover:bg-blue-800"
               >
                 <Icons.Phone className="h-3.5 w-3.5" />
                 444 37 59
