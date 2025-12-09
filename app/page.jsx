@@ -153,8 +153,8 @@ function ElevatorAnimation() {
           }
           11%, 74% {
             background-color: transparent;
-            color: #94A3B8;
-            border-color: #CBD5E1;
+            color: #1D4ED8;
+            border-color: #1D4ED8;
             transform: scale(1);
             box-shadow: none;
           }
