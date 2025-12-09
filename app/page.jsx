@@ -82,11 +82,11 @@ function ElevatorAnimation() {
 
               {/* Asansör Kabini */}
               <div
-                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-700 bg-gradient-to-br from-blue-700 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
+                className="absolute left-6 right-6 h-16 z-10 rounded-lg border-2 border-blue-600 bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg flex items-center justify-center overflow-hidden"
                 style={{ top: '6%', animation: "elevatorMove 20s ease-in-out infinite" }}
               >
                 {/* Kabin Kapısı Efekti */}
-                <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-700/30" />
+                <div className="absolute inset-y-1 left-1/2 w-0.5 bg-blue-800/30" />
                 <div className="relative w-full h-full flex items-center justify-center px-2">
                   <img
   src="/images/withmor-logo-beyaz-dolu.png"
@@ -143,13 +143,13 @@ function ElevatorAnimation() {
         }
 
         /* Kat Işığı Animasyonları (5 model için senkron) */
-        @keyframes floorLight1 {
+        @keyframes floorLight1 { 
           0%, 10%, 75%, 100% {
-            background-color: var(--bg-blue-500);
+            background-color: #2563EB;
             color: #FFFFFF;
-            border-color: var(--bg-blue-500);
+            border-color: #2563EB;
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
           }
           11%, 74% {
             background-color: transparent;
@@ -160,13 +160,13 @@ function ElevatorAnimation() {
           }
         }
 
-        @keyframes floorLight2 {
+        @keyframes floorLight2 { 
           15%, 25% {
-            background-color: var(--brand-blue-500);
+            background-color: #2563EB;
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: #2563EB;
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
           }
           0%, 14%, 26%, 100% {
             background-color: transparent;
@@ -177,13 +177,13 @@ function ElevatorAnimation() {
           }
         }
 
-        @keyframes floorLight3 {
+        @keyframes floorLight3 { 
           30%, 40% {
-            background-color: var(--brand-blue-500);
+            background-color: #2563EB;
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: #2563EB;
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
           }
           0%, 29%, 41%, 100% {
             background-color: transparent;
@@ -194,13 +194,13 @@ function ElevatorAnimation() {
           }
         }
 
-        @keyframes floorLight4 {
+        @keyframes floorLight4 { 
           45%, 55% {
-            background-color: var(--brand-blue-500);
+            background-color: #2563EB;
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: #2563EB;
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
           }
           0%, 44%, 56%, 100% {
             background-color: transparent;
@@ -211,13 +211,13 @@ function ElevatorAnimation() {
           }
         }
 
-        @keyframes floorLight5 {
+        @keyframes floorLight5 { 
           60%, 70% {
-            background-color: var(--brand-blue-500);
+            background-color: #2563EB;
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: #2563EB;
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.5);
           }
           0%, 59%, 71%, 100% {
             background-color: transparent;
@@ -1241,15 +1241,16 @@ export function WithmorPage({ initialLanguage = "tr" }) {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm shadow-blue-900/30">
-              <img
-                src="/images/withmor-logo-beyaz.png"
-                alt="Withmor Logo"
-                className="h-14 w-auto object-contain"
-              />
-            </div>
+          <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm">
+  <img
+    src="/images/withmor-logo-beyaz.png"
+    alt="Withmor Logo"
+    className="h-14 w-auto object-contain"
+  />
+</div>
 
-            <div className="leading-tight flex flex-col gap-1">
+
+                       <div className="leading-tight flex flex-col gap-1">
               <p className="text-[11px] font-semibold text-slate-900 uppercase tracking-[0.2em]">Asansör</p>
               <p className="text-[12px] font-semibold text-blue-700 uppercase tracking-[0.25em]">Teknoloji Merkezi</p>
               <a
@@ -1535,7 +1536,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
                 onClick={() => setShowQuoteModal(true)}
                 className="relative overflow-hidden rounded-lg p-[4px] shadow-lg shadow-blue-900/20 transition hover:shadow-xl hover:-translate-y-0.5 group"
               >
-                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#3569A8_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                 <span className="relative flex h-full w-full items-center justify-center rounded-md bg-blue-900 px-8 py-3 text-sm font-semibold text-white transition group-hover:bg-blue-800">
                   {localizedHero.cta}
                 </span>
@@ -2045,7 +2046,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
                       <Icons.MessageCircle size={20} /> <span className="font-bold text-sm">WhatsApp</span>
                     </a>
                     {/* Facebook */}
-                    <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-blue-700 text-white hover:bg-blue-800 transition-all transform hover:-translate-y-1 shadow-md shadow-blue-100">
+                    <a href={companyInfo.facebook} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[#1877F2] text-white hover:bg-[#166FE5] transition-all transform hover:-translate-y-1 shadow-md shadow-blue-100">
                       <Icons.Facebook size={20} /> <span className="font-bold text-sm">Facebook</span>
                     </a>
                     {/* Instagram */}
@@ -2063,7 +2064,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
                 <div className="relative group z-10">
                     <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 via-blue-600 to-green-600 opacity-75 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200 animate-tilt"></div>
                     <div className="relative overflow-hidden rounded-2xl p-[3px]">
-                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#3569A8_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
+                      <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FF0000_0%,#FFFF00_14%,#00FF00_28%,#00FFFF_42%,#0000FF_57%,#FF00FF_71%,#FF0000_85%,#FF0000_100%)]" />
                       <div className="relative bg-white h-full rounded-xl p-6 md:p-8 shadow-2xl">
                         <h3 className="text-2xl font-bold text-slate-900 mb-6">Hızlı İletişim Formu</h3>
                         <form onSubmit={handleMainContactSubmit} className="space-y-4">
