@@ -154,7 +154,7 @@ function ElevatorAnimation() {
           11%, 74% {
             background-color: transparent;
             color: #1D4ED8;
-            border-color: #1D4ED8;
+            border-color: #CBD5E1;
             transform: scale(1);
             box-shadow: none;
           }
@@ -164,9 +164,9 @@ function ElevatorAnimation() {
           15%, 25% {
             background-color: var(--brand-blue-500);
             color: #FFFFFF;
-            border-color: var(--brand-blue-500);
+            border-color: var(--brand-blue-700);
             transform: scale(1.1);
-            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-500-rgb), 0.5);
+            box-shadow: 0 4px 6px -1px rgba(var(--brand-blue-700-rgb), 0.5);
           }
           0%, 14%, 26%, 100% {
             background-color: transparent;
@@ -1241,7 +1241,7 @@ export function WithmorPage({ initialLanguage = "tr" }) {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center bg-blue-900 px-3 py-1 rounded-md shadow-sm shadow-blue-900/30">
+            <div className="flex items-center justify-center bg-blue-700 px-3 py-1 rounded-md shadow-sm shadow-blue-900/30">
               <img
                 src="/images/withmor-logo-beyaz.png"
                 alt="Withmor Logo"
